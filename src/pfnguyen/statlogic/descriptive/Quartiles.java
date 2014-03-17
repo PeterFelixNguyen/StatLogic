@@ -47,39 +47,46 @@ public class Quartiles {
         /* Finds median for even sized ArrayList */
         if (values.size() % 2 == 0) {
             if (values.size() % 4 != 0) {
-                lowerQuartile = values.get((values.size()/4)); System.out.println(lowerQuartile);
+                lowerQuartile = values.get((values.size()/4));
                 median = values.get(values.size()/2-1).add(values.get((values.size()/2)));
                 median = median.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
-                upperQuartile = values.get((values.size()/4*3+1)); System.out.println(upperQuartile);
+                upperQuartile = values.get((values.size()/4*3+1));
             }
             else {
                 lowerQuartile = values.get(values.size()/4-1).add(values.get((values.size()/4)));
-                lowerQuartile = lowerQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP); System.out.println(lowerQuartile);
+                lowerQuartile = lowerQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
                 median = values.get(values.size()/2-1).add(values.get((values.size()/2)));
                 median = median.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
                 upperQuartile = values.get(values.size()/4*3-1).add(values.get((values.size()/4*3)));
-                upperQuartile = upperQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP); System.out.println(upperQuartile);
+                upperQuartile = upperQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
             }
         }
         /* Finds median for odd sized ArrayList */
         else if (values.size() % 4 == 1) {
             lowerQuartile = values.get(values.size()/4-1).add(values.get((values.size()/4)));
-            lowerQuartile = lowerQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP); System.out.println(lowerQuartile);
+            lowerQuartile = lowerQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
             median = values.get((values.size()/2));
             upperQuartile = values.get(values.size()/4*3).add(values.get((values.size()/4*3+1)));
-            upperQuartile = upperQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP); System.out.println(upperQuartile);
+            upperQuartile = upperQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
         }
         else {
-            lowerQuartile = values.get((values.size()/4)); System.out.println(lowerQuartile);
+            lowerQuartile = values.get((values.size()/4));
             median = values.get((values.size()/2));
-            upperQuartile = values.get((values.size()/4*3+2)); System.out.println(upperQuartile);
+            upperQuartile = values.get((values.size()/4*3+2));
         }
         median.setScale(4, RoundingMode.HALF_UP); // Not working properly
     }
 
-    @Override
-    public String toString() {
+    public String getStringOfMedian() {
         return median.toString();
+    }
+
+    public BigDecimal getLowerQuartile () {
+        return lowerQuartile;
+    }
+
+    public BigDecimal getUpperQuartile() {
+        return upperQuartile;
     }
 
     public BigDecimal getMedian() {
