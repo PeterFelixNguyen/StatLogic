@@ -61,7 +61,6 @@ public class Dispersion {
         ArrayList<BigDecimal> squaredValues = new ArrayList<BigDecimal>();
         ArrayList<BigDecimal> difference = new ArrayList<BigDecimal>();
         range = values.get(values.size()-1).subtract(values.get(0));
-        System.out.println(range);
 
         sum = BigDecimal.ZERO;
         squaredValues.clear();
