@@ -1,0 +1,24 @@
+EASY (1) Status bar indicator {loaded, saved, error[], }
+EASY (2) Help button
+HARD (3) Switch from protected to private members, but that
+		 might require me to merge CategoryPanel and DescriptivePanel
+HARD (4) Resizeable frame
+EASY (5) Print program and user name
+HARD (6) Copyright and ownership
+HARD (7) Modal panels
+
+				/*
+				 * I prefer to use JFrame instead of JOptionPane, but I
+				 * don't know how to implement it
+				 */
+				/*
+				 * if (!configPane.isVisible()) {
+				 * configFrame.setTitle("Configuration");
+				 * configFrame.setSize(300, 200);
+				 * configFrame.setLocationRelativeTo(null);
+				 * configFrame.setEnabled(true);
+				 * configFrame.setVisible(true); }
+				 */
+EASY (8) Add button to minimize LeftPanel so that I can maximize output window.
+
+EASY (9) Get rid of row panels class and calcxbar panels class

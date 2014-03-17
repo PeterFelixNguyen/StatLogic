@@ -1,0 +1,102 @@
+ProcessBuilder is for executing files, so this doesn't work.
+		/*
+		try {
+			Scanner input = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ProcessBuilder pb = new ProcessBuilder("Notepad.exe", file.getName());
+		try {
+			pb.start();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		*/
+		
+		
+Use this example to open a specific file in Windows while in your
+Javas program... The help button was removed from the program, so this
+code is now only used for future reference.
+Import import java.awt.Desktop;
+
+		jbtHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				java.io.File file = new java.io.File("txt/Help.txt");
+
+				try {
+					Desktop.getDesktop().open(file);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+	
+	
+Sorting algorithms in C++, second one doesn't work but is very close
+Same insertion sort algorithm is written in the Java book I am reading
+
+
+	items[0] = 0;
+	items[3] = 0;
+
+	items.at(0) = 1;
+	items.at(3) = 0;
+
+	for (int i = 0; i < items.size(); i++) {
+		for (int j = 0; j < items.size(); j++) {
+
+			if (j != items.size() - 1)
+				if (items.at(j) > items.at(j + 1)) {
+					T temp = items.at(j);
+					items.at(j) = items.at(j + 1);
+					items.at(j + 1) = temp;
+				}
+		}
+	}
+
+	unsigned int j;
+	T key;
+	unsigned int i;
+
+	for (j = 1; j < items.size(); j++) {
+		key = items.at(j);
+		for (i = j - 1; (i >= 0) && (items.at(i) > key); i--) {
+			items.at(i + 1) = items.at(i);
+		}
+		items.at(i + 1) = key;
+	}
+	
+	
+	
+Not using
+		//sort(items.begin(), items.end());
+
+
+ProcessBuilder is for executing files, so this doesn't work.
+        /*
+        try {
+            Scanner input = new Scanner(file);
+        } catch (FileNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        ProcessBuilder pb = new ProcessBuilder("Notepad.exe", file.getName());
+        try {
+            pb.start();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        */
+
+/* I prefer to use JFrame instead of JOptionPane, but I'm not sure how to implement it */
+        /*if (!configPane.isVisible()) {
+            configFrame.setTitle("Configuration");
+            configFrame.setSize(300, 200);
+            configFrame.setLocationRelativeTo(null);
+            configFrame.setEnabled(true);
+            configFrame.setVisible(true);
+        }*/

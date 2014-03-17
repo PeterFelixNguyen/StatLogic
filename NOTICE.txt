@@ -1,0 +1,17 @@
+======================================================================
+  StatLogic
+  Copyright 2014 Peter "Felix" Nguyen
+======================================================================
+  The following source files use the Apache Commons Math library:
+    
+	ZConfidenceInterval.java
+    OneSampleZTest.java
+    TConfidenceInterval.java
+    ZConfidenceInterval.java
+    
+  These source files import and use the following classes from 
+  Apache Commons Math:
+  
+    org.apache.commons.math3.distribution.NormalDistribution;
+	
+====================================================================
