@@ -40,7 +40,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class DescriptiveLoader {
     // Calculators
     private Mean mean;
-    private Quartiles median;
+    private Quartiles quartile;
     private Mode mode;
     @SuppressWarnings("unused")
     private Dispersion stdDev; // this class needs some work
@@ -99,7 +99,7 @@ public class DescriptiveLoader {
              * I should implement a seperate method */
             mean = new Mean(values);
             stdDev = new Dispersion(values, mean.getMean());
-            median = new Quartiles(values); // this also sorts the ArrayList
+            quartile = new Quartiles(values); // this also sorts the ArrayList
             extrema = new Extrema(values); // works if the ArrayList is sorted
             mode = new Mode(values);
             statusBar.setText(
@@ -161,7 +161,9 @@ public class DescriptiveLoader {
                         outFile, false)));
                 output.println("Date created: " + new java.util.Date() + "\n");
                 output.println("Mean: " + mean.toString());
-                output.println("Median: " + median.getMedian());
+                output.println("Median: " + quartile.getMedian());
+                output.println("Lower Quartile: " + quartile.getLowerQuartile());
+                output.println("Upper Quartile: " + quartile.getUpperQuartile());
                 output.println("Mode: " + mode.toString());
                 output.println("Sample Size: " + values.size());
                 output.println("Min: " + extrema.getMinima());
@@ -186,7 +188,9 @@ public class DescriptiveLoader {
                     output.println("Date created: " + new java.util.Date()
                     + "\n");
                     output.println("Mean: " + mean.toString());
-                    output.println("Median: " + median.getMedian());
+                    output.println("Median: " + quartile.getMedian());
+                    output.println("Lower Quartile: " + quartile.getLowerQuartile());
+                    output.println("Upper Quartile: " + quartile.getUpperQuartile());
                     output.println("Mode: " + mode.toString());
                     output.println("Sample Size: " + values.size());
                     output.println("Min: " + extrema.getMinima());
@@ -211,10 +215,13 @@ public class DescriptiveLoader {
     /**
      * Sets the text of JtaOutputArea to display any calculations.
      */
-    public void writeToOutput() {
+    public void writeToOutput() { // I should set this to private
         outputArea.setText("Date created: " + new java.util.Date() + "\n\n"
-                + "Mean: " + mean.toString() + "\n" + "Median: "
-                + median.getMedian() + "\n" + "Mode: " + mode.toString() + "\n"
+                + "Mean: " + mean.toString() + "\n"
+                + "Median: " + quartile.getMedian() + "\n"
+                + "Lower Quartile: " + quartile.getLowerQuartile() + "\n"
+                + "Upper Quartile: "+ quartile.getUpperQuartile() + "\n"
+                + "Mode: " + mode.toString() + "\n"
                 + "Sample Size: " + values.size() + "\n" + "Min: "
                 + extrema.getMinima() + "\n" + "Max: "
                 + extrema.getMaxima() + "\n\n");
@@ -292,17 +299,17 @@ public class DescriptiveLoader {
     }
 
     /**
-     * @return  the median as a String
+     * @return  the quartile as a String
      */
     public String getStringOfMedian() {
-        return median.toString();
+        return quartile.toString();
     }
 
     /**
-     * @return  the median as a BigDecimal
+     * @return  the quartile as a BigDecimal
      */
     public BigDecimal getMedian() {
-        return median.getMedian();
+        return quartile.getMedian();
     }
 
     /**
