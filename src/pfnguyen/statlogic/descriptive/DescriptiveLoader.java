@@ -143,10 +143,10 @@ public class DescriptiveLoader {
     }
 
     /**
-     * Saves results into a .txt file. (This class will be rewritten to
-     * get rid of duplicate code)
-     * 
+     * Saves results into a .txt file.
+     *
      * @throws  IOException  If an input or output exception occured
+     * @return  the boolean value true if file saved, otherwise false
      */
     public boolean saveToFile() throws IOException {
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
