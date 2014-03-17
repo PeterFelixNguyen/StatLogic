@@ -148,7 +148,7 @@ public class DescriptiveLoader {
      * 
      * @throws  IOException  If an input or output exception occured
      */
-    public void saveToFile() throws IOException {
+    public boolean saveToFile() throws IOException {
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Text Files", "txt");
         JFileChooser fileChooser = new JFileChooser();
@@ -156,60 +156,41 @@ public class DescriptiveLoader {
 
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             outFile = fileChooser.getSelectedFile();
-            if (!outFile.exists()) {
-                output = new PrintWriter(new BufferedWriter(new FileWriter(
-                        outFile, false)));
-                output.println("Date created: " + new java.util.Date() + "\n");
-                output.println("Mean: " + mean.toString());
-                output.println("Median: " + quartile.getMedian());
-                output.println("Lower Quartile: " + quartile.getLowerQuartile());
-                output.println("Upper Quartile: " + quartile.getUpperQuartile());
-                output.println("Mode: " + mode.toString());
-                output.println("Sample Size: " + values.size());
-                output.println("Min: " + extrema.getMinima());
-                output.println("Max: " + extrema.getMaxima());
-                output.println();
-                printValues();
-                output.close();
-                statusBar.setText(" Saved to file \"" + outFile.getName()
-                        + "\"");
-                Desktop.getDesktop().open(getOutputFile());
-                setUseable(false);
-            }
-            else {
+            if (outFile.exists()) {
                 final int option = JOptionPane.showConfirmDialog(null,
                         "File already exists, " + "do you want to replace file?",
                         "Retep's StatCalc", JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE);
-
-                if (option == JOptionPane.YES_OPTION) {
-                    output = new PrintWriter(new BufferedWriter(new FileWriter(
-                            outFile, false)));
-                    output.println("Date created: " + new java.util.Date()
-                    + "\n");
-                    output.println("Mean: " + mean.toString());
-                    output.println("Median: " + quartile.getMedian());
-                    output.println("Lower Quartile: " + quartile.getLowerQuartile());
-                    output.println("Upper Quartile: " + quartile.getUpperQuartile());
-                    output.println("Mode: " + mode.toString());
-                    output.println("Sample Size: " + values.size());
-                    output.println("Min: " + extrema.getMinima());
-                    output.println("Max: " + extrema.getMaxima());
-                    output.println();
-                    printValues();
-                    output.close();
-                    statusBar.setText(" Saved to file \"" + outFile.getName()
-                            + "\"");
-                    Desktop.getDesktop().open(getOutputFile());
-                    setUseable(false);
+                if (!(option == JOptionPane.YES_OPTION)) {
+                    return false;
                 }
             }
+            output = new PrintWriter(new BufferedWriter(new FileWriter(
+                    outFile, false)));
+            output.println("Date created: " + new java.util.Date() + "\n");
+            output.println("Mean: " + mean.toString());
+            output.println("Median: " + quartile.getMedian());
+            output.println("Lower Quartile: " + quartile.getLowerQuartile());
+            output.println("Upper Quartile: " + quartile.getUpperQuartile());
+            output.println("Mode: " + mode.toString());
+            output.println("Sample Size: " + values.size());
+            output.println("Min: " + extrema.getMinima());
+            output.println("Max: " + extrema.getMaxima());
+            output.println();
+            printValues();
+            output.close();
+            statusBar.setText(" Saved to file \"" + outFile.getName()
+                    + "\"");
+            Desktop.getDesktop().open(getOutputFile());
+            setUseable(false);
         }
+        return true;
     }
 
     @SuppressWarnings("unused")
-    private void writeFile() {
-        // This is a helper method to prevent duplicate code
+    private void buildString() {
+        // This is a helper method to create a string that can be used
+        // by both JtaOutputArea and PrintWriter.
     }
 
     /**
