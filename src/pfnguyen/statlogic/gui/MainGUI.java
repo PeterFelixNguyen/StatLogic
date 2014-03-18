@@ -101,8 +101,8 @@ class MainFrame extends JFrame {
     //
     private ContainerForChooser containerForChooser = new ContainerForChooser();
     private JComboBox<String> jcboCalcChooser;
-    private String[] calcName = { "Descriptive", "1-Sample Z-Test",
-            "1-Sample T-Test", "Standard Score", "Old Descriptive" };
+    private String[] calcName = { "Descriptive Statistics", "1-Sample Z-Test",
+            "1-Sample T-Test", "Standard Score"};
     private JPanel leftInnerPanel = new JPanel();
     private JPanel rightInnerPanel = new JPanel();
     private ImageIcon collapseIcon = new ImageIcon("images/6.png");
@@ -178,9 +178,6 @@ class MainFrame extends JFrame {
             case 3:
                 upperPanel.leftPanel.add(upperPanel.leftPanel.zScoreCalc);
                 break;
-            case 4:
-                upperPanel.leftPanel.add(upperPanel.leftPanel.unusedCalc);
-                break;
         }
     }
 
@@ -210,12 +207,6 @@ class MainFrame extends JFrame {
                 upperPanel.leftPanel.revalidate();
                 upperPanel.leftPanel.repaint();
                 break;
-            case 4:
-                upperPanel.leftPanel.removeAll();
-                upperPanel.leftPanel.add(upperPanel.leftPanel.unusedCalc);
-                upperPanel.leftPanel.revalidate();
-                upperPanel.leftPanel.repaint();
-                break;
         }
     }
 }
@@ -234,7 +225,7 @@ class UpperPanel extends JPanel {
         add(rightPanel);
     }
 
-    // attempt to make fields private
+    // Need to make fields private
     //	public void setPanel(int index) {
     //		switch (panelIndex = index) {
     //		case 0:
@@ -277,14 +268,12 @@ class LeftPanel extends JPanel {
     ZTestPanel zTestCalc;
     TTestPanel tTestCalc;
     ZScorePanel zScoreCalc;
-    OldDescriptivePanel unusedCalc;
 
     LeftPanel(JTextArea jtaOutput, JLabel statusBar) {
         descriptiveCalc = new DescriptivePanel(jtaOutput, statusBar);
         zTestCalc = new ZTestPanel(jtaOutput, statusBar);
         tTestCalc = new TTestPanel(jtaOutput, statusBar);
         zScoreCalc = new ZScorePanel(jtaOutput, statusBar);
-        unusedCalc = new OldDescriptivePanel(jtaOutput, statusBar);
         setLayout(new FlowLayout(FlowLayout.LEADING)); // has problem with left panel keeping its size
         //setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(zScoreCalc); // This is optional
