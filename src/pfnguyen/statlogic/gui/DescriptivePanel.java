@@ -83,7 +83,6 @@ public class DescriptivePanel extends JPanel {
                     jbtSave.setVisible(true);
                     jbtSave.setEnabled(true);
                     loader.setUseable(true);
-                    loader.writeToOutput();
                 }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Uncertain IOException");
