@@ -55,6 +55,7 @@ public class DescriptiveLoader {
     // Visual Components
     private JTextArea outputArea;
     private JLabel statusBar;
+    private StringBuilder outputString;
 
     @SuppressWarnings("unused")
     private DescriptiveLoader() {
@@ -104,6 +105,8 @@ public class DescriptiveLoader {
             mode = new Mode(values);
             statusBar.setText(
                     " \"" + inFile.getName() + "\" loaded to program");
+            buildString();
+            writeToOutput();
         }
     }
 
@@ -167,17 +170,7 @@ public class DescriptiveLoader {
             }
             output = new PrintWriter(new BufferedWriter(new FileWriter(
                     outFile, false)));
-            output.println("Date created: " + new java.util.Date() + "\n");
-            output.println("Mean: " + mean.toString());
-            output.println("Median: " + quartile.getMedian());
-            output.println("Lower Quartile: " + quartile.getLowerQuartile());
-            output.println("Upper Quartile: " + quartile.getUpperQuartile());
-            output.println("Mode: " + mode.toString());
-            output.println("Sample Size: " + values.size());
-            output.println("Min: " + extrema.getMinima());
-            output.println("Max: " + extrema.getMaxima());
-            output.println();
-            printValues();
+            output.print(outputString.toString());
             output.close();
             statusBar.setText(" Saved to file \"" + outFile.getName()
                     + "\"");
@@ -187,17 +180,10 @@ public class DescriptiveLoader {
         return true;
     }
 
-    @SuppressWarnings("unused")
     private void buildString() {
         // This is a helper method to create a string that can be used
         // by both JtaOutputArea and PrintWriter.
-    }
-
-    /**
-     * Sets the text of JtaOutputArea to display any calculations.
-     */
-    public void writeToOutput() { // I should set this to private
-        outputArea.setText("Date created: " + new java.util.Date() + "\n\n"
+        outputString = new StringBuilder("Date created: " + new java.util.Date() + "\n\n"
                 + "Mean: " + mean.toString() + "\n"
                 + "Median: " + quartile.getMedian() + "\n"
                 + "Lower Quartile: " + quartile.getLowerQuartile() + "\n"
@@ -206,7 +192,14 @@ public class DescriptiveLoader {
                 + "Sample Size: " + values.size() + "\n" + "Min: "
                 + extrema.getMinima() + "\n" + "Max: "
                 + extrema.getMaxima() + "\n\n");
-        printValuesToOutput();
+        printValues();
+    }
+
+    /**
+     * Sets the text of JtaOutputArea to display any calculations.
+     */
+    private void writeToOutput() {
+        outputArea.setText(outputString.toString());
     }
 
     /**
@@ -225,28 +218,14 @@ public class DescriptiveLoader {
     }
 
     /**
-     * Prints all values in ascending order. (Sort is not actually implemented)
+     * Appends the ArrayList of BigDecimal values to a String Builder.
      */
-    public void printValues() {
-        output.println("Sorted values: ");
+    private void printValues() {
+        outputString.append("Sorted values: \n");
         for (int i = 0; i < values.size(); i++) {
-            output.print(values.get(i).toString() + " ");
+            outputString.append(values.get(i).toString() + " ");
             if ((i + 1) % 5 == 0) {
-                output.println();
-            }
-        }
-    }
-
-    /**
-     * Prints all values in ascending order to JtaOutputArea.
-     * (Sort is not actually implemented)
-     */
-    public void printValuesToOutput() {
-        outputArea.append("Sorted values: \n");
-        for (int i = 0; i < values.size(); i++) {
-            outputArea.append(values.get(i).toString() + " ");
-            if ((i + 1) % 5 == 0) {
-                outputArea.append("\n");
+                outputString.append("\n");
             }
         }
     }
