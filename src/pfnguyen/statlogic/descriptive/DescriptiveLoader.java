@@ -51,11 +51,13 @@ public class DescriptiveLoader {
     private PrintWriter output;
     private java.io.File inFile;
     private java.io.File outFile;
-    private boolean useable;
     // Visual Components
     private JTextArea outputArea;
     private JLabel statusBar;
     private StringBuilder outputString;
+    // Boolean States
+    private boolean isSaved = false;
+    private boolean isLoaded = false;
 
     @SuppressWarnings("unused")
     private DescriptiveLoader() {
@@ -107,6 +109,11 @@ public class DescriptiveLoader {
                     " \"" + inFile.getName() + "\" loaded to program");
             buildString();
             writeToOutput();
+
+            if (values.size() != 0) { // Need to make sure if I really need to check this condition
+                isLoaded = true;
+                isSaved = false;
+            }
         }
     }
 
@@ -157,29 +164,36 @@ public class DescriptiveLoader {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(filter);
 
-        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-            outFile = fileChooser.getSelectedFile();
-            if (outFile.exists()) {
-                final int option = JOptionPane.showConfirmDialog(null,
-                        "File already exists, " + "do you want to replace file?",
-                        "Retep's StatCalc", JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE);
-                if (!(option == JOptionPane.YES_OPTION)) {
-                    return false;
+        if (isSaveable()) {
+            if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                outFile = fileChooser.getSelectedFile();
+                if (outFile.exists()) {
+                    final int option = JOptionPane.showConfirmDialog(null,
+                            "File already exists, " + "do you want to replace file?",
+                            "Retep's StatCalc", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE);
+                    if (!(option == JOptionPane.YES_OPTION)) {
+                        return false;
+                    }
                 }
+                output = new PrintWriter(new BufferedWriter(new FileWriter(
+                        outFile, false)));
+                output.print(outputString.toString());
+                output.close();
+                statusBar.setText(" Saved to file \"" + outFile.getName()
+                        + "\"");
+                Desktop.getDesktop().open(getOutputFile());
+                isSaved = true;
             }
-            output = new PrintWriter(new BufferedWriter(new FileWriter(
-                    outFile, false)));
-            output.print(outputString.toString());
-            output.close();
-            statusBar.setText(" Saved to file \"" + outFile.getName()
-                    + "\"");
-            Desktop.getDesktop().open(getOutputFile());
-            setUseable(false);
-        }
-        return true;
+            return true;
+        } else
+            return false;
     }
 
+    /**
+     * Builds the String used to display information in the JtaOutputArea
+     * and/or the output save file.
+     */
     private void buildString() {
         // This is a helper method to create a string that can be used
         // by both JtaOutputArea and PrintWriter.
@@ -287,24 +301,14 @@ public class DescriptiveLoader {
     }
 
     /**
-     * Sets the useable state of the DescriptiveLoader.
-     * (Possible reimplementation)
+     * Returns the saveable state of the DescriptiveLoader.
      * 
-     * @param  useable  the useable state for related components
+     * @return  boolean to indicate useability of save methods
      */
-    @Deprecated
-    public void setUseable(boolean useable) {
-        this.useable = useable;
-    }
-
-    /**
-     * Returns the useable state of the DescriptiveLoader.
-     * (Possible reimplementation)
-     * 
-     * @return  boolean to indicate useability of related components
-     */
-    @Deprecated
-    public boolean isUseable() {
-        return useable;
+    private boolean isSaveable() {
+        if (!isSaved && isLoaded)
+            return true;
+        else
+            return false;
     }
 }

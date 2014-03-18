@@ -75,15 +75,7 @@ public class DescriptivePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             try {
                 loader.loadIntoArrayList();
-                /*
-                 * if statement checks if data loaded before continuing the try
-                 * block
-                 */
-                if (loader.getArraySize() != 0) {
-                    jbtSave.setVisible(true);
-                    jbtSave.setEnabled(true);
-                    loader.setUseable(true);
-                }
+
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Uncertain IOException");
             }
@@ -93,11 +85,10 @@ public class DescriptivePanel extends JPanel {
     class SaveListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (loader.isUseable()) {
-                try {
-                    loader.saveToFile();
-                } catch (IOException ex) {
-                }
+            try {
+                loader.saveToFile();
+            }
+            catch (IOException ex) {
             }
         }
     }
