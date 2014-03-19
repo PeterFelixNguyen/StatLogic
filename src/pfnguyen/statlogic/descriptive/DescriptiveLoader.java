@@ -46,7 +46,7 @@ public class DescriptiveLoader {
     private Dispersion stdDev; // this class needs some work
     private Extrema extrema;
     // Data
-    private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
+    private ArrayList<BigDecimal> values;
     private Scanner input;
     private PrintWriter output;
     private java.io.File inFile;
@@ -86,9 +86,7 @@ public class DescriptiveLoader {
      * @throws  IOException  If an input or output exception occured
      */
     public void loadIntoArrayList() throws IOException {
-        if (values.size() != 0) {
-            values.clear();
-        }
+        values = new ArrayList<BigDecimal>();
 
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
