@@ -105,7 +105,7 @@ class MainFrame extends JFrame {
             "1-Sample T-Test", "Standard Score"};
     private JPanel leftInnerPanel = new JPanel();
     private JPanel rightInnerPanel = new JPanel();
-    private ImageIcon collapseIcon = new ImageIcon("images/6.png");
+    private ImageIcon collapseIcon = new ImageIcon("images/Toggle_03_Hide.png");
     private JLabel collapseBtn = new JLabel(collapseIcon);
     //
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
@@ -139,12 +139,12 @@ class MainFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (state == false) {
-                    collapseBtn.setIcon(new ImageIcon("images/5.png"));
+                    collapseBtn.setIcon(new ImageIcon("images/Toggle_03_Show.png"));
                     upperPanel.leftPanel.removeAll();
                     upperPanel.leftPanel.revalidate();
                     state = true;
                 } else if (state == true) {
-                    collapseBtn.setIcon(new ImageIcon("images/6.png"));
+                    collapseBtn.setIcon(new ImageIcon("images/Toggle_03_Hide.png"));
                     showPanel();
                     upperPanel.leftPanel.revalidate();
                     state = false;
