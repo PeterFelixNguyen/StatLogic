@@ -84,6 +84,20 @@ public class Mode {
     }
 
     /**
+     * alternative toString
+     */
+    public StringBuilder toString2() {
+        StringBuilder string = new StringBuilder();
+        for (int i = 0; i < mode.size(); i++) {
+            string.append(mode.get(i).toString() + " ");
+            if ((i + 1) % 5 == 0) {
+                string.append("\n");
+            }
+        }
+        return string;
+    }
+
+    /**
      * @return  the ArrayList of the modes of a data set
      */
     public ArrayList<BigDecimal> getMode() {

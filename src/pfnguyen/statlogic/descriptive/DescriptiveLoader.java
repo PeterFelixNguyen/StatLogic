@@ -200,7 +200,7 @@ public class DescriptiveLoader {
                 + "Median: " + quartile.getMedian() + "\n"
                 + "Lower Quartile: " + quartile.getLowerQuartile() + "\n"
                 + "Upper Quartile: "+ quartile.getUpperQuartile() + "\n"
-                + "Mode: " + mode.toString() + "\n"
+                + "Mode: " + mode.toString2() + "\n"
                 + "Sample Size: " + values.size() + "\n" + "Min: "
                 + extrema.getMinima() + "\n" + "Max: "
                 + extrema.getMaxima() + "\n\n");
