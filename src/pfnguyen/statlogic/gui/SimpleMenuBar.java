@@ -15,10 +15,14 @@
  */
 package pfnguyen.statlogic.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 @SuppressWarnings("serial")
@@ -50,6 +54,8 @@ public class SimpleMenuBar extends JMenuBar{
     private JMenuItem jmiAbout = new JMenuItem("About");
     private JMenuItem jmiFeedback = new JMenuItem("Feedback");
     private JMenuItem jmiManual = new JMenuItem("Manual");
+    // Menu Panels
+    private AboutPanel aboutPanel = new AboutPanel();
 
     public SimpleMenuBar() {
         add(fileMenu);
@@ -89,5 +95,13 @@ public class SimpleMenuBar extends JMenuBar{
         helpMenu.addSeparator();
         helpMenu.add(jmiFeedback);
         helpMenu.add(jmiAbout);
+
+        jmiAbout.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, aboutPanel);
+            }
+        });
     }
 }
