@@ -39,9 +39,10 @@ public class TLoader {
     // private PrintWriter output;
     private java.io.File inFile;
     // private java.io.File outFile;
-    /** Reference variables to display information */
+    /* Visual Components */
     private JTextArea outputArea;
     private JLabel statusBar;
+    private StringBuilder outputString;
 
     public TLoader(final JTextArea jtaOutput, final JLabel statusBar) {
         outputArea = jtaOutput;
@@ -70,7 +71,7 @@ public class TLoader {
 
             oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
                     arrayValues, significance);
-
+            buildString();
             writeToOutput();
 
             statusBar
@@ -88,10 +89,20 @@ public class TLoader {
         }
     }
 
+    /**
+     * Builds the String used to display information in the JtaOutputArea
+     * and/or the output save file.
+     */
+    private void buildString() {
+        outputString = new StringBuilder("Date created: " + new java.util.Date() + "\n\n"
+                + "One sample Student's t-test" + "\n"
+                + oneSampleTTest.getNullHypothesis() + "\n"
+                + oneSampleTTest.getAltHypothesis() + "\n");
+    }
+
     /** Print results to jtaOutput window */
     public void writeToOutput() {
-        outputArea.setText("Date created: " + new java.util.Date() + "\n\n"
-                + oneSampleTTest.testHypothesis());
+        outputArea.setText(outputString.toString());
         if (this.option == Option.CONFIDENCE_INTERVAl) {
             //outputArea.append("\n" + oneSampleCI.confidenceInterval());
         }
@@ -108,7 +119,7 @@ public class TLoader {
         if (this.option == Option.CONFIDENCE_INTERVAl) {
             //oneSampleCI = new ZConfidenceInterval(xBar, stdDev, n, significance);
         }
-
+        buildString();
         writeToOutput();
     }
 
