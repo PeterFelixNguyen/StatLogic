@@ -193,8 +193,6 @@ public class DescriptiveLoader {
      * and/or the output save file.
      */
     private void buildString() {
-        // This is a helper method to create a string that can be used
-        // by both JtaOutputArea and PrintWriter.
         outputString = new StringBuilder("Date created: " + new java.util.Date() + "\n\n"
                 + "Mean: " + mean.toString() + "\n"
                 + "Median: " + quartile.getMedian() + "\n"
