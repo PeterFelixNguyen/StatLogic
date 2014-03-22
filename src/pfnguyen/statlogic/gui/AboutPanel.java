@@ -18,6 +18,8 @@ public class AboutPanel extends JPanel {
     public AboutPanel() {
         JepAbout.setEditable(false);
         JepAbout.addHyperlinkListener(urlListener);
+        JepAbout.setBorder(null);
+
         File aboutPage = new File("html/AboutPage.html");
 
         if (aboutPage != null) {
