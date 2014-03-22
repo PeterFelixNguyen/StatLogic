@@ -62,8 +62,7 @@ class CollapseButton extends ImageIcon {
 
 @SuppressWarnings("serial")
 class ContainerForChooser extends JPanel {
-    // private ImageIcon collapseIcon = new ImageIcon(
-    // "D:/Dropbox/SourceCode/StatLogicProject/StatCalc0.2.4/images/1.png");
+    // private ImageIcon collapseIcon = new ImageIcon(images/1.png");
 
     // private JLabel collapseBtn = new JLabel(collapseIcon);
     // private JPanel leftInnerPanel = new JPanel();
