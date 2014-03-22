@@ -31,20 +31,40 @@ public class OneSampleTTest {
     private Hypothesis hypothesis;
     private BigDecimal lowerRegion; // move to an if else in constructor???
     private BigDecimal upperRegion; // move to an if else in constructor???
+    private BigDecimal testValue;
+    private String nullHypothesis;
+    private String altHypothesis;
 
     public OneSampleTTest(Hypothesis hypothesis, BigDecimal testValue,
             ArrayList<BigDecimal> x, double significance) {
         getCriticalRegion(hypothesis, significance);
         BigDecimal sampleStdDev = BigDecimalMath.sqrt(calcSampleVariance(x));
         calcTestStatistic(hypothesis, calcSampleMean(x), testValue, sampleStdDev, x);
+        this.testValue = testValue;
         this.hypothesis = hypothesis;
+        constructStrings(); // maybe I should pass the paramaters in the constructor???
     }
 
     public OneSampleTTest(Hypothesis hAlternative, BigDecimal testValue,
             BigDecimal xBar, BigDecimal sampleStdDev, int n, double significance) {
         getCriticalRegion(hAlternative, significance);
         calcTestStatistic(hAlternative, xBar, testValue, sampleStdDev, n);
+        this.testValue = testValue;
         this.hypothesis = hAlternative;
+        constructStrings();
+    }
+
+    private void constructStrings() {
+        String inequality = "";
+
+        if (hypothesis == Hypothesis.LESS_THAN)
+            inequality = "< ";
+        else if (hypothesis == Hypothesis.GREATER_THAN)
+            inequality = "> ";
+        else if (hypothesis == Hypothesis.NOT_EQUAL)
+            inequality = "!= ";
+        nullHypothesis = "H0: mu " + "= " + testValue;
+        altHypothesis = "H1: mu " + inequality + testValue;
     }
 
     private BigDecimal getCriticalRegion(Hypothesis hypothesis,
@@ -126,5 +146,19 @@ public class OneSampleTTest {
         System.out.println("From OneSampleTTest: " + sumOfSquaredDifference);
 
         return sumOfSquaredDifference.multiply(oneOverNAdjusted);
+    }
+
+    /**
+     * @return  the null hypothesis
+     */
+    public String getNullHypothesis() {
+        return nullHypothesis;
+    }
+
+    /**
+     * @return  the alt hypothesis
+     */
+    public String getAltHypothesis() {
+        return altHypothesis;
     }
 }
