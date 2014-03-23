@@ -43,7 +43,7 @@ public class MainGUI {
     public static void main(String[] args) {
         MainFrame frame = new MainFrame();
 
-        frame.setTitle("StatLogic v0.2.2");
+        frame.setTitle("StatLogic v0.2.3");
         frame.setMinimumSize(new Dimension(800, 450));
         frame.setSize(700, 400);
         frame.setResizable(true);
@@ -104,8 +104,8 @@ class MainFrame extends JFrame {
             "1-Sample T-Test", "Standard Score"};
     private JPanel leftInnerPanel = new JPanel();
     private JPanel rightInnerPanel = new JPanel();
-    private ImageIcon collapseIcon = new ImageIcon("images/Toggle_03_Hide.png");
-    private JLabel collapseBtn = new JLabel(collapseIcon);
+    private ImageIcon collapseIcon;
+    private JLabel collapseBtn;
     //
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
     private Border borderForOutput;
@@ -113,6 +113,10 @@ class MainFrame extends JFrame {
     private int panelIndex = 0;
 
     MainFrame() {
+        final ClassLoader cLoader = getClass().getClassLoader();
+        collapseIcon = new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png"));
+        collapseBtn = new JLabel(collapseIcon);
+
         setJMenuBar(menuBar);
         jtaOutput.setLineWrap(true);
         jtaOutput.setWrapStyleWord(true);
@@ -138,12 +142,12 @@ class MainFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (state == false) {
-                    collapseBtn.setIcon(new ImageIcon("images/Toggle_03_Show.png"));
+                    collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Show.png")));
                     upperPanel.leftPanel.removeAll();
                     upperPanel.leftPanel.revalidate();
                     state = true;
                 } else if (state == true) {
-                    collapseBtn.setIcon(new ImageIcon("images/Toggle_03_Hide.png"));
+                    collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
                     showPanel();
                     upperPanel.leftPanel.revalidate();
                     state = false;
