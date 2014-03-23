@@ -3,5 +3,6 @@ Version 0.2.2
 
 Version 0.2.3
 *Resources can now be packaged correctly into a JAR.
-*collapseIcon previously did not render (fixed).
-*AboutPage.html previously did not render (fixed).
+*Icon to show/hide calculator panel previously did not render (fixed).
+*HTML for About window previously did not render (fixed).
+*Icon to show/hide calculator panel did not always update (fixed).
