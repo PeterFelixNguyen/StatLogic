@@ -1,7 +1,6 @@
 package pfnguyen.statlogic.gui;
 
 import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -19,16 +18,13 @@ public class AboutPanel extends JPanel {
         JepAbout.setEditable(false);
         JepAbout.addHyperlinkListener(urlListener);
         JepAbout.setBorder(null);
+        ClassLoader cLoader = this.getClass().getClassLoader();
 
-        File aboutPage = new File("html/AboutPage.html");
-
-        if (aboutPage != null) {
-            try {
-                JepAbout.setPage(aboutPage.toURI().toURL());
-            }
-            catch (IOException e) {
-                System.err.println("Attempted to read a bad URL: " + aboutPage);
-            }
+        try {
+            JepAbout.setPage(cLoader.getResource("html/AboutPage.html"));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
 
         add(JepAbout);
