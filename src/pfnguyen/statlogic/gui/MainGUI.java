@@ -96,7 +96,8 @@ class MainFrame extends JFrame {
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
     private Border borderForOutput;
     private JPanel panelForCollapseBtn = new JPanel();
-    private int panelIndex = 0;
+    private int panelIndex = 3;
+    private boolean hiddenPanel = false;
 
     MainFrame() {
         final ClassLoader cLoader = getClass().getClassLoader();
@@ -119,24 +120,25 @@ class MainFrame extends JFrame {
         jcboCalcChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
+                hiddenPanel = false;
                 setPanel(jcboCalcChooser.getSelectedIndex());
             }
         });
         collapseBtn.addMouseListener(new MouseAdapter() {
-            boolean state = false;
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (state == false) {
+                if (hiddenPanel == false) {
                     collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Show.png")));
                     upperPanel.leftPanel.removeAll();
                     upperPanel.leftPanel.revalidate();
-                    state = true;
-                } else if (state == true) {
+                    hiddenPanel = true;
+                } else if (hiddenPanel == true) {
                     collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
                     showPanel();
                     upperPanel.leftPanel.revalidate();
-                    state = false;
+                    hiddenPanel = false;
                 }
             }
         });
