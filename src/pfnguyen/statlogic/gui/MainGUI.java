@@ -62,26 +62,12 @@ class CollapseButton extends ImageIcon {
 
 @SuppressWarnings("serial")
 class ContainerForChooser extends JPanel {
-    // private ImageIcon collapseIcon = new ImageIcon(images/1.png");
-
-    // private JLabel collapseBtn = new JLabel(collapseIcon);
-    // private JPanel leftInnerPanel = new JPanel();
-    // private JPanel rightInnerPanel = new JPanel();
 
     public ContainerForChooser() {
         setLayout(new GridLayout());
         setBorder(new TitledBorder("Choose Calculator"));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         setMinimumSize(new Dimension(60, 60));
-
-        // add(leftInnerPanel);
-        // add(rightInnerPanel);
-
-        // leftInnerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        // rightInnerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-        // leftInnerPanel.add(jcboCalcChooser);
-        // rightInnerPanel.add(collapseBtn);
     }
 
     @Override
