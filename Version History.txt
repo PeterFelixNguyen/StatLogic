@@ -1,0 +1,7 @@
+Version 0.2.2
++No information
+
+Version 0.2.3
+*Resources can now be packaged correctly into a JAR.
+*collapseIcon previously did not render (fixed).
+*AboutPage.html previously did not render (fixed).
