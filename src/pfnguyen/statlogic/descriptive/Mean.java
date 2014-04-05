@@ -58,7 +58,7 @@ public class Mean {
     }
 
     /**
-     * Converts the BigDecimal value of the mean into a String
+     * Converts the BigDecimal value of the mean into a String.
      * 
      * @return  the String representation of the mean value
      */
