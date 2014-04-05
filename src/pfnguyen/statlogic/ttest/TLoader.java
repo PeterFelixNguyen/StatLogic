@@ -97,7 +97,12 @@ public class TLoader {
         outputString = new StringBuilder("Date created: " + new java.util.Date() + "\n\n"
                 + "One sample Student's t-test" + "\n"
                 + oneSampleTTest.getNullHypothesis() + "\n"
-                + oneSampleTTest.getAltHypothesis() + "\n");
+                + oneSampleTTest.getAltHypothesis() + "\n" + "\n"
+                + "xbar = " + oneSampleTTest.getXBar() + "    n = " + oneSampleTTest.getN() + "\n"
+                + "sigma = " + oneSampleTTest.getSigma() + "    alpha = " + oneSampleTTest.getAlpha() + "\n" + "\n"
+                + "Critical Value = " + oneSampleTTest.getCriticalRegionAsString() + "    Test Statistic = " + oneSampleTTest.getTestStatistics() + "\n");
+        oneSampleTTest.testHypothesis(); // got to do something about this
+        outputString.append(oneSampleTTest.getConclusionAsString());
     }
 
     /** Print results to jtaOutput window */
