@@ -2,7 +2,14 @@ Version 0.2.2
 +No information
 
 Version 0.2.3
-*Resources can now be packaged correctly into a JAR.
+*Resources can now be packaged correctly into a JAR (using Eclipse).
 *Icon to show/hide calculator panel previously did not render (fixed).
 *HTML for About window previously did not render (fixed).
 *Icon to show/hide calculator panel did not always update (fixed).
+
+Version 0.2.4
+1-Sample T-Test can now output the results.
+1-Sample T-Test now concludes witht the correct hypothesis.
+1-Sample T-Test did not perform test until a tail is clicked (fixed).
+1-Sample T-Test can now calculate sample mean and sample standard deviation from file.
+1-Sample T-Test can now calculate sample mean and sample standard deviation from a window of values.
