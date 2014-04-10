@@ -38,13 +38,15 @@ public class OneSampleTTest {
     private String sigma;
     private String alpha;
     private String conclusion = "Test statistic is within the critical region \n" + "Reject the null hypothesis";
+    private BigDecimal calculatedMean;
 
     public OneSampleTTest(Hypothesis hAlternative, BigDecimal testValue,
             ArrayList<BigDecimal> x, double significance) {
+        tDistribution = new TDistribution((double)(x.size()-1));
         getCriticalRegion(hAlternative, significance);
         BigDecimal sampleStdDev = BigDecimalMath.sqrt(calcSampleVariance(x));
         calcTestStatistic(hAlternative, calcSampleMean(x), testValue, sampleStdDev, x);
-        //constructStrings(testValue, this.hypothesis = hAlternative, significance); // maybe I should pass the paramaters in the constructor???
+        constructStrings(this.hypothesis = hAlternative, testValue, calculatedMean, sampleStdDev, x.size(), significance);
     }
 
     public OneSampleTTest(Hypothesis hAlternative, BigDecimal testValue,
@@ -132,16 +134,15 @@ public class OneSampleTTest {
      */
     private BigDecimal calcSampleMean(ArrayList<BigDecimal> x) {
         BigDecimal sum = BigDecimal.ZERO;
-        BigDecimal sampleMean;
 
         for (int i = 0; i < x.size(); i++) {
             sum = sum.add(x.get(i));
         }
 
-        sampleMean = sum.divide(new BigDecimal(x.size()), 4,
+        calculatedMean = sum.divide(new BigDecimal(x.size()), 4,
                 RoundingMode.HALF_UP);
 
-        return sampleMean;
+        return calculatedMean;
     }
 
     /**
@@ -162,8 +163,6 @@ public class OneSampleTTest {
             squaredDifference = sumOfDifference.multiply(sumOfDifference);
             sumOfSquaredDifference = sumOfSquaredDifference.add(squaredDifference);
         }
-
-        System.out.println("From OneSampleTTest: " + sumOfSquaredDifference);
 
         return sumOfSquaredDifference.multiply(oneOverNAdjusted);
     }
