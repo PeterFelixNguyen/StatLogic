@@ -70,7 +70,7 @@ public class TTestPanel extends JPanel {
     // Calculator
     private TLoader loader;
     // Input for Method 3
-    private Hypothesis hypothesis;
+    private Hypothesis hypothesis = Hypothesis.NOT_EQUAL;
     private BigDecimal testValue;
     private BigDecimal stdDev;
     private double significance;
@@ -176,7 +176,8 @@ public class TTestPanel extends JPanel {
                         JTextField jtfSampleSize = new JTextField();
                         JTextField jtfStdDev = new JTextField();
                         Object[] message = { "X\u0305: ", jtfXBar,
-                                "Sample Size: ", jtfSampleSize, "\u03C3\u0302", jtfStdDev};
+                                "Sample Size: ", jtfSampleSize,
+                                "\u03C3\u0302", jtfStdDev};
 
                         int selectedOption = JOptionPane.showConfirmDialog(
                                 jbtCalculate.getParent(), message,
@@ -215,8 +216,10 @@ public class TTestPanel extends JPanel {
                                 calcXBarPanel, "Options",
                                 JOptionPane.OK_CANCEL_OPTION,
                                 JOptionPane.PLAIN_MESSAGE);
-                        loader.stringToBigDecimalArray(jtaValues.getText());
-                        // gotta change from public access to private
+                        testValue = new BigDecimal(jtfTestValue.getText());
+                        significance = new Double(alpha.getText());
+                        loader.stringToBigDecimalArray(jtaValues.getText(), hypothesis, testValue, significance);
+                        // gotta change from public access to private << it's been awhile, i forgot what this means
 
                     } else if (importXBar.isSelected()) {
                         try {
