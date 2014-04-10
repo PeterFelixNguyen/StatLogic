@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * Work on OneSampleTTest.java first
+ */
 package pfnguyen.statlogic.ztest;
 
 import java.math.BigDecimal;
@@ -31,20 +34,21 @@ public class OneSampleZTest {
     private BigDecimal lowerRegion; // move to an if else in constructor???
     private BigDecimal upperRegion; // move to an if else in constructor???
 
-    public OneSampleZTest(Hypothesis hypothesis, BigDecimal testValue,
+    public OneSampleZTest(Hypothesis hAlternative, BigDecimal testValue,
             ArrayList<BigDecimal> x, BigDecimal stdDev, double significance) {
-        getCriticalRegion(hypothesis, significance);
-        calcTestStatistic(hypothesis, calcSampleMean(x), testValue, stdDev, x);
-        this.hypothesis = hypothesis;
+        getCriticalRegion(hAlternative, significance);
+        calcTestStatistic(hAlternative, calcSampleMean(x), testValue, stdDev, x);
+        this.hypothesis = hAlternative;
     }
 
-    public OneSampleZTest(Hypothesis hypothesis, BigDecimal testValue,
+    public OneSampleZTest(Hypothesis hAlternative, BigDecimal testValue,
             BigDecimal xBar, BigDecimal stdDev, int n, double significance) {
-        getCriticalRegion(hypothesis, significance);
-        calcTestStatistic(hypothesis, xBar, testValue, stdDev, n);
-        this.hypothesis = hypothesis;
+        getCriticalRegion(hAlternative, significance);
+        calcTestStatistic(hAlternative, xBar, testValue, stdDev, n);
+        this.hypothesis = hAlternative;
     }
 
+    /* Notice thie method only returns the one tail critical region */
     private BigDecimal getCriticalRegion(Hypothesis hypothesis,
             double significance) {
         if (hypothesis == Hypothesis.NOT_EQUAL) {
