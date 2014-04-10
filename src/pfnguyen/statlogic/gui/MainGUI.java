@@ -43,7 +43,7 @@ public class MainGUI {
     public static void main(String[] args) {
         MainFrame frame = new MainFrame();
 
-        frame.setTitle("StatLogic v0.2.3");
+        frame.setTitle("StatLogic v0.2.3.1");
         frame.setMinimumSize(new Dimension(800, 450));
         frame.setSize(700, 400);
         frame.setResizable(true);
@@ -80,7 +80,7 @@ class ContainerForChooser extends JPanel {
 class MainFrame extends JFrame {
     private JTextArea jtaOutput = new JTextArea();
     private JLabel statusBar = new JLabel(" ", SwingConstants.LEFT);
-    private SimpleMenuBar menuBar = new SimpleMenuBar();
+    private SimpleMenuBar menuBar = new SimpleMenuBar(jtaOutput, statusBar);
     private UpperPanel upperPanel = new UpperPanel(jtaOutput, statusBar);
     private LowerPanel lowerPanel = new LowerPanel(statusBar);
     //
