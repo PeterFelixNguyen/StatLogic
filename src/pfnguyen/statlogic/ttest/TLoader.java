@@ -71,6 +71,7 @@ public class TLoader {
 
             oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
                     arrayValues, significance);
+
             buildString();
             writeToOutput();
 
@@ -79,7 +80,7 @@ public class TLoader {
         }
     }
 
-    public void addToArray() {
+    private void addToArray() {
         if (input.hasNextBigDecimal()) {
             arrayValues.add(input.nextBigDecimal());
             addToArray();
@@ -128,11 +129,26 @@ public class TLoader {
         writeToOutput();
     }
 
-    public void loadTextIntoArray() {
-
+    private void toBigDecimalArray(String[] stringArray) {
+        for (int i = 0; i < stringArray.length; i++) {
+            arrayValues.add(new BigDecimal(stringArray[i]));
+        }
     }
 
-    public void stringToBigDecimalArray(String stringValues) {
+    public void stringToBigDecimalArray(String stringValues, Hypothesis hypothesis,
+            BigDecimal testValue, double significance) {
+        String[] stringArray = stringValues.split("\\s+");
 
+        if (arrayValues.size() != 0) {
+            arrayValues.clear(); // Required to make program reusable
+        }
+
+        toBigDecimalArray(stringArray);
+
+        oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
+                arrayValues, significance);
+
+        buildString();
+        writeToOutput();
     }
 }
