@@ -15,15 +15,24 @@
  */
 package pfnguyen.statlogic.gui;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
 public class SimpleMenuBar extends JMenuBar{
@@ -57,7 +66,7 @@ public class SimpleMenuBar extends JMenuBar{
     // Menu Panels
     private AboutPanel aboutPanel = new AboutPanel();
 
-    public SimpleMenuBar() {
+    public SimpleMenuBar(final JTextArea jtaOutput, final JLabel statusBar) {
         add(fileMenu);
         add(editMenu);
         add(toolsMenu);
@@ -95,6 +104,53 @@ public class SimpleMenuBar extends JMenuBar{
         helpMenu.addSeparator();
         helpMenu.add(jmiFeedback);
         helpMenu.add(jmiAbout);
+
+        // Saves the contents of the output window into a specified file.
+        jmiSaveAs.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Text Files", "txt");
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.addChoosableFileFilter(filter);
+
+                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+                    java.io.File outFile = fileChooser.getSelectedFile();
+
+                    if (outFile.exists()) {
+                        final int option = JOptionPane.showConfirmDialog(null,
+                                "File already exists, " + "do you want to replace file?",
+                                "Retep's StatCalc", JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE);
+                        if (!(option == JOptionPane.YES_OPTION)) {
+                            System.out.println("Cancelled Save");
+                        }
+                    }
+                    PrintWriter output;
+                    try {
+                        output = new PrintWriter(new BufferedWriter(new FileWriter(
+                                outFile, false)));
+                        output.print(jtaOutput.getText());
+                        output.close();
+                    }
+                    catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+
+                    statusBar.setText(" Saved to file \"" + outFile.getName()
+                            + "\"");
+                    try {
+                        Desktop.getDesktop().open(outFile);
+                    }
+                    catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
 
         jmiAbout.addActionListener(new ActionListener() {
 
