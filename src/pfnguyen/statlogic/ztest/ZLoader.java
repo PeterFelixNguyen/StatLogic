@@ -34,7 +34,7 @@ public class ZLoader {
     private ZConfidenceInterval oneSampleCI;
     private Option option = Option.NONE;
     /** Data */
-    private ArrayList<BigDecimal> arrayValues = new ArrayList<BigDecimal>();
+    private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
     private Scanner input;
     // private PrintWriter output;
     private java.io.File inFile;
@@ -52,12 +52,12 @@ public class ZLoader {
     public void loadFileIntoArray(Hypothesis hypothesis,
             BigDecimal testValue, BigDecimal stdDev, double significance)
                     throws IOException {
-        /* If data previously loaded, clear arrayValues */
-        if (arrayValues.size() != 0) {
-            arrayValues.clear(); // Required to make program reusable
+        /* If data previously loaded, clear values */
+        if (values.size() != 0) {
+            values.clear(); // Required to make program reusable
         }
 
-        /* Inputs data from file and assign to arrayValues */
+        /* Inputs data from file and assign to values */
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             inFile = fileChooser.getSelectedFile();
@@ -69,7 +69,7 @@ public class ZLoader {
             input.close();
 
             oneSampleZTest = new OneSampleZTest(hypothesis, testValue,
-                    arrayValues, stdDev, significance);
+                    values, stdDev, significance);
 
             writeToOutput();
 
@@ -80,7 +80,7 @@ public class ZLoader {
 
     public void addToArray() {
         if (input.hasNextBigDecimal()) {
-            arrayValues.add(input.nextBigDecimal());
+            values.add(input.nextBigDecimal());
             addToArray();
         } else if (input.hasNext()) {
             input.next();
