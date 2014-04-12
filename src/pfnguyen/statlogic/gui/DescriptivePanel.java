@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
@@ -40,7 +41,8 @@ import pfnguyen.statlogic.descriptive.DescriptiveLoader;
  */
 @SuppressWarnings("serial")
 public class DescriptivePanel extends JPanel {
-    private JButton jbtLoad = new JButton("Load Data");
+    private JButton jbtLoad = new JButton("Load From File");
+    private JButton jbtEnter = new JButton("Manually Enter");
     private JButton jbtSave = new JButton("Save Results");
     private JButton jbtConf = new JButton("Options");
     private DescriptiveLoader loader;
@@ -62,10 +64,31 @@ public class DescriptivePanel extends JPanel {
         setLayout(new GridLayout(3, 1));
 
         add(jbtLoad);
-        add(jbtSave);
+        add(jbtEnter);
+        //add(jbtSave);
         add(jbtConf);
 
         jbtLoad.addActionListener(new LoadListener());
+        jbtEnter.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextArea jtaValues = new JTextArea(20, 20);
+                jtaValues.setLineWrap(true);
+                jtaValues.setWrapStyleWord(true);
+
+                BoxPanel entryPanel = new BoxPanel();
+                entryPanel.add(new JLabel(
+                        "Enter values"));
+                entryPanel.add(new JScrollPane(jtaValues));
+
+                int selected = JOptionPane.showConfirmDialog(null,
+                        entryPanel, "Options", JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (selected != JOptionPane.CANCEL_OPTION) {
+                    loader.stringToBigDecimalArray(jtaValues.getText());
+                }
+            }
+        });
         jbtSave.addActionListener(listenerJbtSave);
         jbtConf.addActionListener(new OptionListener());
     }
@@ -74,7 +97,7 @@ public class DescriptivePanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                loader.loadIntoArrayList();
+                loader.loadFileIntoArray();
 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Uncertain IOException");
