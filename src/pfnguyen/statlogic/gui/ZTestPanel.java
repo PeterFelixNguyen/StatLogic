@@ -50,10 +50,10 @@ public class ZTestPanel extends JPanel {
     private JRadioButton upperTail = new JRadioButton("Upper Tail");
     private JRadioButton twoTail = new JRadioButton("Two Tail");
     private JRadioButton provideXBar = new JRadioButton("Provide " + "X\u0305");
-    private JRadioButton calculateXBar = new JRadioButton("Calculate "
-            + "X\u0305");
-    private JRadioButton importXBar = new JRadioButton("Calculate " + "X\u0305"
-            + " from File");
+    private JRadioButton calculateXBar = new JRadioButton(
+            "Calculate " + "X\u0305");
+    private JRadioButton importXBar = new JRadioButton(
+            "Calculate " + "X\u0305" + " from File");
     private JTextField jtfTestValue = new JTextField(4);
     private JTextField sigma = new JTextField(4);
     private JTextField alpha = new JTextField(4);
@@ -140,16 +140,6 @@ public class ZTestPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 hypothesis = Hypothesis.NOT_EQUAL;
                 setTwoTail();
-            }
-        });
-        provideXBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        calculateXBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
             }
         });
 
