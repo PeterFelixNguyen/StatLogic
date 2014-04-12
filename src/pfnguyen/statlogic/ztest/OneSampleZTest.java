@@ -29,10 +29,10 @@ import pfnguyen.statlogic.options.CalculatorOptions.Hypothesis;
 public class OneSampleZTest {
     private NormalDistribution normal = new NormalDistribution();
     private BigDecimal testStatistic;
-    private BigDecimal criticalRegion; // move to an if else in constructor???
+    private BigDecimal criticalRegion;
     private Hypothesis hypothesis;
-    private BigDecimal lowerRegion; // move to an if else in constructor???
-    private BigDecimal upperRegion; // move to an if else in constructor???
+    private BigDecimal lowerRegion;
+    private BigDecimal upperRegion;
 
     public OneSampleZTest(Hypothesis hAlternative, BigDecimal testValue,
             ArrayList<BigDecimal> x, BigDecimal stdDev, double significance) {
