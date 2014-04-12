@@ -85,8 +85,9 @@ public class DescriptiveLoader {
      * 
      * @throws  IOException  If an input or output exception occured
      */
-    public void loadIntoArrayList() throws IOException {
-        values = new ArrayList<BigDecimal>();
+    public void loadFileIntoArray() throws IOException {
+        values = new ArrayList<BigDecimal>(); // if placed here, I think I don't need to clear
+        // this method doesnt clear the ArrayList..double check before fully implementing
 
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -112,6 +113,36 @@ public class DescriptiveLoader {
                 isLoaded = true;
                 isSaved = false;
             }
+        }
+    }
+
+    public void stringToBigDecimalArray(String stringValues) {
+        values = new ArrayList<BigDecimal>(); // i think i dont need to clear
+
+        String[] stringArray = stringValues.split("\\s+");
+
+        if (values.size() != 0) {
+            values.clear(); // i think i can remove this
+        }
+
+        for (int i = 0; i < stringArray.length; i++) {
+            values.add(new BigDecimal(stringArray[i]));
+        }
+
+        /* Calculators are instantiated here.
+         * I should implement a separate method */
+        mean = new Mean(values);
+        stdDev = new Dispersion(values, mean.getMean());
+        quartile = new Quartiles(values); // this also sorts the ArrayList
+        extrema = new Extrema(values); // works if the ArrayList is sorted
+        mode = new Mode(values);
+        statusBar.setText("Manual data entry successful");
+        buildString();
+        writeToOutput();
+
+        if (values.size() != 0) { // Need to make sure if I really need to check this condition
+            isLoaded = true;
+            isSaved = false;
         }
     }
 
