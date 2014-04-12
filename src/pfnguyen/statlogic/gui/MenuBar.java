@@ -35,7 +35,7 @@ import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
-public class SimpleMenuBar extends JMenuBar{
+public class MenuBar extends JMenuBar{
     private JMenu fileMenu = new JMenu("File");
     private JMenu editMenu = new JMenu("Edit");
     private JMenu toolsMenu = new JMenu("Tools");
@@ -66,7 +66,7 @@ public class SimpleMenuBar extends JMenuBar{
     // Menu Panels
     private AboutPanel aboutPanel = new AboutPanel();
 
-    public SimpleMenuBar(final JTextArea jtaOutput, final JLabel statusBar) {
+    public MenuBar(final JTextArea jtaOutput, final JLabel statusBar) {
         add(fileMenu);
         add(editMenu);
         add(toolsMenu);
@@ -105,7 +105,6 @@ public class SimpleMenuBar extends JMenuBar{
         helpMenu.add(jmiFeedback);
         helpMenu.add(jmiAbout);
 
-        // Saves the contents of the output window into a specified file.
         jmiSaveAs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,6 +148,13 @@ public class SimpleMenuBar extends JMenuBar{
                         e1.printStackTrace();
                     }
                 }
+            }
+        });
+
+        jmiClear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jtaOutput.setText(null);
             }
         });
 
