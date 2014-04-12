@@ -223,8 +223,8 @@ public class ZScorePanel extends JPanel {
     public void calculateZScore() {
         if (new Double(jtfStdDev.getText()) != 0 && !emptyFields()) {
             zScore = new ZScore(xBar, populationMean, stdDev);
-            jlblZScore.setText(String.valueOf(zScore.getZScore()));
-            jlblPValue.setText(String.valueOf(zScore.getProbability()));
+            jlblZScore.setText("Z = " + String.valueOf(zScore.getZScore()));
+            jlblPValue.setText("P = " + String.valueOf(zScore.getProbability()));
         }
     }
 
