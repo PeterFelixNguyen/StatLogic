@@ -27,44 +27,84 @@ import pfnguyen.statlogic.options.CalculatorOptions.Hypothesis;
 public class OneSampleTTest {
     private TDistribution tDistribution;
     private BigDecimal testStatistic;
-    private BigDecimal criticalRegion; // move to an if else in constructor???
+    private BigDecimal criticalRegion;
     private Hypothesis hypothesis;
-    private BigDecimal lowerRegion; // move to an if else in constructor???
-    private BigDecimal upperRegion; // move to an if else in constructor???
+    private BigDecimal lowerRegion;
+    private BigDecimal upperRegion;
     private String nullHypothesis;
     private String altHypothesis;
     private String xBar;
     private String n;
     private String sigma;
     private String alpha;
-    private String conclusion = "Test statistic is within the critical region \n" + "Reject the null hypothesis";
+    private String conclusion = "Test statistic is within the critical region \n"
+            + "Reject the null hypothesis";
+    private boolean rejectNull;
     private BigDecimal calculatedMean;
 
+    /**
+     * Constructs OneSampleTTest with an ArrayList of values.
+     * 
+     * @param  hAlternative  the inequality for alternative hypothesis
+     * @param  testValue     the value for the null hypothesis
+     * @param  x             the data sample
+     * @param  significance  the significance level
+     */
     public OneSampleTTest(Hypothesis hAlternative, BigDecimal testValue,
             ArrayList<BigDecimal> x, double significance) {
         tDistribution = new TDistribution((double)(x.size()-1));
         getCriticalRegion(hAlternative, significance);
         BigDecimal sampleStdDev = BigDecimalMath.sqrt(calcSampleVariance(x));
-        calcTestStatistic(hAlternative, calcSampleMean(x), testValue, sampleStdDev, x);
-        constructStrings(this.hypothesis = hAlternative, testValue, calculatedMean, sampleStdDev, x.size(), significance);
+        calcTestStatistic(hAlternative, calcSampleMean(x),
+                testValue, sampleStdDev, x);
+        constructStrings(this.hypothesis = hAlternative, testValue,
+                calculatedMean, sampleStdDev, x.size(), significance);
+        rejectNull = testHypothesis();
     }
 
+    /**
+     * Constructs OneSampleTTest with precalculated values for
+     * sample mean, sample standard deviation, and sample size.
+     * 
+     * @param  hAlternative  the inequality for alternative hypothesis
+     * @param  testValue     the value for the null hypothesis
+     * @param  xBar          the sample mean
+     * @param  sampleStdDev  the sample standard deviation
+     * @param  n             the sample size
+     * @param  significance  the significance level
+     */
     public OneSampleTTest(Hypothesis hAlternative, BigDecimal testValue,
-            BigDecimal xBar, BigDecimal sampleStdDev, int n, double significance) {
+            BigDecimal xBar, BigDecimal sampleStdDev,
+            int n, double significance) {
         tDistribution = new TDistribution((double)(n-1));
         getCriticalRegion(hAlternative, significance);
         calcTestStatistic(hAlternative, xBar, testValue, sampleStdDev, n);
-        constructStrings(this.hypothesis = hAlternative, testValue, xBar, sampleStdDev, n, significance);
+        constructStrings(this.hypothesis = hAlternative, testValue, xBar,
+                sampleStdDev, n, significance);
+        rejectNull = testHypothesis();
     }
 
-    private void constructStrings(Hypothesis hypothesis, BigDecimal testValue, BigDecimal xBar, BigDecimal sampleStdDev, int n, double significance) {
+    /**
+     * Constructs Strings for alternative hypothesis, sample mean, sample size,
+     * sample standard deviation, and significance level.
+     * 
+     * @param  hAlternative  the inequality for alternative hypothesis
+     * @param  testValue     the value for the null hypothesis
+     * @param  xBar          the sample mean
+     * @param  sampleStdDev  the sample standard deviation
+     * @param  n             the sample size
+     * @param  significance  the significance level
+     */
+    private void constructStrings(Hypothesis hAlternative,
+            BigDecimal testValue, BigDecimal xBar,
+            BigDecimal sampleStdDev, int n, double significance) {
         String inequality = "";
 
-        if (hypothesis == Hypothesis.LESS_THAN)
+        if (hAlternative == Hypothesis.LESS_THAN)
             inequality = "< ";
-        else if (hypothesis == Hypothesis.GREATER_THAN)
+        else if (hAlternative == Hypothesis.GREATER_THAN)
             inequality = "> ";
-        else if (hypothesis == Hypothesis.NOT_EQUAL)
+        else if (hAlternative == Hypothesis.NOT_EQUAL)
             inequality = "!= ";
         nullHypothesis = "H0: mu " + "= " + testValue;
         altHypothesis = "H1: mu " + inequality + testValue;
@@ -74,10 +114,15 @@ public class OneSampleTTest {
         this.alpha = "" + significance;
     }
 
-    /* Change to double, BigDecimal precision not necessary */
-    private void getCriticalRegion(Hypothesis hypothesis,
+    /**
+     * Calculates the critical region.
+     * 
+     * @param hAlternative  the inequality for alternative hypothesis
+     * @param significance  the significance level
+     */
+    private void getCriticalRegion(Hypothesis hAlternative,
             double significance) {
-        if (hypothesis == Hypothesis.NOT_EQUAL) {
+        if (hAlternative == Hypothesis.NOT_EQUAL) {
             lowerRegion = new BigDecimal(
                     tDistribution.inverseCumulativeProbability(significance / 2));
             lowerRegion = lowerRegion.setScale(3, BigDecimal.ROUND_HALF_UP);
@@ -85,12 +130,12 @@ public class OneSampleTTest {
                     tDistribution.inverseCumulativeProbability(1 - (significance / 2)));
             upperRegion = upperRegion.setScale(3, BigDecimal.ROUND_HALF_UP);
         }
-        else if (hypothesis == Hypothesis.LESS_THAN) {
+        else if (hAlternative == Hypothesis.LESS_THAN) {
             criticalRegion = new BigDecimal(
                     tDistribution.inverseCumulativeProbability(significance));
             criticalRegion = criticalRegion.setScale(3, BigDecimal.ROUND_HALF_UP);
         }
-        else if (hypothesis == Hypothesis.GREATER_THAN) {
+        else if (hAlternative == Hypothesis.GREATER_THAN) {
             criticalRegion = new BigDecimal(
                     tDistribution.inverseCumulativeProbability(significance));
             criticalRegion = criticalRegion.setScale(3, BigDecimal.ROUND_HALF_UP).abs();
@@ -100,7 +145,13 @@ public class OneSampleTTest {
         }
     }
 
-    public boolean testHypothesis() {
+    /**
+     * Check if test statistic is within the critical region
+     * to determine whether or not to reject the null hypothesis.
+     * 
+     * @return  true if null hypothesis is rejected, otherwise false
+     */
+    private boolean testHypothesis() {
         if (hypothesis == Hypothesis.LESS_THAN
                 && testStatistic.compareTo(criticalRegion) < 0) {
             return true;
@@ -115,19 +166,13 @@ public class OneSampleTTest {
             return true;
         }
         else
-            conclusion = "Test statistic is NOT within the critical region \n" + "Do NOT reject the null hypothesis";
+            conclusion = "Test statistic is NOT within the critical region \n"
+                    + "Do NOT reject the null hypothesis";
         return false;
     }
 
     /**
-     * @return  the String representation of the test's conclusion
-     */
-    public String getConclusionAsString() {
-        return conclusion;
-    }
-
-    /**
-     * Calculates the sample mean
+     * Calculates the sample mean.
      *
      * @param  x  the data sample
      * @return    the sample mean
@@ -146,7 +191,7 @@ public class OneSampleTTest {
     }
 
     /**
-     * Calculates the sample variance
+     * Calculates the sample variance.
      * 
      * @param  x  the data sample
      * @return    the sample variance
@@ -167,6 +212,15 @@ public class OneSampleTTest {
         return sumOfSquaredDifference.multiply(oneOverNAdjusted);
     }
 
+    /**
+     * Calculates the test statistic if x is calculated from an ArrayList.
+     * 
+     * @param  hAlternative    the inequality for alternative hypothesis
+     * @param  sampleMean      the sample mean
+     * @param  populationMean  the population mean
+     * @param  stdDev          the standard deviation
+     * @param  x               the data sample
+     */
     private void calcTestStatistic(Hypothesis hAlternative,
             BigDecimal sampleMean, BigDecimal populationMean,
             BigDecimal stdDev, ArrayList<BigDecimal> x) {
@@ -176,6 +230,15 @@ public class OneSampleTTest {
                         4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP);
     }
 
+    /**
+     * Calculates the test statistic if x is provided by the user.
+     * 
+     * @param  hAlternative    the inequality for alternative hypothesis
+     * @param  sampleMean      the sample mean
+     * @param  populationMean  the population mean
+     * @param  stdDev          the standard deviation
+     * @param  x               the data sample
+     */
     private void calcTestStatistic(Hypothesis hAlternative,
             BigDecimal sampleMean, BigDecimal populationMean,
             BigDecimal sampleStdDev, int n) {
@@ -242,5 +305,19 @@ public class OneSampleTTest {
             return lowerRegion.toString() + " and " + upperRegion.toString();
         else
             return criticalRegion.toString();
+    }
+
+    /**
+     * @return  the String representation of the test's conclusion
+     */
+    public String getConclusionAsString() {
+        return conclusion;
+    }
+
+    /**
+     * @return  true if null hypothesis is rejected, false otherwise
+     */
+    public boolean getConclusion() {
+        return rejectNull;
     }
 }
