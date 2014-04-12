@@ -80,7 +80,7 @@ class ContainerForChooser extends JPanel {
 class MainFrame extends JFrame {
     private JTextArea jtaOutput = new JTextArea();
     private JLabel statusBar = new JLabel(" ", SwingConstants.LEFT);
-    private SimpleMenuBar menuBar = new SimpleMenuBar(jtaOutput, statusBar);
+    private MenuBar menuBar = new MenuBar(jtaOutput, statusBar);
     private UpperPanel upperPanel = new UpperPanel(jtaOutput, statusBar);
     private LowerPanel lowerPanel = new LowerPanel(statusBar);
     //
