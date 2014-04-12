@@ -49,10 +49,12 @@ public class TTestPanel extends JPanel {
     private JRadioButton lowerTail = new JRadioButton("Lower Tail");
     private JRadioButton upperTail = new JRadioButton("Upper Tail");
     private JRadioButton twoTail = new JRadioButton("Two Tail");
-    private JRadioButton provideXBar = new JRadioButton("Provide " + "X\u0305" + ", \u03C3\u0302");
-    private JRadioButton calculateXBar = new JRadioButton("Calculate " + "X\u0305"  + ", \u03C3\u0302");
-    private JRadioButton importXBar = new JRadioButton("Calculate " + "X\u0305" + ", \u03C3\u0302"
-            + " from File");
+    private JRadioButton provideXBar = new JRadioButton(
+            "Provide " + "X\u0305" + ", \u03C3\u0302");
+    private JRadioButton calculateXBar = new JRadioButton(
+            "Calculate " + "X\u0305"  + ", \u03C3\u0302");
+    private JRadioButton importXBar = new JRadioButton(
+            "Calculate " + "X\u0305" + ", \u03C3\u0302" + " from File");
     private JTextField jtfTestValue = new JTextField(4);
     private JTextField alpha = new JTextField(4);
     private JButton jbtCalculate = new JButton("Calculate");
@@ -138,16 +140,6 @@ public class TTestPanel extends JPanel {
                 setTwoTail();
             }
         });
-        provideXBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        calculateXBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
 
         // Listen for changes in the text
         jtfTestValue.getDocument().addDocumentListener(new DocumentListener() {
@@ -169,67 +161,96 @@ public class TTestPanel extends JPanel {
         jbtCalculate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if ((new Double(alpha.getText()) > 0.0)
-                        && (new Double(alpha.getText()) < 1.0)) {
-                    if (provideXBar.isSelected()) {
-                        JTextField jtfXBar = new JTextField();
-                        JTextField jtfSampleSize = new JTextField();
-                        JTextField jtfStdDev = new JTextField();
-                        Object[] message = { "X\u0305: ", jtfXBar,
-                                "Sample Size: ", jtfSampleSize,
-                                "\u03C3\u0302", jtfStdDev};
+                try {
+                    if ((new Double(alpha.getText()) > 0.0)
+                            && (new Double(alpha.getText()) < 1.0)) {
+                        if (provideXBar.isSelected()) {
+                            JTextField jtfXBar = new JTextField();
+                            JTextField jtfSampleSize = new JTextField();
+                            JTextField jtfStdDev = new JTextField();
 
-                        int selectedOption = JOptionPane.showConfirmDialog(
-                                jbtCalculate.getParent(), message,
-                                "Sample Mean", JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE);
+                            if (xBar != null) {
+                                jtfXBar.setText(xBar.toString());
+                            }
 
-                        if (selectedOption != JOptionPane.CANCEL_OPTION) {
-                            testValue = new BigDecimal(jtfTestValue.getText());
-                            significance = new Double(alpha.getText());
+                            // Should provide error handling is sampleSize <= 1
+                            jtfSampleSize.setText(Integer.toString(sampleSize));
+                            if (jtfSampleSize.getText().contains("0")) {
+                                jtfSampleSize.setText("");
+                            }
+                            else {
+                                jtfSampleSize.setText(Integer.toString(sampleSize));
+                            }
 
-                            xBar = new BigDecimal(jtfXBar.getText());
-                            sampleSize = new Integer(jtfSampleSize.getText());
-                            stdDev = new BigDecimal(jtfStdDev.getText());
+                            if (stdDev != null) {
+                                jtfStdDev.setText(stdDev.toString());
+                            }
 
-                            if (!jchkConfidenceInterval.isSelected()) {
-                                loader.loadXIntoCalc(hypothesis, testValue,
-                                        xBar, stdDev, sampleSize, significance,
-                                        Option.TEST_HYPOTHESIS);
-                            } else {
-                                loader.loadXIntoCalc(hypothesis, testValue,
-                                        xBar, stdDev, sampleSize, significance,
-                                        Option.CONFIDENCE_INTERVAl);
+                            Object[] message = { "X\u0305: ", jtfXBar,
+                                    "Sample Size: ", jtfSampleSize,
+                                    "\u03C3\u0302", jtfStdDev};
+
+                            int selected = JOptionPane.showConfirmDialog(
+                                    jbtCalculate.getParent(), message,
+                                    "Sample Mean", JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE);
+
+                            if (selected != JOptionPane.CANCEL_OPTION) {
+                                testValue = new BigDecimal(jtfTestValue.getText());
+                                significance = new Double(alpha.getText());
+
+                                xBar = new BigDecimal(jtfXBar.getText());
+                                sampleSize = new Integer(jtfSampleSize.getText());
+                                stdDev = new BigDecimal(jtfStdDev.getText());
+
+                                if (!jchkConfidenceInterval.isSelected()) {
+                                    loader.loadXIntoCalc(hypothesis, testValue,
+                                            xBar, stdDev, sampleSize, significance,
+                                            Option.TEST_HYPOTHESIS);
+                                } else {
+                                    loader.loadXIntoCalc(hypothesis, testValue,
+                                            xBar, stdDev, sampleSize, significance,
+                                            Option.CONFIDENCE_INTERVAl);
+                                }
+                            }
+                        } else if (calculateXBar.isSelected()) {
+                            JTextArea jtaValues = new JTextArea(20, 20);
+                            jtaValues.setLineWrap(true);
+                            jtaValues.setWrapStyleWord(true);
+
+                            BoxPanel calcXBarPanel = new BoxPanel();
+                            calcXBarPanel.add(new JLabel(
+                                    "Enter values to calculate Sample Mean"));
+                            calcXBarPanel.add(new JScrollPane(jtaValues));
+                            // first parameter should be null?
+                            int selected = JOptionPane.showConfirmDialog(
+                                    jbtCalculate.getParent(), calcXBarPanel,
+                                    "Options", JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE);
+
+                            if (selected != JOptionPane.CANCEL_OPTION) {
+                                testValue = new BigDecimal(jtfTestValue.getText());
+                                significance = new Double(alpha.getText());
+                                loader.stringToBigDecimalArray(jtaValues.getText(), hypothesis, testValue, significance);
+                                // gotta change from public access to private << it's been awhile, i forgot what this means
+                            }
+
+                        } else if (importXBar.isSelected()) {
+                            try {
+                                testValue = new BigDecimal(jtfTestValue.getText());
+                                significance = new Double(alpha.getText());
+                                loader.loadFileIntoArray(hypothesis, testValue, significance);
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
                             }
                         }
-                    } else if (calculateXBar.isSelected()) {
-                        JTextArea jtaValues = new JTextArea(20, 20);
-                        jtaValues.setLineWrap(true);
-                        jtaValues.setWrapStyleWord(true);
-
-                        BoxPanel calcXBarPanel = new BoxPanel();
-                        calcXBarPanel.add(new JLabel(
-                                "Enter values to calculate Sample Mean"));
-                        calcXBarPanel.add(new JScrollPane(jtaValues));
-
-                        JOptionPane.showConfirmDialog(jbtCalculate.getParent(),
-                                calcXBarPanel, "Options",
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE);
-                        testValue = new BigDecimal(jtfTestValue.getText());
-                        significance = new Double(alpha.getText());
-                        loader.stringToBigDecimalArray(jtaValues.getText(), hypothesis, testValue, significance);
-                        // gotta change from public access to private << it's been awhile, i forgot what this means
-
-                    } else if (importXBar.isSelected()) {
-                        try {
-                            testValue = new BigDecimal(jtfTestValue.getText());
-                            significance = new Double(alpha.getText());
-                            loader.loadFileIntoArray(hypothesis, testValue, significance);
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
                     }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Signifiance level must be between 0 and 1 (exclusive)");
+                    }
+                }
+                catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null, "Significance level is not a number");
                 }
             }
         });
