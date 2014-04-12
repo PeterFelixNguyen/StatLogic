@@ -34,7 +34,7 @@ public class TLoader {
     private OneSampleTTest oneSampleTTest;
     private Option option = Option.NONE;
     /** Data */
-    private ArrayList<BigDecimal> arrayValues = new ArrayList<BigDecimal>();
+    private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
     private Scanner input;
     // private PrintWriter output;
     private java.io.File inFile;
@@ -53,12 +53,12 @@ public class TLoader {
     public void loadFileIntoArray(Hypothesis hypothesis,
             BigDecimal testValue, double significance)
                     throws IOException {
-        /* If data previously loaded, clear arrayValues */
-        if (arrayValues.size() != 0) {
-            arrayValues.clear(); // Required to make program reusable
+        /* If data previously loaded, clear values */
+        if (values.size() != 0) {
+            values.clear(); // Required to make program reusable
         }
 
-        /* Inputs data from file and assign to arrayValues */
+        /* Inputs data from file and assign to values */
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             inFile = fileChooser.getSelectedFile();
@@ -70,7 +70,7 @@ public class TLoader {
             input.close();
 
             oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
-                    arrayValues, significance);
+                    values, significance);
 
             buildString();
             writeToOutput();
@@ -82,7 +82,7 @@ public class TLoader {
 
     private void addToArray() {
         if (input.hasNextBigDecimal()) {
-            arrayValues.add(input.nextBigDecimal());
+            values.add(input.nextBigDecimal());
             addToArray();
         } else if (input.hasNext()) {
             input.next();
@@ -102,7 +102,6 @@ public class TLoader {
                 + "xbar = " + oneSampleTTest.getXBar() + "    n = " + oneSampleTTest.getN() + "\n"
                 + "sigma = " + oneSampleTTest.getSigma() + "    alpha = " + oneSampleTTest.getAlpha() + "\n" + "\n"
                 + "Critical Value = " + oneSampleTTest.getCriticalRegionAsString() + "    Test Statistic = " + oneSampleTTest.getTestStatistics() + "\n");
-        oneSampleTTest.testHypothesis(); // got to do something about this
         outputString.append(oneSampleTTest.getConclusionAsString());
     }
 
@@ -129,24 +128,20 @@ public class TLoader {
         writeToOutput();
     }
 
-    private void toBigDecimalArray(String[] stringArray) {
-        for (int i = 0; i < stringArray.length; i++) {
-            arrayValues.add(new BigDecimal(stringArray[i]));
-        }
-    }
-
     public void stringToBigDecimalArray(String stringValues, Hypothesis hypothesis,
             BigDecimal testValue, double significance) {
         String[] stringArray = stringValues.split("\\s+");
 
-        if (arrayValues.size() != 0) {
-            arrayValues.clear(); // Required to make program reusable
+        if (values.size() != 0) {
+            values.clear(); // Required to make program reusable
         }
 
-        toBigDecimalArray(stringArray);
+        for (int i = 0; i < stringArray.length; i++) {
+            values.add(new BigDecimal(stringArray[i]));
+        }
 
         oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
-                arrayValues, significance);
+                values, significance);
 
         buildString();
         writeToOutput();
