@@ -13,6 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Change confidence to significance, remove 1 - ((1 - C) / 2)
+ * Just use (1 - significance / 2), this fixed bug for t-confidence...
+ * not sure about z-confidence... test before you change
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 package pfnguyen.statlogic.ztest;
 
 import java.math.BigDecimal;
