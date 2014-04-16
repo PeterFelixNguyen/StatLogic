@@ -18,6 +18,8 @@ package pfnguyen.statlogic.descriptive;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import pfnguyen.statlogic.algorithms.SortAlgorithms;
+
 /**
  * Class that calculates the extrema of a data set.
  * 
@@ -43,6 +45,7 @@ public class Extrema {
      * @param  values  the values used for calculation of extrema
      */
     private void calcExtrema(ArrayList<BigDecimal> values) {
+        SortAlgorithms.BubbleSort(values);
         minima = values.get(0);
         maxima = values.get(values.size() - 1);
     }
