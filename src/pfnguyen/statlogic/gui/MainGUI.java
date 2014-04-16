@@ -69,29 +69,25 @@ class ContainerForChooser extends JPanel {
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         setMinimumSize(new Dimension(60, 60));
     }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(60, 60);
-    }
 }
 
 @SuppressWarnings("serial")
 class MainFrame extends JFrame {
+    // Visual components
     private JTextArea jtaOutput = new JTextArea();
     private JLabel statusBar = new JLabel(" ", SwingConstants.LEFT);
-    private MenuBar menuBar = new MenuBar(jtaOutput, statusBar);
-    private UpperPanel upperPanel = new UpperPanel(jtaOutput, statusBar);
+    private StringBuilder outputString = new StringBuilder();
+    //
+    private MenuBar menuBar = new MenuBar(jtaOutput, statusBar, outputString);
+    private UpperPanel upperPanel = new UpperPanel(jtaOutput, statusBar, outputString);
     private LowerPanel lowerPanel = new LowerPanel(statusBar);
     //
     private ContainerForChooser containerForChooser = new ContainerForChooser();
     private JComboBox<String> jcboCalcChooser;
-    private String[] calcName = { "Descriptive Statistics", "1-Sample Z-Test",
-            "1-Sample T-Test", "Standard Score"};
+    private String[] calcName = { "Descriptive Statistics", "1-Sample Z",
+            "1-Sample t", "Standard Score"};
     private JPanel leftInnerPanel = new JPanel();
     private JPanel rightInnerPanel = new JPanel();
-    private ImageIcon collapseIcon;
-    private JLabel collapseBtn;
     //
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
     private Border borderForOutput;
@@ -101,8 +97,11 @@ class MainFrame extends JFrame {
 
     MainFrame() {
         final ClassLoader cLoader = getClass().getClassLoader();
-        collapseIcon = new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png"));
-        collapseBtn = new JLabel(collapseIcon);
+        ImageIcon collapseIcon = new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png"));
+        final JLabel collapseBtn = new JLabel(collapseIcon);
+
+        ImageIcon windowIcon = new ImageIcon(cLoader.getResource("images/WindowIcon02-500x500.png"));
+        setIconImage(windowIcon.getImage());
 
         setJMenuBar(menuBar);
         jtaOutput.setLineWrap(true);
@@ -208,8 +207,8 @@ class UpperPanel extends JPanel {
     LeftPanel leftPanel;
     //	private int panelIndex = 0;
 
-    UpperPanel(JTextArea jtaOutput, JLabel statusBar) {
-        leftPanel = new LeftPanel(jtaOutput, statusBar);
+    UpperPanel(JTextArea jtaOutput, JLabel statusBar, StringBuilder outputString) {
+        leftPanel = new LeftPanel(jtaOutput, statusBar, outputString);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(new TitledBorder(""));
         add(leftPanel);
@@ -260,24 +259,14 @@ class LeftPanel extends JPanel {
     TTestPanel tTestCalc;
     ZScorePanel zScoreCalc;
 
-    LeftPanel(JTextArea jtaOutput, JLabel statusBar) {
-        descriptiveCalc = new DescriptivePanel(jtaOutput, statusBar);
+    LeftPanel(JTextArea jtaOutput, JLabel statusBar, final StringBuilder outputString) {
+        descriptiveCalc = new DescriptivePanel(jtaOutput, statusBar, outputString);
         zTestCalc = new ZTestPanel(jtaOutput, statusBar);
-        tTestCalc = new TTestPanel(jtaOutput, statusBar);
-        zScoreCalc = new ZScorePanel(jtaOutput, statusBar);
-        setLayout(new FlowLayout(FlowLayout.LEADING)); // has problem with left panel keeping its size
-        //setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(zScoreCalc); // This is optional
-        // setMaximumSize(new Dimension(350, Integer.MAX_VALUE));
-        // setMinimumSize(new Dimension(350, 350));
+        tTestCalc = new TTestPanel(jtaOutput, statusBar, outputString);
+        zScoreCalc = new ZScorePanel(jtaOutput, statusBar, outputString);
+        setLayout(new FlowLayout(FlowLayout.LEADING));
+        add(zScoreCalc); // Default calculator
     }
-
-    // // Keep preferred dimension equal to min and max
-    // // to keep it the panel at a constant size
-    // @Override
-    // public Dimension getPreferredSize() {
-    // return new Dimension(350, 350);
-    // }
 }
 
 @SuppressWarnings("serial")
