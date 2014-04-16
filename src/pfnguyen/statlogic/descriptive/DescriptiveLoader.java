@@ -42,8 +42,7 @@ public class DescriptiveLoader {
     private Mean mean;
     private Quartiles quartile;
     private Mode mode;
-    @SuppressWarnings("unused")
-    private Dispersion stdDev; // this class needs some work
+    private Dispersion dispersion;
     private Extrema extrema;
     // Data
     private ArrayList<BigDecimal> values;
@@ -71,9 +70,10 @@ public class DescriptiveLoader {
      * @param  statusBar  the status bar this class can use
      */
     public DescriptiveLoader(final JTextArea jtaOutput,
-            final JLabel statusBar) {
+            final JLabel statusBar, final StringBuilder outputString) {
         outputArea = jtaOutput;
         this.statusBar = statusBar;
+        this.outputString = outputString;
     }
     // I plan to turn JTextArea and JLabel into special classes
     // So that only these two classes could be passed into the
@@ -86,26 +86,58 @@ public class DescriptiveLoader {
      * @throws  IOException  If an input or output exception occured
      */
     public void loadFileIntoArray() throws IOException {
-        values = new ArrayList<BigDecimal>(); // if placed here, I think I don't need to clear
-        // this method doesnt clear the ArrayList..double check before fully implementing
+        values = new ArrayList<BigDecimal>();
 
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             inFile = fileChooser.getSelectedFile();
             input = new Scanner(inFile);
 
-            addToArrayList();
-            input.close();
+            try {
+                strictAddToArrayList();
+                input.close();
 
-            /* Calculators are instantiated here.
-             * I should implement a seperate method */
+                /* I should implement a seperate method */
+                mean = new Mean(values);
+                dispersion = new Dispersion(values, mean.getMean());
+                quartile = new Quartiles(values);
+                extrema = new Extrema(values);
+                mode = new Mode(values);
+                statusBar.setText(
+                        " \"" + inFile.getName() + "\" loaded to program");
+                buildString();
+                writeToOutput();
+
+                if (values.size() != 0) { // Need to make sure if I really need to check this condition
+                    isLoaded = true;
+                    isSaved = false;
+                }
+            }
+            catch (InputMismatchException ex) {
+                JOptionPane.showMessageDialog(null, "InputMismatchException, "
+                        + "make sure the data set contains numbers only",
+                        "Failure", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    public void stringToBigDecimalArray(String stringValues) {
+        values = new ArrayList<BigDecimal>();
+
+        String[] stringArray = stringValues.split("\\s+");
+
+        try {
+            for (int i = 0; i < stringArray.length; i++) {
+                values.add(new BigDecimal(stringArray[i]));
+            }
+
             mean = new Mean(values);
-            stdDev = new Dispersion(values, mean.getMean());
-            quartile = new Quartiles(values); // this also sorts the ArrayList
-            extrema = new Extrema(values); // works if the ArrayList is sorted
+            dispersion = new Dispersion(values, mean.getMean());
+            quartile = new Quartiles(values);
+            extrema = new Extrema(values);
             mode = new Mode(values);
-            statusBar.setText(
-                    " \"" + inFile.getName() + "\" loaded to program");
+
+            statusBar.setText("Manual data entry successful");
             buildString();
             writeToOutput();
 
@@ -114,35 +146,10 @@ public class DescriptiveLoader {
                 isSaved = false;
             }
         }
-    }
-
-    public void stringToBigDecimalArray(String stringValues) {
-        values = new ArrayList<BigDecimal>(); // i think i dont need to clear
-
-        String[] stringArray = stringValues.split("\\s+");
-
-        if (values.size() != 0) {
-            values.clear(); // i think i can remove this
-        }
-
-        for (int i = 0; i < stringArray.length; i++) {
-            values.add(new BigDecimal(stringArray[i]));
-        }
-
-        /* Calculators are instantiated here.
-         * I should implement a separate method */
-        mean = new Mean(values);
-        stdDev = new Dispersion(values, mean.getMean());
-        quartile = new Quartiles(values); // this also sorts the ArrayList
-        extrema = new Extrema(values); // works if the ArrayList is sorted
-        mode = new Mode(values);
-        statusBar.setText("Manual data entry successful");
-        buildString();
-        writeToOutput();
-
-        if (values.size() != 0) { // Need to make sure if I really need to check this condition
-            isLoaded = true;
-            isSaved = false;
+        catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "NumberFormatException, "
+                    + "make sure the data set contains numbers only",
+                    "Failure", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -150,6 +157,7 @@ public class DescriptiveLoader {
      * Adds each value into the ArrayList and
      * skips any values that cannot be added.
      */
+    @SuppressWarnings("unused")
     private void addToArrayList() {
         if (input.hasNextBigDecimal()) {
             values.add(input.nextBigDecimal());
@@ -167,20 +175,22 @@ public class DescriptiveLoader {
      * @throws  InputMismatchException  If the input stream reads any value that
      *                                  cannot be translated into a BigDecimal
      */
-    @SuppressWarnings("unused")
     private void strictAddToArrayList() {
-        try {
-            while (input.hasNext()) {
-                values.add(input.nextBigDecimal());
-            }
-        }
-        catch (InputMismatchException ex) {
-            JOptionPane.showMessageDialog(null, "Input mismatch, "
-                    + "make sure the data set contains numbers only",
-                    "Failure", JOptionPane.WARNING_MESSAGE);
+        while (input.hasNext()) {
+            values.add(input.nextBigDecimal());
         }
     }
 
+    /*
+     * Must decide whether to keep this for "individual save"
+     * or to discard this in favor of "save all"
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     /**
      * Saves results into a .txt file.
      *
@@ -224,16 +234,21 @@ public class DescriptiveLoader {
      * and/or the output save file.
      */
     private void buildString() {
-        outputString = new StringBuilder("Date created: " + new java.util.Date() + "\n\n"
+        outputString.append("Date created: " + new java.util.Date() + "\n\n"
                 + "Mean: " + mean.toString() + "\n"
                 + "Median: " + quartile.getMedian() + "\n"
                 + "Lower Quartile: " + quartile.getLowerQuartile() + "\n"
                 + "Upper Quartile: "+ quartile.getUpperQuartile() + "\n"
                 + "Mode: " + mode.toString2() + "\n"
-                + "Sample Size: " + values.size() + "\n" + "Min: "
-                + extrema.getMinima() + "\n" + "Max: "
-                + extrema.getMaxima() + "\n\n");
+                + "Sample Size: " + values.size() + "\n"
+                + "Min: " + extrema.getMinima() + "\n"
+                + "Max: " + extrema.getMaxima() + "\n"
+                + "Sample Variance: " + dispersion.getSampleVariance() + "\n"
+                + "Sample Standard Deviation: " + dispersion.getSampleStdDev() + "\n\n");
         printValues();
+        outputString.append("\n\n" +
+                "**************************************************************************************" +
+                "\n");
     }
 
     /**
