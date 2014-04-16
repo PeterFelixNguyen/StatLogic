@@ -19,6 +19,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+import pfnguyen.statlogic.algorithms.SortAlgorithms;
+
 public class Quartiles {
     private BigDecimal lowerQuartile;
     private BigDecimal median;
@@ -30,19 +32,7 @@ public class Quartiles {
 
     private void calcMedian(ArrayList<BigDecimal> values) {
 
-        /* Sorting algorithm using for loops */
-        for (int i = 0; i < values.size(); i++) {
-            for (int j = 0; j < values.size(); j++) {
-
-                /* Swaps elements */
-                if (j != values.size() - 1)
-                    if (values.get(j).compareTo(values.get(j + 1)) > 0) {
-                        BigDecimal temp = values.get(j);
-                        values.set(j, values.get(j + 1));
-                        values.set(j + 1, temp);
-                    }
-            }
-        }
+        SortAlgorithms.BubbleSort(values);
 
         /* Finds median for even sized ArrayList */
         if (values.size() % 2 == 0) {
