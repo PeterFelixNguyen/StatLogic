@@ -41,32 +41,28 @@ import pfnguyen.statlogic.descriptive.DescriptiveLoader;
  */
 @SuppressWarnings("serial")
 public class DescriptivePanel extends JPanel {
-    private JButton jbtLoad = new JButton("Load From File");
-    private JButton jbtEnter = new JButton("Manually Enter");
-    private JButton jbtSave = new JButton("Save Results");
-    private JButton jbtConf = new JButton("Options");
+    private JButton jbtLoad = new JButton("Import data");
+    private JButton jbtEnter = new JButton("Enter data");
+    private JButton jbtOptions = new JButton("Options");
     private DescriptiveLoader loader;
-    // private LoadListener listenerJbtLoad = new LoadListener();
-    private SaveListener listenerJbtSave = new SaveListener();
     private ConfigurationPanel configPanel = new ConfigurationPanel();
 
     /**
      * Constructs DescriptivePanel and adds components defined in CategoryPanel
      * superclass
      */
-    public DescriptivePanel(final JTextArea jtaOutput, final JLabel statusBar) {
-        loader = new DescriptiveLoader(jtaOutput, statusBar);
+    public DescriptivePanel(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
+        loader = new DescriptiveLoader(jtaOutput, statusBar, outputString);
         setBorder(new TitledBorder("Descriptive Stats"));
         Font customFont = new Font("TimesRoman", Font.BOLD, 13);
+        jbtEnter.setFont(customFont);
         jbtLoad.setFont(customFont);
-        jbtSave.setFont(customFont);
-        jbtConf.setFont(customFont);
+        jbtOptions.setFont(customFont);
         setLayout(new GridLayout(3, 1));
 
-        add(jbtLoad);
         add(jbtEnter);
-        //add(jbtSave);
-        add(jbtConf);
+        add(jbtLoad);
+        add(jbtOptions);
 
         jbtLoad.addActionListener(new LoadListener());
         jbtEnter.addActionListener(new ActionListener(){
@@ -82,15 +78,20 @@ public class DescriptivePanel extends JPanel {
                 entryPanel.add(new JScrollPane(jtaValues));
 
                 int selected = JOptionPane.showConfirmDialog(null,
-                        entryPanel, "Options", JOptionPane.OK_CANCEL_OPTION,
+                        entryPanel, "Enter data", JOptionPane.OK_CANCEL_OPTION,
                         JOptionPane.PLAIN_MESSAGE);
-                if (selected != JOptionPane.CANCEL_OPTION) {
-                    loader.stringToBigDecimalArray(jtaValues.getText());
+                if (selected == JOptionPane.OK_OPTION) {
+                    if (jtaValues.getText().length() == 0) {
+                        JOptionPane.showMessageDialog(null, "No values entered",
+                                "Failure", JOptionPane.WARNING_MESSAGE);
+                    }
+                    else {
+                        loader.stringToBigDecimalArray(jtaValues.getText());
+                    }
                 }
             }
         });
-        jbtSave.addActionListener(listenerJbtSave);
-        jbtConf.addActionListener(new OptionListener());
+        jbtOptions.addActionListener(new OptionListener());
     }
 
     class LoadListener implements ActionListener {
@@ -105,21 +106,10 @@ public class DescriptivePanel extends JPanel {
         }
     }
 
-    class SaveListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                loader.saveToFile();
-            }
-            catch (IOException ex) {
-            }
-        }
-    }
-
     class OptionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(null, configPanel, "Options666",
+            JOptionPane.showMessageDialog(null, configPanel, "Options",
                     JOptionPane.PLAIN_MESSAGE);
         }
     }
@@ -137,10 +127,6 @@ class ConfigurationPanel extends JPanel {
     private JCheckBox nCheckBox = new JCheckBox("n");
     private JCheckBox minimaCheckBox = new JCheckBox("min");
     private JCheckBox maximaCheckBox = new JCheckBox("max");
-
-    private JPanel experimentalOptions = new JPanel();
-    private JCheckBox nonNumbersCheckBox = new JCheckBox(
-            "Ignore input mismatch when scanning");
 
     private JPanel outputOptions = new JPanel();
     private ButtonGroup group = new ButtonGroup();
@@ -172,10 +158,5 @@ class ConfigurationPanel extends JPanel {
         group.add(unsortedDataToggle);
         group.add(sortedDataToggle);
         dataToggle.setSelected(true);
-
-        add(experimentalOptions);
-        experimentalOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-        experimentalOptions.setBorder(new TitledBorder("Experimental Options"));
-        experimentalOptions.add(nonNumbersCheckBox);
     }
 }
