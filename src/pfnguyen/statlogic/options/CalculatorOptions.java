@@ -23,4 +23,8 @@ public interface CalculatorOptions {
     public enum Hypothesis {
         NOT_EQUAL, GREATER_THAN, LESS_THAN
     }
+
+    public enum Order {
+        SORTED, NOT_SORTED, REVERSED
+    }
 }
