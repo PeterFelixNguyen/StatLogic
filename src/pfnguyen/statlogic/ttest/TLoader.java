@@ -32,6 +32,7 @@ import pfnguyen.statlogic.options.CalculatorOptions.Option;
 public class TLoader {
     /** Calculators */
     private OneSampleTTest oneSampleTTest;
+    private TConfidenceInterval oneSampleCI;
     private Option option = Option.NONE;
     /** Data */
     private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
@@ -44,9 +45,11 @@ public class TLoader {
     private JLabel statusBar;
     private StringBuilder outputString;
 
-    public TLoader(final JTextArea jtaOutput, final JLabel statusBar) {
+    public TLoader(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
         outputArea = jtaOutput;
         this.statusBar = statusBar;
+        this.outputString = outputString;
+
     }
 
     /** Load values from .txt file for calculation */
@@ -95,42 +98,54 @@ public class TLoader {
      * and/or the output save file.
      */
     private void buildString() {
-        outputString = new StringBuilder("Date created: " + new java.util.Date() + "\n\n"
-                + "One sample Student's t-test" + "\n"
-                + oneSampleTTest.getNullHypothesis() + "\n"
-                + oneSampleTTest.getAltHypothesis() + "\n" + "\n"
-                + "xbar = " + oneSampleTTest.getXBar() + "    n = " + oneSampleTTest.getN() + "\n"
-                + "sigma = " + oneSampleTTest.getSigma() + "    alpha = " + oneSampleTTest.getAlpha() + "\n" + "\n"
-                + "Critical Value = " + oneSampleTTest.getCriticalRegionAsString() + "    Test Statistic = " + oneSampleTTest.getTestStatistics() + "\n");
-        outputString.append(oneSampleTTest.getConclusionAsString());
+        if (option == Option.TEST_HYPOTHESIS) {
+            outputString.append("Date created: " + new java.util.Date() + "\n\n"
+                    + "Test Hypothesis for One sample Student's t-test" + "\n"
+                    + oneSampleTTest.getNullHypothesis() + "\n"
+                    + oneSampleTTest.getAltHypothesis() + "\n" + "\n"
+                    + "xbar = " + oneSampleTTest.getXBar() + "    n = " + oneSampleTTest.getN() + "\n"
+                    + "sigma = " + oneSampleTTest.getSigma() + "    alpha = " + oneSampleTTest.getAlpha() + "\n" + "\n"
+                    + "Critical Value = " + oneSampleTTest.getCriticalRegionAsString() + "    Test Statistic = "
+                    + oneSampleTTest.getTestStatistics() + "\n"
+                    + oneSampleTTest.getConclusionAsString() + "\n\n" +
+                    "**************************************************************************************" +
+                    "\n");
+        }
+        if (option == Option.CONFIDENCE_INTERVAl) {
+            outputString.append("Confidence Interval for One sample Student's t-test" + "\n"
+                    + oneSampleCI.confidenceInterval() + "\n\n" +
+                    "**************************************************************************************" +
+                    "\n");
+        }
     }
 
     /** Print results to jtaOutput window */
     public void writeToOutput() {
         outputArea.setText(outputString.toString());
-        if (this.option == Option.CONFIDENCE_INTERVAl) {
-            //outputArea.append("\n" + oneSampleCI.confidenceInterval());
-        }
     }
 
     public void loadXIntoCalc(Hypothesis hAlternative, BigDecimal testValue,
             BigDecimal xBar, BigDecimal stdDev, int n, double significance,
             Option option) {
-        oneSampleTTest = new OneSampleTTest(hAlternative, testValue, xBar,
-                stdDev, n, significance);
 
-        this.option =  option;
+        this.option = option;
 
-        if (this.option == Option.CONFIDENCE_INTERVAl) {
-            //oneSampleCI = new ZConfidenceInterval(xBar, stdDev, n, significance);
+        if (option == Option.TEST_HYPOTHESIS) {
+            oneSampleTTest = new OneSampleTTest(hAlternative, testValue, xBar,
+                    stdDev, n, significance);
+        }
+        if (option == Option.CONFIDENCE_INTERVAl) {
+            oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
         }
         buildString();
         writeToOutput();
     }
 
-    public void stringToBigDecimalArray(String stringValues, Hypothesis hypothesis,
-            BigDecimal testValue, double significance) {
+    public void stringToBigDecimalArray(String stringValues, Hypothesis hAlternative,
+            BigDecimal testValue, double significance, Option option) {
         String[] stringArray = stringValues.split("\\s+");
+
+        this.option = option;
 
         if (values.size() != 0) {
             values.clear(); // Required to make program reusable
@@ -140,8 +155,16 @@ public class TLoader {
             values.add(new BigDecimal(stringArray[i]));
         }
 
-        oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
+        oneSampleTTest = new OneSampleTTest(hAlternative, testValue,
                 values, significance);
+
+        BigDecimal xBar = new BigDecimal(oneSampleTTest.getXBar());
+        BigDecimal stdDev = new BigDecimal(oneSampleTTest.getSigma());
+        int n = new Integer(oneSampleTTest.getN());
+
+        if (option == Option.CONFIDENCE_INTERVAl) {
+            oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
+        }
 
         buildString();
         writeToOutput();
