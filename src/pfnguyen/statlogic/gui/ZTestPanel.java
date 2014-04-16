@@ -85,7 +85,7 @@ public class ZTestPanel extends JPanel {
     public ZTestPanel(final JTextArea jtaOutput, final JLabel statusBar) {
         loader = new ZLoader(jtaOutput, statusBar);
         // Styling
-        setBorder(new TitledBorder("1-Sample Z-Test"));
+        setBorder(new TitledBorder("1-Sample Z"));
         setLayout(new FlowLayout(FlowLayout.LEADING));
         // Components
         add(layoutContainer);
