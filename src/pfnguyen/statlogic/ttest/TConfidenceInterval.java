@@ -18,30 +18,31 @@ package pfnguyen.statlogic.ttest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.TDistribution;
 
 public class TConfidenceInterval {
     private BigDecimal lowerBound;
     private BigDecimal upperBound;
     private BigDecimal standardError;
-
-    private NormalDistribution normal = new NormalDistribution();
+    private TDistribution tDistribution;
 
     public TConfidenceInterval(BigDecimal x[], BigDecimal stdDev,
             double confidence) {
+        tDistribution = new TDistribution((double)(x.length-1));
         calcConfidenceInterval(calcSampleMean(x), stdDev, x.length, confidence);
     }
 
     public TConfidenceInterval(BigDecimal xBar, BigDecimal stdDev, int n,
             double confidence) {
+        tDistribution = new TDistribution((double)(n-1));
         calcConfidenceInterval(xBar, stdDev, n, confidence);
     }
 
     /** stdDev, n, confidence must not be BigDecimals */
     public void calcConfidenceInterval(BigDecimal sampleMean,
-            BigDecimal stdDev, int n, double confidence) {
+            BigDecimal stdDev, int n, double significance) {
         standardError = new BigDecimal(
-                normal.inverseCumulativeProbability(1 - ((1 - confidence) / 2)))
+                tDistribution.inverseCumulativeProbability(1 - significance / 2))
         .multiply(stdDev).divide(new BigDecimal(Math.sqrt(n)), 4,
                 RoundingMode.HALF_UP);
         upperBound = sampleMean.add(standardError);
