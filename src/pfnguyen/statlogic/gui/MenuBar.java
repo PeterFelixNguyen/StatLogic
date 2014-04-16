@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -38,6 +39,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class MenuBar extends JMenuBar{
     private JMenu fileMenu = new JMenu("File");
     private JMenu editMenu = new JMenu("Edit");
+    private JMenu viewMenu = new JMenu("View");
     private JMenu toolsMenu = new JMenu("Tools");
     private JMenu settingsMenu = new JMenu("Settings");
     private JMenu helpMenu = new JMenu("Help");
@@ -49,26 +51,26 @@ public class MenuBar extends JMenuBar{
     private JMenuItem jmiClear = new JMenuItem("Clear");
     private JMenuItem jmiFind = new JMenuItem("Find");
     private JMenuItem jmiSelectAll = new JMenuItem("Select All");
-    private JMenuItem jmiView = new JMenuItem("View");
+    // View Menu Choices
+    private JMenu jmCalcView = new JMenu("Calculator View");
     private JMenuItem jmiFont = new JMenuItem("Font");
+    private JRadioButtonMenuItem jrbmiHideCalc = new JRadioButtonMenuItem("Hide Calculator");
+    private JRadioButtonMenuItem jrbmiShowCalc = new JRadioButtonMenuItem("Show Calculator");
     // Tools Menu Choices
     private JMenuItem jmiArithmetic = new JMenuItem("Arithmetic");
     private JMenuItem jmiFileCheck = new JMenuItem("File Check");
     // Settings Menu Choices
-    private JMenu jmiPrecision = new JMenu("Calculator Precision");
-    private JRadioButtonMenuItem jrbmiPrecisionHi = new JRadioButtonMenuItem("High Precision");
-    private JRadioButtonMenuItem jrbmiPrecisionLo = new JRadioButtonMenuItem("Low Precision");
     private JMenuItem jmiUserConfig = new JMenuItem("User Configuration");
     // Help Menu Choices
     private JMenuItem jmiAbout = new JMenuItem("About");
-    private JMenuItem jmiFeedback = new JMenuItem("Feedback");
     private JMenuItem jmiManual = new JMenuItem("Manual");
     // Menu Panels
     private AboutPanel aboutPanel = new AboutPanel();
 
-    public MenuBar(final JTextArea jtaOutput, final JLabel statusBar) {
+    public MenuBar(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
         add(fileMenu);
         add(editMenu);
+        add(viewMenu);
         add(toolsMenu);
         add(settingsMenu);
         add(helpMenu);
@@ -83,26 +85,23 @@ public class MenuBar extends JMenuBar{
         editMenu.add(jmiFind);
         editMenu.addSeparator();
         editMenu.add(jmiSelectAll);
-        editMenu.addSeparator();
-        editMenu.add(jmiView);
-        editMenu.add(jmiFont);
+
+        viewMenu.add(jmCalcView);
+        viewMenu.add(jmiFont);
+
+        ButtonGroup viewGroup = new ButtonGroup();
+        viewGroup.add(jrbmiHideCalc);
+        viewGroup.add(jrbmiShowCalc);
+        jmCalcView.add(jrbmiHideCalc);
+        jmCalcView.add(jrbmiShowCalc);
 
         toolsMenu.add(jmiArithmetic);
         toolsMenu.add(jmiFileCheck);
 
-        ButtonGroup group = new ButtonGroup();
-        group.add(jrbmiPrecisionHi);
-        group.add(jrbmiPrecisionLo);
-        jrbmiPrecisionHi.setSelected(true);
-        settingsMenu.add(jmiPrecision);
-        jmiPrecision.add(jrbmiPrecisionHi);
-        jmiPrecision.add(jrbmiPrecisionLo);
-        settingsMenu.addSeparator();
         settingsMenu.add(jmiUserConfig);
 
         helpMenu.add(jmiManual);
         helpMenu.addSeparator();
-        helpMenu.add(jmiFeedback);
         helpMenu.add(jmiAbout);
 
         jmiSaveAs.addActionListener(new ActionListener() {
@@ -151,10 +150,19 @@ public class MenuBar extends JMenuBar{
             }
         });
 
+        jmiExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
         jmiClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jtaOutput.setText(null);
+                statusBar.setText("Output cleared");
+                outputString.setLength(0);
             }
         });
 
@@ -162,7 +170,10 @@ public class MenuBar extends JMenuBar{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, aboutPanel);
+                ClassLoader cLoader = getClass().getClassLoader();
+
+                ImageIcon windowIcon = new ImageIcon(cLoader.getResource("images/WindowIcon02-50x50.png"));
+                JOptionPane.showMessageDialog(null, aboutPanel, "About StatLogic", JOptionPane.PLAIN_MESSAGE, windowIcon);
             }
         });
     }
