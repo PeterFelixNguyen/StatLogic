@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class ZScore {
-    private double xBar;
+    private double X;
     private double populationMean;
     private double stdDev;
     private double zScore;
@@ -30,12 +30,12 @@ public class ZScore {
     /**
      * Constructs ZScore based on parameter values.
      * 
-     * @param  xBar            the sample mean
+     * @param  X            the sample mean
      * @param  populationMean  the population mean
      * @param  stdDev          the standard deviation
      */
-    public ZScore(double xBar, double populationMean, double stdDev) {
-        this.xBar = xBar;
+    public ZScore(double X, double populationMean, double stdDev) {
+        this.X = X;
         this.populationMean = populationMean;
         this.stdDev = stdDev;
         calculateZScore();
@@ -48,11 +48,32 @@ public class ZScore {
     private void calculateZScore() {
         DecimalFormat df = new DecimalFormat("#.####");
 
-        zScore = (xBar - populationMean) / stdDev;
+        zScore = (X - populationMean) / stdDev;
         zScore = Double.valueOf(df.format(zScore));
 
         probability = normal.cumulativeProbability(zScore);
         probability = Double.valueOf(df.format(probability));
+    }
+
+    /**
+     * @return  raw score
+     */
+    public double getX() {
+        return X;
+    }
+
+    /**
+     * @return  population mean
+     */
+    public double getPopulationMean() {
+        return populationMean;
+    }
+
+    /**
+     * @return  population standard deviation
+     */
+    public double getStdDev() {
+        return stdDev;
     }
 
     /**
