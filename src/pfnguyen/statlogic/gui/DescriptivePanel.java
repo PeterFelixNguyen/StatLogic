@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -121,42 +122,84 @@ public class DescriptivePanel extends JPanel {
 
 @SuppressWarnings("serial")
 class ConfigurationPanel extends JPanel {
-    private JPanel calculatorOptions = new JPanel();
+    private JPanel calcOptions = new JPanel(new GridLayout(2, 1));
+    private JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    private JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JCheckBox meanCheckBox = new JCheckBox("mean");
     private JCheckBox medianCheckBox = new JCheckBox("median");
+    private JCheckBox modeCheckBox = new JCheckBox("mode");
     private JCheckBox nCheckBox = new JCheckBox("n");
     private JCheckBox minimaCheckBox = new JCheckBox("min");
     private JCheckBox maximaCheckBox = new JCheckBox("max");
+    private JCheckBox percentiles = new JCheckBox("25th/75th percentiles");
+
+    private JPanel varianceOptions = new JPanel(new GridLayout(1, 2));
+    private JPanel leftPanel = new JPanel();
+    private JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+    private JPanel subRightPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    private JPanel subRightPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    private JRadioButton jrbBothSample = new JRadioButton("s & s^2");
+    private JRadioButton jrbSampleVar = new JRadioButton("s^2");
+    private JRadioButton jrbSampleStdDev = new JRadioButton("s");
+    private JRadioButton jrbBothPop = new JRadioButton("\u03C3 & \u03C3^2");
+    private JRadioButton jrbPopVar = new JRadioButton("\u03C3^2");
+    private JRadioButton jrbPopStdDev = new JRadioButton("\u03C3");
+    private JRadioButton jrbNoneVar = new JRadioButton("none");
 
     private JPanel outputOptions = new JPanel();
-    private ButtonGroup group = new ButtonGroup();
-    private JRadioButton dataToggle = new JRadioButton(
-            "Do not include data values");
+    private JRadioButton dataToggle = new JRadioButton("No values");
     private JRadioButton unsortedDataToggle = new JRadioButton(
-            "Include unsorted data values");
+            "Unsorted values");
     private JRadioButton sortedDataToggle = new JRadioButton(
-            "Include sorted data values");
+            "Sorted values");
 
     public ConfigurationPanel() {
-        setLayout(new GridLayout(5, 1));
-        add(calculatorOptions);
-        calculatorOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-        calculatorOptions.setBorder(new TitledBorder("Calculator Options"));
-        calculatorOptions.add(meanCheckBox);
-        calculatorOptions.add(medianCheckBox);
-        calculatorOptions.add(nCheckBox);
-        calculatorOptions.add(minimaCheckBox);
-        calculatorOptions.add(maximaCheckBox);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(calcOptions);
+        calcOptions.add(row1);
+        calcOptions.add(row2);
+        calcOptions.setBorder(new TitledBorder("Calculator Options"));
+        row1.add(meanCheckBox);
+        row1.add(medianCheckBox);
+        row1.add(modeCheckBox);
+        row1.add(nCheckBox);
+        row2.add(minimaCheckBox);
+        row2.add(maximaCheckBox);
+        row2.add(percentiles);
 
+        add(varianceOptions);
+        varianceOptions.add(leftPanel);
+        varianceOptions.add(rightPanel);
+        ButtonGroup sigmaGroup = new ButtonGroup();
+        sigmaGroup.add(jrbBothSample);
+        sigmaGroup.add(jrbSampleVar);
+        sigmaGroup.add(jrbSampleStdDev);
+        sigmaGroup.add(jrbBothPop);
+        sigmaGroup.add(jrbPopVar);
+        sigmaGroup.add(jrbPopStdDev);
+        sigmaGroup.add(jrbNoneVar);
+        leftPanel.add(jrbNoneVar);
+        rightPanel.add(subRightPanel1);
+        rightPanel.add(subRightPanel2);
+        subRightPanel1.add(jrbBothSample);
+        subRightPanel1.add(jrbSampleVar);
+        subRightPanel1.add(jrbSampleStdDev);
+        subRightPanel2.add(jrbBothPop);
+        subRightPanel2.add(jrbPopVar);
+        subRightPanel2.add(jrbPopStdDev);
+
+        varianceOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+        varianceOptions.setBorder(new TitledBorder("Variance Options"));
         add(outputOptions);
         outputOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
         outputOptions.setBorder(new TitledBorder("Output Options"));
         outputOptions.add(dataToggle);
         outputOptions.add(unsortedDataToggle);
         outputOptions.add(sortedDataToggle);
-        group.add(dataToggle);
-        group.add(unsortedDataToggle);
-        group.add(sortedDataToggle);
+        ButtonGroup valuesGroup = new ButtonGroup();
+        valuesGroup.add(dataToggle);
+        valuesGroup.add(unsortedDataToggle);
+        valuesGroup.add(sortedDataToggle);
         dataToggle.setSelected(true);
     }
 }
