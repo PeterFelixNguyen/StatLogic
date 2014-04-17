@@ -285,10 +285,10 @@ public class TTestPanel extends JPanel {
                             calcXBarPanel.add(new JLabel(
                                     "Enter values to calculate Sample Mean"));
                             calcXBarPanel.add(new JScrollPane(jtaValues));
-                            // first parameter should be null?
+
                             int selected = JOptionPane.showConfirmDialog(
-                                    jbtCalculate.getParent(), calcXBarPanel,
-                                    "Options", JOptionPane.OK_CANCEL_OPTION,
+                                    null, calcXBarPanel, "1-Sample t",
+                                    JOptionPane.OK_CANCEL_OPTION,
                                     JOptionPane.PLAIN_MESSAGE);
 
                             if (selected != JOptionPane.CANCEL_OPTION) {
