@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * Work on OneSampleTTest.java first
- */
 package pfnguyen.statlogic.ztest;
 
 import java.math.BigDecimal;
