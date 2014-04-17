@@ -106,6 +106,9 @@ public class ZScorePanel extends JPanel {
                     if (jtfRawScore.getText().length() != 0) {
                         jtfRawScore.setBackground(Color.RED);
                     }
+                    else {
+                        jtfRawScore.setBackground(Color.WHITE);
+                    }
                     isCalculated = false;
                 }
             }
@@ -128,6 +131,9 @@ public class ZScorePanel extends JPanel {
                     jlblPValue.setText(String.valueOf("P = ?"));
                     if (jtfRawScore.getText().length() != 0) {
                         jtfRawScore.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfRawScore.setBackground(Color.WHITE);
                     }
                     isCalculated = false;
                 }
@@ -158,6 +164,9 @@ public class ZScorePanel extends JPanel {
                     if (jtfPopulationMean.getText().length() != 0) {
                         jtfPopulationMean.setBackground(Color.RED);
                     }
+                    else {
+                        jtfPopulationMean.setBackground(Color.WHITE);
+                    }
                     isCalculated = false;
                 }
             }
@@ -180,6 +189,9 @@ public class ZScorePanel extends JPanel {
                     jlblPValue.setText(String.valueOf("P = ?"));
                     if (jtfPopulationMean.getText().length() != 0) {
                         jtfPopulationMean.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfPopulationMean.setBackground(Color.WHITE);
                     }
                     isCalculated = false;
                 }
@@ -210,6 +222,9 @@ public class ZScorePanel extends JPanel {
                     if (jtfStdDev.getText().length() != 0) {
                         jtfStdDev.setBackground(Color.RED);
                     }
+                    else {
+                        jtfStdDev.setBackground(Color.WHITE);
+                    }
                     isCalculated = false;
                 }
             }
@@ -232,6 +247,9 @@ public class ZScorePanel extends JPanel {
                     jlblPValue.setText(String.valueOf("P = ?"));
                     if (jtfStdDev.getText().length() != 0) {
                         jtfStdDev.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfStdDev.setBackground(Color.WHITE);
                     }
                     isCalculated = false;
                 }
