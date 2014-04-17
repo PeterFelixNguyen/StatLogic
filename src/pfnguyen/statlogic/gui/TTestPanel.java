@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,20 +46,21 @@ public class TTestPanel extends JPanel {
     // Primary components
     private JLabel h0 = new JLabel("H0: \u03BC = ?    ");
     private JLabel h1 = new JLabel("H1: \u03BC \u2260 ?    ");
-    private JRadioButton lowerTail = new JRadioButton("Lower Tail");
-    private JRadioButton upperTail = new JRadioButton("Upper Tail");
-    private JRadioButton twoTail = new JRadioButton("Two Tail");
-    private JRadioButton provideXBar = new JRadioButton(
+    private JRadioButton jrbLowerTail = new JRadioButton("Lower Tail");
+    private JRadioButton jrbUpperTail = new JRadioButton("Upper Tail");
+    private JRadioButton jrbTwoTail = new JRadioButton("Two Tail");
+    private JRadioButton jrbProvideXBar = new JRadioButton(
             "Provide " + "X\u0305" + ", \u03C3\u0302");
-    private JRadioButton calculateXBar = new JRadioButton(
-            "Calculate " + "X\u0305"  + ", \u03C3\u0302");
-    private JRadioButton importXBar = new JRadioButton(
-            "Calculate " + "X\u0305" + ", \u03C3\u0302" + " from File");
+    private JRadioButton jrbEnterData = new JRadioButton(
+            "Enter data");
+    //"Calculate " + "X\u0305"  + ", \u03C3\u0302"
+    private JRadioButton jrbImportData = new JRadioButton(
+            "Import data");
+    //"Calculate " + "X\u0305" + ", \u03C3\u0302" + " from File"
+    private JLabel jlblTestValue = new JLabel("Test Value");
     private JTextField jtfTestValue = new JTextField(4);
     private JTextField alpha = new JTextField(4);
     private JButton jbtCalculate = new JButton("Calculate");
-    private JCheckBox jchkConfidenceInterval = new JCheckBox(
-            "Confidence Interval");
     // Button groups
     private ButtonGroup tailBtnGroup = new ButtonGroup();
     private ButtonGroup xBarBtnGroup = new ButtonGroup();
@@ -81,11 +82,15 @@ public class TTestPanel extends JPanel {
     private int sampleSize;
     // Layout Container
     private JPanel layoutContainer = new JPanel(new GridLayout(5, 1));
+    // Chooser
+    private String[] calcName = { "Hypothesis Test",
+            "Confidence Interval", "Both Options"};
+    private JComboBox<String> jcboCalcOptions = new JComboBox<String>(calcName);
 
-    public TTestPanel(final JTextArea jtaOutput, final JLabel statusBar) {
-        loader = new TLoader(jtaOutput, statusBar);
+    public TTestPanel(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
+        loader = new TLoader(jtaOutput, statusBar, outputString);
         // Styling
-        setBorder(new TitledBorder("1-Sample T-Test"));
+        setBorder(new TitledBorder("1-Sample t"));
         setLayout(new FlowLayout(FlowLayout.LEADING));
         // Components
         add(layoutContainer);
@@ -96,44 +101,45 @@ public class TTestPanel extends JPanel {
         layoutContainer.add(row5);
         row1.add(h0);
         row1.add(h1);
-        row2.add(lowerTail);
-        row2.add(upperTail);
-        row2.add(twoTail);
-        row3.add(provideXBar);
-        row3.add(calculateXBar);
-        row3.add(importXBar);
-        row4.add(new JLabel("Test Value"));
+        row2.add(jrbLowerTail);
+        row2.add(jrbUpperTail);
+        row2.add(jrbTwoTail);
+        row3.add(jrbProvideXBar);
+        row3.add(jrbEnterData);
+        row3.add(jrbImportData);
+        row4.add(jlblTestValue);
         row4.add(jtfTestValue);
         row4.add(new JLabel("alpha \u03b1"));
         row4.add(alpha);
         row5.add(jbtCalculate);
-        row5.add(jchkConfidenceInterval);
+        row5.add(jcboCalcOptions);
         // Component configuration
-        twoTail.setSelected(true);
-        calculateXBar.setSelected(true);
+        jrbTwoTail.setSelected(true);
+        jrbEnterData.setSelected(true);
+        jcboCalcOptions.setSelectedIndex(2);
         // Grouping
-        tailBtnGroup.add(lowerTail);
-        tailBtnGroup.add(upperTail);
-        tailBtnGroup.add(twoTail);
-        xBarBtnGroup.add(provideXBar);
-        xBarBtnGroup.add(calculateXBar);
-        xBarBtnGroup.add(importXBar);
+        tailBtnGroup.add(jrbLowerTail);
+        tailBtnGroup.add(jrbUpperTail);
+        tailBtnGroup.add(jrbTwoTail);
+        xBarBtnGroup.add(jrbProvideXBar);
+        xBarBtnGroup.add(jrbEnterData);
+        xBarBtnGroup.add(jrbImportData);
         // Listeners
-        lowerTail.addActionListener(new ActionListener() {
+        jrbLowerTail.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setLowerTail();
                 hypothesis = Hypothesis.LESS_THAN;
             }
         });
-        upperTail.addActionListener(new ActionListener() {
+        jrbUpperTail.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setUpperTail();
                 hypothesis = Hypothesis.GREATER_THAN;
             }
         });
-        twoTail.addActionListener(new ActionListener() {
+        jrbTwoTail.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hypothesis = Hypothesis.NOT_EQUAL;
@@ -164,7 +170,7 @@ public class TTestPanel extends JPanel {
                 try {
                     if ((new Double(alpha.getText()) > 0.0)
                             && (new Double(alpha.getText()) < 1.0)) {
-                        if (provideXBar.isSelected()) {
+                        if (jrbProvideXBar.isSelected()) {
                             JTextField jtfXBar = new JTextField();
                             JTextField jtfSampleSize = new JTextField();
                             JTextField jtfStdDev = new JTextField();
@@ -196,24 +202,30 @@ public class TTestPanel extends JPanel {
                                     JOptionPane.PLAIN_MESSAGE);
 
                             if (selected != JOptionPane.CANCEL_OPTION) {
-                                testValue = new BigDecimal(jtfTestValue.getText());
                                 significance = new Double(alpha.getText());
 
                                 xBar = new BigDecimal(jtfXBar.getText());
                                 sampleSize = new Integer(jtfSampleSize.getText());
                                 stdDev = new BigDecimal(jtfStdDev.getText());
 
-                                if (!jchkConfidenceInterval.isSelected()) {
+                                if (jcboCalcOptions.getSelectedIndex() == 0 ||
+                                        jcboCalcOptions.getSelectedIndex() == 2) {
+                                    testValue = new BigDecimal(jtfTestValue.getText());
                                     loader.loadXIntoCalc(hypothesis, testValue,
                                             xBar, stdDev, sampleSize, significance,
                                             Option.TEST_HYPOTHESIS);
-                                } else {
+                                }
+                                if (jcboCalcOptions.getSelectedIndex() == 1 ||
+                                        jcboCalcOptions.getSelectedIndex() == 2)
+                                {
+                                    testValue = BigDecimal.ONE;
                                     loader.loadXIntoCalc(hypothesis, testValue,
                                             xBar, stdDev, sampleSize, significance,
                                             Option.CONFIDENCE_INTERVAl);
                                 }
                             }
-                        } else if (calculateXBar.isSelected()) {
+                        }
+                        else if (jrbEnterData.isSelected()) {
                             JTextArea jtaValues = new JTextArea(20, 20);
                             jtaValues.setLineWrap(true);
                             jtaValues.setWrapStyleWord(true);
@@ -229,13 +241,27 @@ public class TTestPanel extends JPanel {
                                     JOptionPane.PLAIN_MESSAGE);
 
                             if (selected != JOptionPane.CANCEL_OPTION) {
-                                testValue = new BigDecimal(jtfTestValue.getText());
                                 significance = new Double(alpha.getText());
-                                loader.stringToBigDecimalArray(jtaValues.getText(), hypothesis, testValue, significance);
-                                // gotta change from public access to private << it's been awhile, i forgot what this means
+                                if (jcboCalcOptions.getSelectedIndex() == 0 ||
+                                        jcboCalcOptions.getSelectedIndex() == 2) {
+                                    testValue = new BigDecimal(jtfTestValue.getText());
+                                    loader.stringToBigDecimalArray(
+                                            jtaValues.getText(),hypothesis,
+                                            testValue, significance,
+                                            Option.TEST_HYPOTHESIS);
+                                }
+                                if (jcboCalcOptions.getSelectedIndex() == 1 ||
+                                        jcboCalcOptions.getSelectedIndex() == 2) {
+                                    testValue = BigDecimal.ONE;
+                                    loader.stringToBigDecimalArray(
+                                            jtaValues.getText(), hypothesis,
+                                            testValue, significance,
+                                            Option.CONFIDENCE_INTERVAl);
+                                }
                             }
 
-                        } else if (importXBar.isSelected()) {
+                        }
+                        else if (jrbImportData.isSelected()) {
                             try {
                                 testValue = new BigDecimal(jtfTestValue.getText());
                                 significance = new Double(alpha.getText());
@@ -250,16 +276,43 @@ public class TTestPanel extends JPanel {
                     }
                 }
                 catch (NumberFormatException ex){
-                    JOptionPane.showMessageDialog(null, "Significance level is not a number");
+                    JOptionPane.showMessageDialog(null, "Significance level is not a number (needs to be fixed)");
                 }
             }
         });
+
+        jcboCalcOptions.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jcboCalcOptions.getSelectedIndex() == 1) {
+                    h0.setEnabled(false);
+                    h1.setEnabled(false);
+                    jrbLowerTail.setEnabled(false);
+                    jrbUpperTail.setEnabled(false);
+                    jrbTwoTail.setEnabled(false);
+                    jlblTestValue.setEnabled(false);
+                    jtfTestValue.setEnabled(false);
+                }
+                else {
+                    h0.setEnabled(true);
+                    h1.setEnabled(true);
+                    jrbLowerTail.setEnabled(true);
+                    jrbUpperTail.setEnabled(true);
+                    jrbTwoTail.setEnabled(true);
+                    jlblTestValue.setEnabled(true);
+                    jtfTestValue.setEnabled(true);
+                }
+            }
+        });
+        //        System.out.println(getPreferredSize()); // So I can adjust size accordinly
+        //        setMaximumSize(new Dimension(350, 213));
+        //        setMinimumSize(new Dimension(350, 213));
     }
 
     private void setTail() {
-        if (lowerTail.isSelected())
+        if (jrbLowerTail.isSelected())
             setLowerTail();
-        else if (upperTail.isSelected())
+        else if (jrbUpperTail.isSelected())
             setUpperTail();
         else
             setTwoTail();
