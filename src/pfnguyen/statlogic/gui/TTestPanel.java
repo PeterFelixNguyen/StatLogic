@@ -15,6 +15,7 @@
  */
 package pfnguyen.statlogic.gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -59,7 +60,7 @@ public class TTestPanel extends JPanel {
     //"Calculate " + "X\u0305" + ", \u03C3\u0302" + " from File"
     private JLabel jlblTestValue = new JLabel("Test Value");
     private JTextField jtfTestValue = new JTextField(4);
-    private JTextField alpha = new JTextField(4);
+    private JTextField jtfAlpha = new JTextField(4);
     private JButton jbtCalculate = new JButton("Calculate");
     // Button groups
     private ButtonGroup tailBtnGroup = new ButtonGroup();
@@ -110,7 +111,7 @@ public class TTestPanel extends JPanel {
         row4.add(jlblTestValue);
         row4.add(jtfTestValue);
         row4.add(new JLabel("alpha \u03b1"));
-        row4.add(alpha);
+        row4.add(jtfAlpha);
         row5.add(jbtCalculate);
         row5.add(jcboCalcOptions);
         // Component configuration
@@ -164,12 +165,62 @@ public class TTestPanel extends JPanel {
                 setTail();
             }
         });
+
+        jtfAlpha.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    double temp = new Double(jtfAlpha.getText());
+                    if (temp <= 0 || temp >= 1) {
+                        jtfAlpha.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfAlpha.setBackground(Color.WHITE);
+                    }
+                }
+                catch (NumberFormatException ex) {
+                    if (jtfAlpha.getText().length() != 0) {
+                        jtfAlpha.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfAlpha.setBackground(Color.WHITE);
+                    }
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    double temp = new Double(jtfAlpha.getText());
+                    if (temp <= 0 || temp >= 1) {
+                        jtfAlpha.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfAlpha.setBackground(Color.WHITE);
+                    }                }
+                catch (NumberFormatException ex) {
+                    if (jtfAlpha.getText().length() != 0) {
+                        jtfAlpha.setBackground(Color.RED);
+                    }
+                    else {
+                        jtfAlpha.setBackground(Color.WHITE);
+                    }
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+        });
+
         jbtCalculate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if ((new Double(alpha.getText()) > 0.0)
-                            && (new Double(alpha.getText()) < 1.0)) {
+                    if ((new Double(jtfAlpha.getText()) > 0.0)
+                            && (new Double(jtfAlpha.getText()) < 1.0)) {
                         if (jrbProvideXBar.isSelected()) {
                             JTextField jtfXBar = new JTextField();
                             JTextField jtfSampleSize = new JTextField();
@@ -179,7 +230,7 @@ public class TTestPanel extends JPanel {
                                 jtfXBar.setText(xBar.toString());
                             }
 
-                            // Should provide error handling is sampleSize <= 1
+                            // Should provide error handling if sampleSize <= 1
                             jtfSampleSize.setText(Integer.toString(sampleSize));
                             if (jtfSampleSize.getText().contains("0")) {
                                 jtfSampleSize.setText("");
@@ -202,7 +253,7 @@ public class TTestPanel extends JPanel {
                                     JOptionPane.PLAIN_MESSAGE);
 
                             if (selected != JOptionPane.CANCEL_OPTION) {
-                                significance = new Double(alpha.getText());
+                                significance = new Double(jtfAlpha.getText());
 
                                 xBar = new BigDecimal(jtfXBar.getText());
                                 sampleSize = new Integer(jtfSampleSize.getText());
@@ -241,7 +292,7 @@ public class TTestPanel extends JPanel {
                                     JOptionPane.PLAIN_MESSAGE);
 
                             if (selected != JOptionPane.CANCEL_OPTION) {
-                                significance = new Double(alpha.getText());
+                                significance = new Double(jtfAlpha.getText());
                                 if (jcboCalcOptions.getSelectedIndex() == 0 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
                                     testValue = new BigDecimal(jtfTestValue.getText());
@@ -264,7 +315,7 @@ public class TTestPanel extends JPanel {
                         else if (jrbImportData.isSelected()) {
                             try {
                                 testValue = new BigDecimal(jtfTestValue.getText());
-                                significance = new Double(alpha.getText());
+                                significance = new Double(jtfAlpha.getText());
                                 loader.loadFileIntoArray(hypothesis, testValue, significance);
                             } catch (IOException e1) {
                                 e1.printStackTrace();
@@ -276,7 +327,7 @@ public class TTestPanel extends JPanel {
                     }
                 }
                 catch (NumberFormatException ex){
-                    JOptionPane.showMessageDialog(null, "Significance level is not a number (needs to be fixed)");
+                    JOptionPane.showMessageDialog(null, "Something is wrong, invalid values");
                 }
             }
         });
@@ -304,9 +355,6 @@ public class TTestPanel extends JPanel {
                 }
             }
         });
-        //        System.out.println(getPreferredSize()); // So I can adjust size accordinly
-        //        setMaximumSize(new Dimension(350, 213));
-        //        setMinimumSize(new Dimension(350, 213));
     }
 
     private void setTail() {
