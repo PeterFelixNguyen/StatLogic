@@ -77,18 +77,18 @@ class MainFrame extends JFrame {
     private JTextArea jtaOutput = new JTextArea();
     private JLabel statusBar = new JLabel(" ", SwingConstants.LEFT);
     private StringBuilder outputString = new StringBuilder();
-    //
+    // Primary containers
     private MenuBar menuBar = new MenuBar(jtaOutput, statusBar, outputString);
     private UpperPanel upperPanel = new UpperPanel(jtaOutput, statusBar, outputString);
     private LowerPanel lowerPanel = new LowerPanel(statusBar);
-    //
+    // Subcontainers
     private ContainerForChooser containerForChooser = new ContainerForChooser();
     private JComboBox<String> jcboCalcChooser;
     private String[] calcName = { "Descriptive Statistics", "1-Sample Z",
             "1-Sample t", "Standard Score"};
     private JPanel leftInnerPanel = new JPanel();
     private JPanel rightInnerPanel = new JPanel();
-    //
+    // Output window
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
     private Border borderForOutput;
     private JPanel panelForCollapseBtn = new JPanel();
