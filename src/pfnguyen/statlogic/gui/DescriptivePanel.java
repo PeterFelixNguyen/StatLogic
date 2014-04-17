@@ -79,7 +79,7 @@ public class DescriptivePanel extends JPanel {
                 entryPanel.add(new JScrollPane(jtaValues));
 
                 int selected = JOptionPane.showConfirmDialog(null,
-                        entryPanel, "Enter data", JOptionPane.OK_CANCEL_OPTION,
+                        entryPanel, "Descriptive Statistics", JOptionPane.OK_CANCEL_OPTION,
                         JOptionPane.PLAIN_MESSAGE);
                 if (selected == JOptionPane.OK_OPTION) {
                     if (jtaValues.getText().length() == 0) {
