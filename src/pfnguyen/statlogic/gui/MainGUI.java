@@ -61,13 +61,6 @@ public class MainGUI {
 }
 
 @SuppressWarnings("serial")
-class CollapseButton extends ImageIcon {
-    public CollapseButton() {
-
-    }
-}
-
-@SuppressWarnings("serial")
 class ContainerForChooser extends JPanel {
 
     public ContainerForChooser() {
@@ -112,7 +105,7 @@ class MainFrame extends JFrame {
         ImageIcon collapseIcon = new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png"));
         final JLabel collapseBtn = new JLabel(collapseIcon);
 
-        ImageIcon windowIcon = new ImageIcon(cLoader.getResource("images/WindowIcon02-500x500.png"));
+        ImageIcon windowIcon = new ImageIcon(cLoader.getResource("images/WindowIcon02-50x50.png"));
         setIconImage(windowIcon.getImage());
 
         setJMenuBar(menuBar);
@@ -170,7 +163,6 @@ class MainFrame extends JFrame {
                 }
             }
         });
-
 
         jtaOutput.addFocusListener(new FocusListener() {
 
