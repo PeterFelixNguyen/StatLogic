@@ -16,6 +16,8 @@
 package pfnguyen.statlogic.gui;
 
 import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -26,13 +28,17 @@ import java.io.PrintWriter;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
@@ -53,9 +59,10 @@ public class MenuBar extends JMenuBar{
     private JMenuItem jmiSelectAll = new JMenuItem("Select All");
     // View Menu Choices
     private JMenu jmCalcView = new JMenu("Calculator View");
-    private JMenuItem jmiFont = new JMenuItem("Font");
+    private JMenuItem jmiFontSize = new JMenuItem("Font Size");
     private JRadioButtonMenuItem jrbmiHideCalc = new JRadioButtonMenuItem("Hide Calculator");
     private JRadioButtonMenuItem jrbmiShowCalc = new JRadioButtonMenuItem("Show Calculator");
+    private FontPanel fontPanel = new FontPanel();
     // Tools Menu Choices
     private JMenuItem jmiArithmetic = new JMenuItem("Arithmetic");
     private JMenuItem jmiFileCheck = new JMenuItem("File Check");
@@ -66,8 +73,11 @@ public class MenuBar extends JMenuBar{
     private JMenuItem jmiManual = new JMenuItem("Manual");
     // Menu Panels
     private AboutPanel aboutPanel = new AboutPanel();
+    // Visual Components
+    private JTextArea jtaOutput;
 
     public MenuBar(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
+        this.jtaOutput = jtaOutput;
         add(fileMenu);
         add(editMenu);
         add(viewMenu);
@@ -87,7 +97,7 @@ public class MenuBar extends JMenuBar{
         editMenu.add(jmiSelectAll);
 
         viewMenu.add(jmCalcView);
-        viewMenu.add(jmiFont);
+        viewMenu.add(jmiFontSize);
 
         ButtonGroup viewGroup = new ButtonGroup();
         viewGroup.add(jrbmiHideCalc);
@@ -166,6 +176,17 @@ public class MenuBar extends JMenuBar{
             }
         });
 
+        jmiFontSize.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Point point = new Point(getRootPane().getLocationOnScreen());
+                fontPanel.setLocation((int)point.getX() + 50, (int)point.getY() + 50);
+                fontPanel.setVisible(true);
+                System.out.println(getRootPane().getLocationOnScreen());
+            }
+        });
+
         jmiAbout.addActionListener(new ActionListener() {
 
             @Override
@@ -176,5 +197,34 @@ public class MenuBar extends JMenuBar{
                 JOptionPane.showMessageDialog(null, aboutPanel, "About StatLogic", JOptionPane.PLAIN_MESSAGE, windowIcon);
             }
         });
+    }
+
+    class FontPanel extends JFrame {
+        private JSlider fontSlider = new JSlider(JSlider.HORIZONTAL);
+
+        FontPanel() {
+            setTitle("Font Size");
+            setSize(250, 100);
+            setResizable(false);
+            add(fontSlider);
+            fontSlider.setMinimum(12);
+            fontSlider.setMaximum(24);
+            fontSlider.setPaintLabels(true);
+            fontSlider.setPaintTicks(true);
+            fontSlider.setMajorTickSpacing(1);
+            fontSlider.setMinorTickSpacing(0);
+
+            fontSlider.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    int fontSize = fontSlider.getValue();
+
+                    Font font = new Font(jtaOutput.getFont().getName(), Font.PLAIN, fontSize);
+                    jtaOutput.setFont(font);
+                }
+
+            });
+        }
     }
 }
