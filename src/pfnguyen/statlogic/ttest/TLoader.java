@@ -34,7 +34,7 @@ public class TLoader {
     private TConfidenceInterval oneSampleCI;
     private Option option = Option.NONE;
     /* Data */
-    private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
+    private ArrayList<BigDecimal> values;
     private Scanner input;
     private java.io.File inFile;
     /* Visual Components */
@@ -48,14 +48,56 @@ public class TLoader {
         this.outputString = outputString;
     }
 
+    public void loadXIntoCalc(Hypothesis hAlternative, BigDecimal testValue,
+            BigDecimal xBar, BigDecimal stdDev, int n, double significance,
+            Option option) {
+
+        this.option = option;
+
+        if (option == Option.TEST_HYPOTHESIS) {
+            oneSampleTTest = new OneSampleTTest(hAlternative, testValue, xBar,
+                    stdDev, n, significance);
+        }
+        if (option == Option.CONFIDENCE_INTERVAl) {
+            oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
+        }
+        buildString();
+        writeToOutput();
+    }
+
+    public void stringToBigDecimalArray(String stringValues, Hypothesis hAlternative,
+            BigDecimal testValue, double significance, Option option) {
+        String[] stringArray = stringValues.split("\\s+");
+        values = new ArrayList<BigDecimal>();
+
+        this.option = option;
+
+        for (int i = 0; i < stringArray.length; i++) {
+            values.add(new BigDecimal(stringArray[i]));
+        }
+
+        oneSampleTTest = new OneSampleTTest(hAlternative, testValue,
+                values, significance);
+        // move into if statement
+        BigDecimal xBar = new BigDecimal(oneSampleTTest.getXBar());
+        BigDecimal stdDev = new BigDecimal(oneSampleTTest.getSigma());
+        int n = new Integer(oneSampleTTest.getN());
+
+        if (option == Option.CONFIDENCE_INTERVAl) {
+            oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
+        }
+
+        buildString();
+        writeToOutput();
+    }
+
     /** Load values from .txt file for calculation */
     public void loadFileIntoArray(Hypothesis hypothesis,
-            BigDecimal testValue, double significance)
+            BigDecimal testValue, double significance, Option option)
                     throws IOException {
-        /* If data previously loaded, clear values */ // REMOVE THIS, CREATE INSTANCES
-        if (values.size() != 0) {
-            values.clear(); // Required to make program reusable
-        }
+        values = new ArrayList<BigDecimal>();
+
+        this.option = option;
 
         /* Inputs data from file and assign to values */
         JFileChooser fileChooser = new JFileChooser();
@@ -68,9 +110,17 @@ public class TLoader {
 
             input.close();
 
+            //if (option == Option.TEST_HYPOTHESIS) {
             oneSampleTTest = new OneSampleTTest(hypothesis, testValue,
                     values, significance);
-
+            //}
+            if (option == Option.CONFIDENCE_INTERVAl ||
+                    option == Option.BOTH) { // really need to fix this
+                BigDecimal xBar = new BigDecimal(oneSampleTTest.getXBar());
+                BigDecimal stdDev = new BigDecimal(oneSampleTTest.getSigma());
+                int n = new Integer(oneSampleTTest.getN());
+                oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
+            }
             buildString();
             writeToOutput();
 
@@ -107,7 +157,24 @@ public class TLoader {
                     "**************************************************************************************" +
                     "\n");
         }
-        if (option == Option.CONFIDENCE_INTERVAl) {
+        else if (option == Option.CONFIDENCE_INTERVAl) {
+            outputString.append("Confidence Interval for One sample Student's t-test" + "\n"
+                    + oneSampleCI.confidenceInterval() + "\n\n" +
+                    "**************************************************************************************" +
+                    "\n");
+        }
+        else if (option == Option.BOTH) {
+            outputString.append("Date created: " + new java.util.Date() + "\n\n"
+                    + "Test Hypothesis for One sample Student's t-test" + "\n"
+                    + oneSampleTTest.getNullHypothesis() + "\n"
+                    + oneSampleTTest.getAltHypothesis() + "\n" + "\n"
+                    + "xbar = " + oneSampleTTest.getXBar() + "    n = " + oneSampleTTest.getN() + "\n"
+                    + "sigma = " + oneSampleTTest.getSigma() + "    alpha = " + oneSampleTTest.getAlpha() + "\n" + "\n"
+                    + "Critical Value = " + oneSampleTTest.getCriticalRegionAsString() + "    Test Statistic = "
+                    + oneSampleTTest.getTestStatistics() + "\n"
+                    + oneSampleTTest.getConclusionAsString() + "\n\n" +
+                    "**************************************************************************************" +
+                    "\n");
             outputString.append("Confidence Interval for One sample Student's t-test" + "\n"
                     + oneSampleCI.confidenceInterval() + "\n\n" +
                     "**************************************************************************************" +
@@ -118,51 +185,5 @@ public class TLoader {
     /** Print results to jtaOutput window */
     public void writeToOutput() {
         outputArea.setText(outputString.toString());
-    }
-
-    public void loadXIntoCalc(Hypothesis hAlternative, BigDecimal testValue,
-            BigDecimal xBar, BigDecimal stdDev, int n, double significance,
-            Option option) {
-
-        this.option = option;
-
-        if (option == Option.TEST_HYPOTHESIS) {
-            oneSampleTTest = new OneSampleTTest(hAlternative, testValue, xBar,
-                    stdDev, n, significance);
-        }
-        if (option == Option.CONFIDENCE_INTERVAl) {
-            oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
-        }
-        buildString();
-        writeToOutput();
-    }
-
-    public void stringToBigDecimalArray(String stringValues, Hypothesis hAlternative,
-            BigDecimal testValue, double significance, Option option) {
-        String[] stringArray = stringValues.split("\\s+");
-
-        this.option = option;
-
-        if (values.size() != 0) {
-            values.clear(); // Required to make program reusable
-        }
-
-        for (int i = 0; i < stringArray.length; i++) {
-            values.add(new BigDecimal(stringArray[i]));
-        }
-
-        oneSampleTTest = new OneSampleTTest(hAlternative, testValue,
-                values, significance);
-
-        BigDecimal xBar = new BigDecimal(oneSampleTTest.getXBar());
-        BigDecimal stdDev = new BigDecimal(oneSampleTTest.getSigma());
-        int n = new Integer(oneSampleTTest.getN());
-
-        if (option == Option.CONFIDENCE_INTERVAl) {
-            oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
-        }
-
-        buildString();
-        writeToOutput();
     }
 }

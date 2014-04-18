@@ -11,12 +11,13 @@ Version 0.2.3
 *Icon to show/hide calculator panel did not always update (fixed).
 
 Version 0.2.4
-1-Sample T-Test can now output the results.
-1-Sample T-Test concluded with the wrong hypothesis (fixed, z distribution used instead of t distribution).
-1-Sample T-Test did not perform test until a tail is clicked (fixed).
-1-Sample T-Test can now calculate sample mean and sample standard deviation from file.
-1-Sample T-Test can now calculate sample mean and sample standard deviation from a window of values.
+1-Sample t can now output the results.
+1-Sample t concluded with the wrong hypothesis (fixed, z distribution used instead of t distribution).
+1-Sample t did not perform test until a tail is clicked (fixed).
+1-Sample t can now calculate sample mean and sample standard deviation from file.
+1-Sample t can now calculate sample mean and sample standard deviation from a window of values.
 1-Sample T Confidence Interval did not calculate correctly (fixed, z distribution used instead of t distribution and constructor arguments were wrong)
+1-Sample Z-Test can use all three options: provice x-bar, enter data, and import data.
 Major design improvement in t-distribution calculator.
 Z-Score standardization formula used wrong variable (fixed, X-Bar changed to X (raw score)).
 Clear button on menu bar now works.
