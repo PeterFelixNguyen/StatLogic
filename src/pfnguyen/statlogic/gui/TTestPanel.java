@@ -54,12 +54,10 @@ public class TTestPanel extends JPanel {
             "Provide " + "X\u0305" + ", \u03C3\u0302");
     private JRadioButton jrbEnterData = new JRadioButton(
             "Enter data");
-    //"Calculate " + "X\u0305"  + ", \u03C3\u0302"
     private JRadioButton jrbImportData = new JRadioButton(
             "Import data");
-    //"Calculate " + "X\u0305" + ", \u03C3\u0302" + " from File"
     private JLabel jlblTestValue = new JLabel("Test Value");
-    private JTextField jtfTestValue = new JTextField(4);
+    private JTextField jtfTestValue = new JTextField(8);
     private JTextField jtfAlpha = new JTextField(4);
     private JButton jbtCalculate = new JButton("Calculate");
     // Button groups
@@ -72,7 +70,7 @@ public class TTestPanel extends JPanel {
     private FlowPanel row4 = new FlowPanel();
     private FlowPanel row5 = new FlowPanel();
     // Calculator
-    private TLoader loader;
+    private TLoader tLoader;
     // Input for Method 3
     private Hypothesis hypothesis = Hypothesis.NOT_EQUAL;
     private BigDecimal testValue;
@@ -89,7 +87,7 @@ public class TTestPanel extends JPanel {
     private JComboBox<String> jcboCalcOptions = new JComboBox<String>(calcName);
 
     public TTestPanel(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
-        loader = new TLoader(jtaOutput, statusBar, outputString);
+        tLoader = new TLoader(jtaOutput, statusBar, outputString);
         // Styling
         setBorder(new TitledBorder("1-Sample t"));
         setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -262,7 +260,7 @@ public class TTestPanel extends JPanel {
                                 if (jcboCalcOptions.getSelectedIndex() == 0 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
                                     testValue = new BigDecimal(jtfTestValue.getText());
-                                    loader.loadXIntoCalc(hypothesis, testValue,
+                                    tLoader.loadXIntoCalc(hypothesis, testValue,
                                             xBar, stdDev, sampleSize, significance,
                                             Option.TEST_HYPOTHESIS);
                                 }
@@ -270,7 +268,7 @@ public class TTestPanel extends JPanel {
                                         jcboCalcOptions.getSelectedIndex() == 2)
                                 {
                                     testValue = BigDecimal.ONE;
-                                    loader.loadXIntoCalc(hypothesis, testValue,
+                                    tLoader.loadXIntoCalc(hypothesis, testValue,
                                             xBar, stdDev, sampleSize, significance,
                                             Option.CONFIDENCE_INTERVAl);
                                 }
@@ -296,7 +294,7 @@ public class TTestPanel extends JPanel {
                                 if (jcboCalcOptions.getSelectedIndex() == 0 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
                                     testValue = new BigDecimal(jtfTestValue.getText());
-                                    loader.stringToBigDecimalArray(
+                                    tLoader.stringToBigDecimalArray(
                                             jtaValues.getText(),hypothesis,
                                             testValue, significance,
                                             Option.TEST_HYPOTHESIS);
@@ -304,7 +302,7 @@ public class TTestPanel extends JPanel {
                                 if (jcboCalcOptions.getSelectedIndex() == 1 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
                                     testValue = BigDecimal.ONE;
-                                    loader.stringToBigDecimalArray(
+                                    tLoader.stringToBigDecimalArray(
                                             jtaValues.getText(), hypothesis,
                                             testValue, significance,
                                             Option.CONFIDENCE_INTERVAl);
@@ -316,7 +314,7 @@ public class TTestPanel extends JPanel {
                             try {
                                 testValue = new BigDecimal(jtfTestValue.getText());
                                 significance = new Double(jtfAlpha.getText());
-                                loader.loadFileIntoArray(hypothesis, testValue, significance);
+                                tLoader.loadFileIntoArray(hypothesis, testValue, significance);
                             } catch (IOException e1) {
                                 e1.printStackTrace();
                             }
