@@ -18,11 +18,18 @@ package pfnguyen.statlogic.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -92,8 +99,13 @@ class MainFrame extends JFrame {
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
     private Border borderForOutput;
     private JPanel panelForCollapseBtn = new JPanel();
-    private int panelIndex = 3;
+    private int panelIndex = 1; // set default index here
     private boolean hiddenPanel = false;
+    private boolean outputFocused = false;
+    private int minFontSize = 12;
+    private int fontSize = 12;
+    private int maxFontSize = 24;
+    private boolean ctrlPressed = false;
 
     MainFrame() {
         final ClassLoader cLoader = getClass().getClassLoader();
@@ -113,9 +125,66 @@ class MainFrame extends JFrame {
         leftInnerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         rightInnerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         jcboCalcChooser = new JComboBox<String>(calcName);
-        jcboCalcChooser.setSelectedIndex(3);
+        jcboCalcChooser.setSelectedIndex(panelIndex);
         leftInnerPanel.add(jcboCalcChooser);
         rightInnerPanel.add(collapseBtn);
+
+        jtaOutput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    ctrlPressed = true;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    ctrlPressed = false;
+                }
+            }
+        });
+
+        jtaOutput.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+
+                if (ctrlPressed == true) {
+                    if (outputFocused == true) {
+                        int wheel = e.getWheelRotation();
+
+                        if (wheel < 0) {
+                            if (fontSize < maxFontSize) {
+                                fontSize++;
+                            }
+                        }
+                        else {
+                            if (fontSize > minFontSize) {
+                                fontSize--;
+                            }
+                        }
+
+                        Font font = new Font(jtaOutput.getFont().getName(), Font.PLAIN, fontSize);
+                        jtaOutput.setFont(font);
+                    }
+                }
+            }
+        });
+
+
+        jtaOutput.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                outputFocused = true;
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                outputFocused = false;
+            }
+        });
+
         jcboCalcChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -261,11 +330,11 @@ class LeftPanel extends JPanel {
 
     LeftPanel(JTextArea jtaOutput, JLabel statusBar, final StringBuilder outputString) {
         descriptiveCalc = new DescriptivePanel(jtaOutput, statusBar, outputString);
-        zTestCalc = new ZTestPanel(jtaOutput, statusBar);
+        zTestCalc = new ZTestPanel(jtaOutput, statusBar, outputString);
         tTestCalc = new TTestPanel(jtaOutput, statusBar, outputString);
         zScoreCalc = new ZScorePanel(jtaOutput, statusBar, outputString);
         setLayout(new FlowLayout(FlowLayout.LEADING));
-        add(zScoreCalc); // Default calculator
+        add(zTestCalc); // Default calculator
     }
 }
 
