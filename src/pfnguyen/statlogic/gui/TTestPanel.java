@@ -59,7 +59,7 @@ public class TTestPanel extends JPanel {
     private JLabel jlblTestValue = new JLabel("Test Value");
     private JTextField jtfTestValue = new JTextField(8);
     private JTextField jtfAlpha = new JTextField(4);
-    private JButton jbtCalculate = new JButton("Calculate");
+    private JButton jbtCalc = new JButton("Calculate");
     // Button groups
     private ButtonGroup tailBtnGroup = new ButtonGroup();
     private ButtonGroup xBarBtnGroup = new ButtonGroup();
@@ -110,7 +110,7 @@ public class TTestPanel extends JPanel {
         row4.add(jtfTestValue);
         row4.add(new JLabel("alpha \u03b1"));
         row4.add(jtfAlpha);
-        row5.add(jbtCalculate);
+        row5.add(jbtCalc);
         row5.add(jcboCalcOptions);
         // Component configuration
         jrbTwoTail.setSelected(true);
@@ -213,7 +213,7 @@ public class TTestPanel extends JPanel {
 
         });
 
-        jbtCalculate.addActionListener(new ActionListener() {
+        jbtCalc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -246,7 +246,7 @@ public class TTestPanel extends JPanel {
                                     "\u03C3\u0302", jtfStdDev};
 
                             int selected = JOptionPane.showConfirmDialog(
-                                    jbtCalculate.getParent(), message,
+                                    jbtCalc.getParent(), message,
                                     "Sample Mean", JOptionPane.OK_CANCEL_OPTION,
                                     JOptionPane.PLAIN_MESSAGE);
 
@@ -301,7 +301,7 @@ public class TTestPanel extends JPanel {
                                 }
                                 if (jcboCalcOptions.getSelectedIndex() == 1 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
-                                    testValue = BigDecimal.ONE;
+                                    testValue = BigDecimal.ONE; // is there a way around this?
                                     tLoader.stringToBigDecimalArray(
                                             jtaValues.getText(), hypothesis,
                                             testValue, significance,
@@ -314,9 +314,21 @@ public class TTestPanel extends JPanel {
                             try {
                                 testValue = new BigDecimal(jtfTestValue.getText());
                                 significance = new Double(jtfAlpha.getText());
-                                tLoader.loadFileIntoArray(hypothesis, testValue, significance);
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
+                                if (jcboCalcOptions.getSelectedIndex() == 0) {
+                                    tLoader.loadFileIntoArray(hypothesis, testValue,
+                                            significance, Option.TEST_HYPOTHESIS);
+                                }
+                                else if (jcboCalcOptions.getSelectedIndex() == 1) {
+                                    tLoader.loadFileIntoArray(hypothesis, testValue,
+                                            significance, Option.CONFIDENCE_INTERVAl);
+                                }
+                                else if (jcboCalcOptions.getSelectedIndex() == 2) {
+                                    tLoader.loadFileIntoArray(hypothesis, testValue,
+                                            significance, Option.BOTH);
+                                }
+                            }
+                            catch (IOException ex) {
+                                System.out.println("Import Failed");
                             }
                         }
                     }
