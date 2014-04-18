@@ -17,7 +17,7 @@ package pfnguyen.statlogic.options;
 
 public interface CalculatorOptions {
     public enum Option {
-        NONE, TEST_HYPOTHESIS, CONFIDENCE_INTERVAl
+        NONE, TEST_HYPOTHESIS, CONFIDENCE_INTERVAl, BOTH
     }
 
     public enum Hypothesis {
