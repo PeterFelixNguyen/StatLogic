@@ -187,7 +187,8 @@ class ConfigurationPanel extends JPanel {
         subRightPanel2.add(jrbBothPop);
         subRightPanel2.add(jrbPopVar);
         subRightPanel2.add(jrbPopStdDev);
-
+        jrbNoneVar.setSelected(true);
+        
         varianceOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
         varianceOptions.setBorder(new TitledBorder("Variance Options"));
         add(outputOptions);
