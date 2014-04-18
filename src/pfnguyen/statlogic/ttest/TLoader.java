@@ -16,7 +16,6 @@
 package pfnguyen.statlogic.ttest;
 
 import java.io.IOException;
-//import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -30,16 +29,14 @@ import pfnguyen.statlogic.options.CalculatorOptions.Option;
 
 
 public class TLoader {
-    /** Calculators */
+    /* Calculators */
     private OneSampleTTest oneSampleTTest;
     private TConfidenceInterval oneSampleCI;
     private Option option = Option.NONE;
-    /** Data */
+    /* Data */
     private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
     private Scanner input;
-    // private PrintWriter output;
     private java.io.File inFile;
-    // private java.io.File outFile;
     /* Visual Components */
     private JTextArea outputArea;
     private JLabel statusBar;
@@ -49,14 +46,13 @@ public class TLoader {
         outputArea = jtaOutput;
         this.statusBar = statusBar;
         this.outputString = outputString;
-
     }
 
     /** Load values from .txt file for calculation */
     public void loadFileIntoArray(Hypothesis hypothesis,
             BigDecimal testValue, double significance)
                     throws IOException {
-        /* If data previously loaded, clear values */
+        /* If data previously loaded, clear values */ // REMOVE THIS, CREATE INSTANCES
         if (values.size() != 0) {
             values.clear(); // Required to make program reusable
         }
