@@ -16,7 +16,6 @@
 package pfnguyen.statlogic.gui;
 
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,10 +54,6 @@ public class DescriptivePanel extends JPanel {
     public DescriptivePanel(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
         loader = new DescriptiveLoader(jtaOutput, statusBar, outputString);
         setBorder(new TitledBorder("Descriptive Stats"));
-        Font customFont = new Font("TimesRoman", Font.BOLD, 13);
-        jbtEnter.setFont(customFont);
-        jbtLoad.setFont(customFont);
-        jbtOptions.setFont(customFont);
         setLayout(new GridLayout(3, 1));
 
         add(jbtEnter);
@@ -188,7 +183,7 @@ class ConfigurationPanel extends JPanel {
         subRightPanel2.add(jrbPopVar);
         subRightPanel2.add(jrbPopStdDev);
         jrbNoneVar.setSelected(true);
-        
+
         varianceOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
         varianceOptions.setBorder(new TitledBorder("Variance Options"));
         add(outputOptions);
