@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 /**
  * Class that calculates the square root of a BigDecimal value.
- * 
+ *
  * @author  Peter "Felix" Nguyen
  */
 public class BigDecimalMath {
