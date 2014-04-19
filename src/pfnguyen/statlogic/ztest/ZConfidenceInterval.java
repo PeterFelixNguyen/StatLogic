@@ -13,25 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Change confidence to significance, remove 1 - ((1 - C) / 2)
- * Just use (1 - significance / 2), this fixed bug for t-confidence...
- * not sure about z-confidence... test before you change
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- */
 package pfnguyen.statlogic.ztest;
 
 import java.math.BigDecimal;
@@ -43,24 +24,23 @@ public class ZConfidenceInterval {
     private BigDecimal lowerBound;
     private BigDecimal upperBound;
     private BigDecimal standardError;
-
     private NormalDistribution normal = new NormalDistribution();
 
     public ZConfidenceInterval(BigDecimal x[], BigDecimal stdDev,
-            double confidence) {
-        calcConfidenceInterval(calcSampleMean(x), stdDev, x.length, confidence);
+            double significance) {
+        calcConfidenceInterval(calcSampleMean(x), stdDev, x.length, significance);
     }
 
     public ZConfidenceInterval(BigDecimal xBar, BigDecimal stdDev, int n,
-            double confidence) {
-        calcConfidenceInterval(xBar, stdDev, n, confidence);
+            double significance) {
+        calcConfidenceInterval(xBar, stdDev, n, significance);
     }
 
     /** stdDev, n, confidence must not be BigDecimals */
     public void calcConfidenceInterval(BigDecimal sampleMean,
-            BigDecimal stdDev, int n, double confidence) {
+            BigDecimal stdDev, int n, double significance) {
         standardError = new BigDecimal(
-                normal.inverseCumulativeProbability(1 - ((1 - confidence) / 2)))
+                normal.inverseCumulativeProbability(1 - significance / 2))
         .multiply(stdDev).divide(new BigDecimal(Math.sqrt(n)), 4,
                 RoundingMode.HALF_UP);
         upperBound = sampleMean.add(standardError);
