@@ -213,6 +213,7 @@ public class MenuBar extends JMenuBar{
             fontSlider.setPaintTicks(true);
             fontSlider.setMajorTickSpacing(1);
             fontSlider.setMinorTickSpacing(0);
+            fontSlider.setValue(12);
 
             fontSlider.addChangeListener(new ChangeListener() {
 

@@ -15,7 +15,6 @@
  */
 package pfnguyen.statlogic.descriptive;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import pfnguyen.statlogic.algorithms.SortAlgorithms;
@@ -26,8 +25,8 @@ import pfnguyen.statlogic.algorithms.SortAlgorithms;
  * @author Peter "Felix" Nguyen
  */
 public class Extrema {
-    private BigDecimal maxima;
-    private BigDecimal minima;
+    private double maxima;
+    private double minima;
 
     /**
      * Constructs an Extrema class with the specified ArrayList of BigDecimal
@@ -35,7 +34,7 @@ public class Extrema {
      * 
      * @param  values  the values used for calculation of extrema
      */
-    public Extrema(ArrayList<BigDecimal> values) {
+    public Extrema(ArrayList<Double> values) {
         calcExtrema(values);
     }
 
@@ -44,7 +43,7 @@ public class Extrema {
      * 
      * @param  values  the values used for calculation of extrema
      */
-    private void calcExtrema(ArrayList<BigDecimal> values) {
+    private void calcExtrema(ArrayList<Double> values) {
         SortAlgorithms.BubbleSort(values);
         minima = values.get(0);
         maxima = values.get(values.size() - 1);
@@ -53,14 +52,14 @@ public class Extrema {
     /**
      * @return  the minima of a data set
      */
-    public BigDecimal getMinima() {
+    public double getMinima() {
         return minima;
     }
 
     /**
      * @return  the maxima of a data set
      */
-    public BigDecimal getMaxima() {
+    public double getMaxima() {
         return maxima;
     }
 }

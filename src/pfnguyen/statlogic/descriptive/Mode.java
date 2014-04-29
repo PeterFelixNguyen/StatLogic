@@ -15,7 +15,6 @@
  */
 package pfnguyen.statlogic.descriptive;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +23,7 @@ import java.util.ArrayList;
  * @author Peter "Felix" Nguyen
  */
 public class Mode {
-    private ArrayList<BigDecimal> mode = new ArrayList<BigDecimal>();
+    private ArrayList<Double> mode = new ArrayList<Double>();
 
     /**
      * Constructs a Mode class with the specified ArrayList of
@@ -32,7 +31,7 @@ public class Mode {
      *
      * @param  values  the values from the data set
      */
-    public Mode(ArrayList<BigDecimal> values) {
+    public Mode(ArrayList<Double> values) {
         calcMode(values);
     }
 
@@ -42,7 +41,7 @@ public class Mode {
      *
      * @param  values  the values from the data set
      */
-    private void calcMode(ArrayList<BigDecimal> values) {
+    private void calcMode(ArrayList<Double> values) {
         int maxCount = 0;
         /* Tallies each value to determine the max count */
         for (int i = 0; i < values.size(); i++) {
@@ -100,7 +99,7 @@ public class Mode {
     /**
      * @return  the ArrayList of the modes of a data set
      */
-    public ArrayList<BigDecimal> getMode() {
+    public ArrayList<Double> getMode() {
         return mode;
     }
 }

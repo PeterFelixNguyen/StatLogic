@@ -21,7 +21,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -75,11 +74,11 @@ public class ZTestPanel extends JPanel {
     private ZLoader zLoader;
     // Input for Method 3
     private Hypothesis hypothesis = Hypothesis.NOT_EQUAL;
-    private BigDecimal testValue;
-    private BigDecimal stdDev;
+    private double testValue;
+    private double stdDev;
     private double significance;
     // Input for Method 1
-    private BigDecimal xBar;
+    private Double xBar;
     private int sampleSize;
     // Layout Container
     private JPanel layoutContainer = new JPanel(new GridLayout(6, 1));
@@ -253,13 +252,13 @@ public class ZTestPanel extends JPanel {
                             if (selected != JOptionPane.CANCEL_OPTION) {
                                 significance = new Double(jtfAlpha.getText());
 
-                                xBar = new BigDecimal(jtfXBar.getText());
+                                xBar = new Double(jtfXBar.getText());
                                 sampleSize = new Integer(jtfSampleSize.getText());
-                                stdDev = new BigDecimal(jtfSigma.getText());
+                                stdDev = new Double(jtfSigma.getText());
 
                                 if (jcboCalcOptions.getSelectedIndex() == 0 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
-                                    testValue = new BigDecimal(jtfTestValue.getText());
+                                    testValue = new Double(jtfTestValue.getText());
                                     zLoader.loadXIntoCalc(hypothesis, testValue,
                                             xBar, stdDev, sampleSize, significance,
                                             Option.TEST_HYPOTHESIS);
@@ -267,7 +266,7 @@ public class ZTestPanel extends JPanel {
                                 if (jcboCalcOptions.getSelectedIndex() == 1 ||
                                         jcboCalcOptions.getSelectedIndex() == 2)
                                 {
-                                    testValue = BigDecimal.ONE;
+                                    testValue = 1; // This is bad
                                     zLoader.loadXIntoCalc(hypothesis, testValue,
                                             xBar, stdDev, sampleSize, significance,
                                             Option.CONFIDENCE_INTERVAl);
@@ -278,7 +277,7 @@ public class ZTestPanel extends JPanel {
                             JTextArea jtaValues = new JTextArea(20, 20);
                             jtaValues.setLineWrap(true);
                             jtaValues.setWrapStyleWord(true);
-                            stdDev = new BigDecimal(jtfSigma.getText());
+                            stdDev = new Double(jtfSigma.getText());
 
                             BoxPanel calcXBarPanel = new BoxPanel();
                             calcXBarPanel.add(new JLabel(
@@ -294,16 +293,16 @@ public class ZTestPanel extends JPanel {
                                 significance = new Double(jtfAlpha.getText());
                                 if (jcboCalcOptions.getSelectedIndex() == 0 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
-                                    testValue = new BigDecimal(jtfTestValue.getText());
-                                    zLoader.stringToBigDecimalArray(
+                                    testValue = new Double(jtfTestValue.getText());
+                                    zLoader.stringToDoubleArray(
                                             jtaValues.getText(), hypothesis,
                                             testValue, stdDev, significance,
                                             Option.TEST_HYPOTHESIS);
                                 }
                                 if (jcboCalcOptions.getSelectedIndex() == 1 ||
                                         jcboCalcOptions.getSelectedIndex() == 2) {
-                                    testValue = BigDecimal.ONE; // is there a way around this?
-                                    zLoader.stringToBigDecimalArray(
+                                    testValue = 1; // is there a way around this?
+                                    zLoader.stringToDoubleArray(
                                             jtaValues.getText(), hypothesis,
                                             testValue, stdDev, significance,
                                             Option.CONFIDENCE_INTERVAl);
@@ -313,9 +312,9 @@ public class ZTestPanel extends JPanel {
                         }
                         else if (jrbImportData.isSelected()) {
                             try {
-                                testValue = new BigDecimal(jtfTestValue.getText());
+                                testValue = new Double(jtfTestValue.getText());
                                 significance = new Double(jtfAlpha.getText());
-                                stdDev = new BigDecimal(jtfSigma.getText());
+                                stdDev = new Double(jtfSigma.getText());
                                 if (jcboCalcOptions.getSelectedIndex() == 0) {
                                     zLoader.loadFileIntoArray(hypothesis, testValue,
                                             stdDev, significance, Option.TEST_HYPOTHESIS);

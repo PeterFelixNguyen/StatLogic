@@ -15,22 +15,20 @@
  */
 package pfnguyen.statlogic.descriptive;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import pfnguyen.statlogic.algorithms.SortAlgorithms;
 
 public class Quartiles {
-    private BigDecimal lowerQuartile;
-    private BigDecimal median;
-    private BigDecimal upperQuartile;
+    private double lowerQuartile;
+    private Double median;
+    private double upperQuartile;
 
-    public Quartiles(ArrayList<BigDecimal> values) {
+    public Quartiles(ArrayList<Double> values) {
         calcMedian(values);
     }
 
-    private void calcMedian(ArrayList<BigDecimal> values) {
+    private void calcMedian(ArrayList<Double> values) {
 
         SortAlgorithms.BubbleSort(values);
 
@@ -38,48 +36,41 @@ public class Quartiles {
         if (values.size() % 2 == 0) {
             if (values.size() % 4 != 0) {
                 lowerQuartile = values.get((values.size()/4));
-                median = values.get(values.size()/2-1).add(values.get((values.size()/2)));
-                median = median.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
+                median = values.get(values.size()/2-1) + values.get((values.size()/2)) / 2;
                 upperQuartile = values.get((values.size()/4*3+1));
             }
             else {
-                lowerQuartile = values.get(values.size()/4-1).add(values.get((values.size()/4)));
-                lowerQuartile = lowerQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
-                median = values.get(values.size()/2-1).add(values.get((values.size()/2)));
-                median = median.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
-                upperQuartile = values.get(values.size()/4*3-1).add(values.get((values.size()/4*3)));
-                upperQuartile = upperQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
+                lowerQuartile = (values.get(values.size()/4-1) + values.get((values.size()/4))) / 2;
+                median = (values.get(values.size()/2-1) + values.get((values.size()/2))) / 2;
+                upperQuartile = (values.get(values.size()/4*3-1) + values.get((values.size()/4*3))) / 2;
             }
         }
         /* Finds median for odd sized ArrayList */
         else if (values.size() % 4 == 1) {
-            lowerQuartile = values.get(values.size()/4-1).add(values.get((values.size()/4)));
-            lowerQuartile = lowerQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
+            lowerQuartile = (values.get(values.size()/4-1) + values.get((values.size()/4))) / 2;
             median = values.get((values.size()/2));
-            upperQuartile = values.get(values.size()/4*3).add(values.get((values.size()/4*3+1)));
-            upperQuartile = upperQuartile.divide(new BigDecimal(Integer.toString(2)), 4, RoundingMode.HALF_UP);
+            upperQuartile = (values.get(values.size()/4*3) + values.get((values.size()/4*3+1))) / 2;
         }
         else {
             lowerQuartile = values.get((values.size()/4));
             median = values.get((values.size()/2));
             upperQuartile = values.get((values.size()/4*3+2));
         }
-        median.setScale(4, RoundingMode.HALF_UP); // Not working properly
     }
 
     public String getStringOfMedian() {
         return median.toString();
     }
 
-    public BigDecimal getLowerQuartile () {
+    public double getLowerQuartile () {
         return lowerQuartile;
     }
 
-    public BigDecimal getUpperQuartile() {
+    public double getUpperQuartile() {
         return upperQuartile;
     }
 
-    public BigDecimal getMedian() {
+    public double getMedian() {
         return median;
     }
 }

@@ -16,7 +16,6 @@
 package pfnguyen.statlogic.ztest;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -34,7 +33,7 @@ public class ZLoader {
     private ZConfidenceInterval oneSampleCI;
     private Option option = Option.NONE;
     // Data
-    private ArrayList<BigDecimal> values = new ArrayList<BigDecimal>();
+    private ArrayList<Double> values = new ArrayList<Double>();
     private Scanner input;
     private java.io.File inFile;
     // Visual Components
@@ -48,8 +47,8 @@ public class ZLoader {
         this.outputString = outputString;
     }
 
-    public void loadXIntoCalc(Hypothesis hAlternative, BigDecimal testValue,
-            BigDecimal xBar, BigDecimal stdDev, int n, double significance,
+    public void loadXIntoCalc(Hypothesis hAlternative, double testValue,
+            double xBar, double stdDev, int n, double significance,
             Option option) {
 
         this.option = option;
@@ -65,22 +64,22 @@ public class ZLoader {
         writeToOutput();
     }
 
-    public void stringToBigDecimalArray(String stringValues, Hypothesis hAlternative,
-            BigDecimal testValue, BigDecimal stdDev, double significance, Option option) {
+    public void stringToDoubleArray(String stringValues, Hypothesis hAlternative,
+            double testValue, double stdDev, double significance, Option option) {
         String[] stringArray = stringValues.split("\\s+");
-        values = new ArrayList<BigDecimal>();
+        values = new ArrayList<Double>();
 
         this.option = option;
 
         for (int i = 0; i < stringArray.length; i++) {
-            values.add(new BigDecimal(stringArray[i]));
+            values.add(new Double(stringArray[i]));
         }
 
         oneSampleZTest = new OneSampleZTest(hAlternative, testValue,
                 values, stdDev, significance);
 
         // move into if statement
-        BigDecimal xBar = new BigDecimal(oneSampleZTest.getXBar());
+        double xBar = new Double(oneSampleZTest.getXBar());
         int n = new Integer(oneSampleZTest.getN());
 
         if (option == Option.CONFIDENCE_INTERVAl) {
@@ -93,9 +92,9 @@ public class ZLoader {
 
     /** Load values from .txt file for calculation */
     public void loadFileIntoArray(Hypothesis hypothesis,
-            BigDecimal testValue, BigDecimal stdDev,
+            double testValue, double stdDev,
             double significance, Option option) throws IOException {
-        values = new ArrayList<BigDecimal>();
+        values = new ArrayList<Double>();
 
         this.option = option;
 
@@ -116,7 +115,7 @@ public class ZLoader {
             //}
             if (option == Option.CONFIDENCE_INTERVAl ||
                     option == Option.BOTH) {
-                BigDecimal xBar = new BigDecimal(oneSampleZTest.getXBar());
+                double xBar = new Double(oneSampleZTest.getXBar());
                 int n = new Integer(oneSampleZTest.getN());
                 oneSampleCI = new ZConfidenceInterval(xBar, stdDev, n, significance);
             }
@@ -129,8 +128,8 @@ public class ZLoader {
     }
 
     private void addToArray() {
-        if (input.hasNextBigDecimal()) {
-            values.add(input.nextBigDecimal());
+        if (input.hasNextDouble()) {
+            values.add(input.nextDouble());
             addToArray();
         } else if (input.hasNext()) {
             input.next();

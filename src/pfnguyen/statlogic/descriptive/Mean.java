@@ -15,8 +15,6 @@
  */
 package pfnguyen.statlogic.descriptive;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +23,7 @@ import java.util.ArrayList;
  * @author Peter "Felix" Nguyen
  */
 public class Mean {
-    private BigDecimal mean;
+    private Double mean;
 
     @SuppressWarnings("unused")
     private Mean() {
@@ -37,7 +35,7 @@ public class Mean {
      *
      * @param  values  the values from the data set
      */
-    public Mean(ArrayList<BigDecimal> values) {
+    public Mean(ArrayList<Double> values) {
         calcMean(values);
     }
 
@@ -47,14 +45,14 @@ public class Mean {
      *
      * @param  values  the values from the data set
      */
-    private void calcMean(ArrayList<BigDecimal> values) {
-        BigDecimal sum = BigDecimal.ZERO;
+    private void calcMean(ArrayList<Double> values) {
+        double sum = 0;
 
         for (int i = 0; i < values.size(); i++) {
-            sum = sum.add(values.get(i));
+            sum += values.get(i);
         }
 
-        mean = sum.divide(new BigDecimal(values.size()), 4, RoundingMode.HALF_UP);
+        mean = sum / values.size();
     }
 
     /**
@@ -70,7 +68,7 @@ public class Mean {
     /**
      * @return  the mean of the data set
      */
-    public BigDecimal getMean() {
+    public double getMean() {
         return mean;
     }
 }

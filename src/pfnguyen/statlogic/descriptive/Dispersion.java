@@ -15,11 +15,7 @@
  */
 package pfnguyen.statlogic.descriptive;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-
-import pfnguyen.statlogic.math.BigDecimalMath;
 
 /**
  * Class that calculates the statistical dispersion of a data set.
@@ -27,11 +23,11 @@ import pfnguyen.statlogic.math.BigDecimalMath;
  * @author Peter "Felix" Nguyen
  */
 public class Dispersion {
-    private BigDecimal range;
-    private BigDecimal sampleStdDev;
-    private BigDecimal sampleVariance;
-    private BigDecimal stdDev;
-    private BigDecimal variance;
+    private double range;
+    private double sampleStdDev;
+    private double sampleVariance;
+    private double stdDev;
+    private double variance;
 
     @SuppressWarnings("unused")
     private Dispersion() {
@@ -45,7 +41,7 @@ public class Dispersion {
      * @param  values  the values from the data set
      * @param  mean    the mean of all the values
      */
-    public Dispersion(ArrayList<BigDecimal> values, BigDecimal mean) {
+    public Dispersion(ArrayList<Double> values, double mean) {
         calcDispersion(values, mean);
     }
 
@@ -56,64 +52,64 @@ public class Dispersion {
      * @param  values  the values from the data set
      * @param  mean    the mean of all the values
      */
-    private void calcDispersion(ArrayList<BigDecimal> values, BigDecimal mean) {
-        BigDecimal sum;
-        ArrayList<BigDecimal> squaredValues = new ArrayList<BigDecimal>();
-        ArrayList<BigDecimal> difference = new ArrayList<BigDecimal>();
-        range = values.get(values.size()-1).subtract(values.get(0));
+    private void calcDispersion(ArrayList<Double> values, double mean) {
+        double sum;
+        ArrayList<Double> squaredValues = new ArrayList<Double>();
+        ArrayList<Double> difference = new ArrayList<Double>();
+        range = values.get(values.size()-1) - values.get(0);
 
-        sum = BigDecimal.ZERO;
-        squaredValues.clear();
-        difference.clear();
+        sum = 0;
+        squaredValues.clear(); // I think i can delete this
+        difference.clear(); // This too
 
         for (int i = 0; i < values.size(); i++) {
-            difference.add(values.get(i).subtract(mean));
+            difference.add(values.get(i) - mean);
         }
 
         for (int i = 0; i < values.size(); i++) {
-            squaredValues.add(difference.get(i).multiply(difference.get(i)));
-            sum = sum.add(squaredValues.get(i));
+            squaredValues.add(difference.get(i) * difference.get(i));
+            sum += squaredValues.get(i);
         }
 
-        variance = sum.divide(new BigDecimal(Integer.toString(difference.size())), 4, RoundingMode.HALF_UP);
-        sampleVariance = sum.divide(new BigDecimal(Integer.toString(difference.size() - 1)), 4, RoundingMode.HALF_UP);
+        variance = sum / difference.size();
+        sampleVariance = sum / (difference.size() - 1);
 
-        stdDev = BigDecimalMath.sqrt(variance);
-        sampleStdDev = BigDecimalMath.sqrt(sampleVariance);
+        stdDev = Math.sqrt(variance);
+        sampleStdDev = Math.sqrt(sampleVariance);
     }
 
     /**
      * @return  the range of a data set
      */
-    public BigDecimal getRange() {
+    public double getRange() {
         return range;
     }
 
     /**
      * @return  the sample variance
      */
-    public BigDecimal getSampleVariance() {
+    public double getSampleVariance() {
         return sampleVariance;
     }
 
     /**
      * @return  the sample standard deviation
      */
-    public BigDecimal getSampleStdDev() {
+    public double getSampleStdDev() {
         return sampleStdDev;
     }
 
     /**
      * @return  the population variance
      */
-    public BigDecimal getVariance() {
+    public double getVariance() {
         return variance;
     }
 
     /**
      * @return  the population standard deviation
      */
-    public BigDecimal getStdDev() {
+    public double getStdDev() {
         return stdDev;
     }
 }

@@ -82,7 +82,7 @@ public class DescriptivePanel extends JPanel {
                                 "Failure", JOptionPane.WARNING_MESSAGE);
                     }
                     else {
-                        loader.stringToBigDecimalArray(jtaValues.getText());
+                        loader.stringToDoubleArray(jtaValues.getText());
                     }
                 }
             }

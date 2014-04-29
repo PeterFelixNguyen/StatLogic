@@ -15,53 +15,47 @@
  */
 package pfnguyen.statlogic.ttest;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import org.apache.commons.math3.distribution.TDistribution;
 
 public class TConfidenceInterval {
-    private BigDecimal lowerBound;
-    private BigDecimal upperBound;
-    private BigDecimal standardError;
+    private double lowerBound;
+    private double upperBound;
+    private double standardError;
     private TDistribution tDistribution;
 
-    public TConfidenceInterval(BigDecimal x[], BigDecimal stdDev,
+    public TConfidenceInterval(double x[], double stdDev,
             double confidence) {
         tDistribution = new TDistribution((double)(x.length-1));
         calcConfidenceInterval(calcSampleMean(x), stdDev, x.length, confidence);
     }
 
-    public TConfidenceInterval(BigDecimal xBar, BigDecimal stdDev, int n,
+    public TConfidenceInterval(double xBar, double stdDev, int n,
             double confidence) {
         tDistribution = new TDistribution((double)(n-1));
         calcConfidenceInterval(xBar, stdDev, n, confidence);
     }
 
     /** stdDev, n, confidence must not be BigDecimals */
-    public void calcConfidenceInterval(BigDecimal sampleMean,
-            BigDecimal stdDev, int n, double significance) {
-        standardError = new BigDecimal(
-                tDistribution.inverseCumulativeProbability(1 - significance / 2))
-        .multiply(stdDev).divide(new BigDecimal(Math.sqrt(n)), 4,
-                RoundingMode.HALF_UP);
-        upperBound = sampleMean.add(standardError);
-        lowerBound = sampleMean.subtract(standardError);
+    public void calcConfidenceInterval(double sampleMean,
+            double stdDev, int n, double significance) {
+        standardError = tDistribution.inverseCumulativeProbability(
+                1 - significance / 2) * stdDev / Math.sqrt(n);
+        upperBound = sampleMean + standardError;
+        lowerBound = sampleMean - standardError;
     }
 
     public String confidenceInterval() {
         return "[" + lowerBound + "," + upperBound + "]";
     }
 
-    private BigDecimal calcSampleMean(BigDecimal x[]) {
-        BigDecimal sum = BigDecimal.ZERO;
-        BigDecimal sampleMean;
+    private double calcSampleMean(double x[]) {
+        double sum = 0;
+        double sampleMean;
 
         for (int i = 0; i < x.length; i++) {
-            sum = sum.add(x[i]);
+            sum += x[i];
         }
-        sampleMean = sum.divide(new BigDecimal(x.length), 4,
-                RoundingMode.HALF_UP);
+        sampleMean = sum / x.length;
         return sampleMean;
     }
 }

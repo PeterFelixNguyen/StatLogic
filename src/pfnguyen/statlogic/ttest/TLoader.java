@@ -16,7 +16,6 @@
 package pfnguyen.statlogic.ttest;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -34,7 +33,7 @@ public class TLoader {
     private TConfidenceInterval oneSampleCI;
     private Option option = Option.NONE;
     /* Data */
-    private ArrayList<BigDecimal> values;
+    private ArrayList<Double> values;
     private Scanner input;
     private java.io.File inFile;
     /* Visual Components */
@@ -48,8 +47,8 @@ public class TLoader {
         this.outputString = outputString;
     }
 
-    public void loadXIntoCalc(Hypothesis hAlternative, BigDecimal testValue,
-            BigDecimal xBar, BigDecimal stdDev, int n, double significance,
+    public void loadXIntoCalc(Hypothesis hAlternative, double testValue,
+            double xBar, double stdDev, int n, double significance,
             Option option) {
 
         this.option = option;
@@ -65,22 +64,22 @@ public class TLoader {
         writeToOutput();
     }
 
-    public void stringToBigDecimalArray(String stringValues, Hypothesis hAlternative,
-            BigDecimal testValue, double significance, Option option) {
+    public void stringToDoubleArray(String stringValues, Hypothesis hAlternative,
+            double testValue, double significance, Option option) {
         String[] stringArray = stringValues.split("\\s+");
-        values = new ArrayList<BigDecimal>();
+        values = new ArrayList<Double>();
 
         this.option = option;
 
         for (int i = 0; i < stringArray.length; i++) {
-            values.add(new BigDecimal(stringArray[i]));
+            values.add(new Double(stringArray[i]));
         }
 
         oneSampleTTest = new OneSampleTTest(hAlternative, testValue,
                 values, significance);
         // move into if statement
-        BigDecimal xBar = new BigDecimal(oneSampleTTest.getXBar());
-        BigDecimal stdDev = new BigDecimal(oneSampleTTest.getSigma());
+        double xBar = new Double(oneSampleTTest.getXBar());
+        double stdDev = new Double(oneSampleTTest.getSigma());
         int n = new Integer(oneSampleTTest.getN());
 
         if (option == Option.CONFIDENCE_INTERVAl) {
@@ -93,9 +92,9 @@ public class TLoader {
 
     /** Load values from .txt file for calculation */
     public void loadFileIntoArray(Hypothesis hypothesis,
-            BigDecimal testValue, double significance, Option option)
+            double testValue, double significance, Option option)
                     throws IOException {
-        values = new ArrayList<BigDecimal>();
+        values = new ArrayList<Double>();
 
         this.option = option;
 
@@ -116,8 +115,8 @@ public class TLoader {
             //}
             if (option == Option.CONFIDENCE_INTERVAl ||
                     option == Option.BOTH) { // really need to fix this
-                BigDecimal xBar = new BigDecimal(oneSampleTTest.getXBar());
-                BigDecimal stdDev = new BigDecimal(oneSampleTTest.getSigma());
+                double xBar = new Double(oneSampleTTest.getXBar());
+                double stdDev = new Double(oneSampleTTest.getSigma());
                 int n = new Integer(oneSampleTTest.getN());
                 oneSampleCI = new TConfidenceInterval(xBar, stdDev, n, significance);
             }
@@ -130,8 +129,8 @@ public class TLoader {
     }
 
     private void addToArray() {
-        if (input.hasNextBigDecimal()) {
-            values.add(input.nextBigDecimal());
+        if (input.hasNextDouble()) {
+            values.add(input.nextDouble());
             addToArray();
         } else if (input.hasNext()) {
             input.next();

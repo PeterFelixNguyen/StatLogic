@@ -15,8 +15,6 @@
  */
 package pfnguyen.statlogic.ztest;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -25,11 +23,11 @@ import pfnguyen.statlogic.options.CalculatorOptions.Hypothesis;
 
 public class OneSampleZTest {
     private NormalDistribution normal = new NormalDistribution();
-    private BigDecimal testStatistic;
-    private BigDecimal criticalRegion;
+    private double testStatistic;
+    private Double criticalRegion;
     private Hypothesis hypothesis;
-    private BigDecimal lowerRegion;
-    private BigDecimal upperRegion;
+    private Double lowerRegion;
+    private Double upperRegion;
     private String nullHypothesis;
     private String altHypothesis;
     private String xBar;
@@ -39,7 +37,7 @@ public class OneSampleZTest {
     private String conclusion = "Test statistic is within the critical region \n"
             + "Reject the null hypothesis";
     private boolean rejectNull;
-    private BigDecimal calculatedMean;
+    private double calculatedMean;
 
     /**
      * Constructs OneSampleZTest with an ArrayList of values.
@@ -49,8 +47,8 @@ public class OneSampleZTest {
      * @param  x             the data sample
      * @param  significance  the significance level
      */
-    public OneSampleZTest(Hypothesis hAlternative, BigDecimal testValue,
-            ArrayList<BigDecimal> x, BigDecimal stdDev, double significance) {
+    public OneSampleZTest(Hypothesis hAlternative, double testValue,
+            ArrayList<Double> x, double stdDev, double significance) {
         getCriticalRegion(hAlternative, significance);
         calcTestStatistic(hAlternative, calcSampleMean(x),
                 testValue, stdDev, x);
@@ -70,8 +68,8 @@ public class OneSampleZTest {
      * @param  n             the sample size
      * @param  significance  the significance level
      */
-    public OneSampleZTest(Hypothesis hAlternative, BigDecimal testValue,
-            BigDecimal xBar, BigDecimal stdDev,
+    public OneSampleZTest(Hypothesis hAlternative, double testValue,
+            double xBar, double stdDev,
             int n, double significance) {
         getCriticalRegion(hAlternative, significance);
         calcTestStatistic(hAlternative, xBar, testValue, stdDev, n);
@@ -92,8 +90,8 @@ public class OneSampleZTest {
      * @param  significance  the significance level
      */
     private void constructStrings(Hypothesis hAlternative,
-            BigDecimal testValue, BigDecimal xBar,
-            BigDecimal stdDev, int n, double significance) {
+            double testValue, double xBar,
+            double stdDev, int n, double significance) {
         String inequality = "";
 
         if (hAlternative == Hypothesis.LESS_THAN)
@@ -119,22 +117,14 @@ public class OneSampleZTest {
     private void getCriticalRegion(Hypothesis hAlternative,
             double significance) {
         if (hAlternative == Hypothesis.NOT_EQUAL) {
-            lowerRegion = new BigDecimal(
-                    normal.inverseCumulativeProbability(significance / 2));
-            lowerRegion = lowerRegion.setScale(3, BigDecimal.ROUND_HALF_UP);
-            upperRegion = new BigDecimal(
-                    normal.inverseCumulativeProbability(1 - (significance / 2)));
-            upperRegion = upperRegion.setScale(3, BigDecimal.ROUND_HALF_UP);
+            lowerRegion = normal.inverseCumulativeProbability(significance / 2);
+            upperRegion = normal.inverseCumulativeProbability(1 - (significance / 2));
         }
         else if (hAlternative == Hypothesis.LESS_THAN) {
-            criticalRegion = new BigDecimal(
-                    normal.inverseCumulativeProbability(significance));
-            criticalRegion = criticalRegion.setScale(3, BigDecimal.ROUND_HALF_UP);
+            criticalRegion = normal.inverseCumulativeProbability(significance);
         }
         else if (hAlternative == Hypothesis.GREATER_THAN) {
-            criticalRegion = new BigDecimal(
-                    normal.inverseCumulativeProbability(significance));
-            criticalRegion = criticalRegion.setScale(3, BigDecimal.ROUND_HALF_UP).abs();
+            criticalRegion = normal.inverseCumulativeProbability(significance);
         }
         else {
             System.out.println("No hypothesis/inequality selected");
@@ -149,16 +139,16 @@ public class OneSampleZTest {
      */
     private boolean testHypothesis() {
         if (hypothesis == Hypothesis.LESS_THAN
-                && testStatistic.compareTo(criticalRegion) < 0) {
+                && testStatistic < criticalRegion) {
             return true;
         }
         else if (hypothesis == Hypothesis.GREATER_THAN
-                && testStatistic.compareTo(criticalRegion) > 0) {
+                && testStatistic > criticalRegion) {
             return true;
         }
         else if (hypothesis == Hypothesis.NOT_EQUAL
-                && (testStatistic.compareTo(lowerRegion) < 0 || testStatistic
-                        .compareTo(upperRegion) > 0)) {
+                && (testStatistic < lowerRegion ||
+                        testStatistic > upperRegion)) {
             return true;
         }
         else
@@ -173,15 +163,14 @@ public class OneSampleZTest {
      * @param  x  the data sample
      * @return    the sample mean
      */
-    private BigDecimal calcSampleMean(ArrayList<BigDecimal> x) {
-        BigDecimal sum = BigDecimal.ZERO;
+    private double calcSampleMean(ArrayList<Double> x) {
+        double sum = 0;
 
         for (int i = 0; i < x.size(); i++) {
-            sum = sum.add(x.get(i));
+            sum += x.get(i);
         }
 
-        calculatedMean = sum.divide(new BigDecimal(x.size()), 4,
-                RoundingMode.HALF_UP);
+        calculatedMean = sum / x.size();
 
         return calculatedMean;
     }
@@ -196,12 +185,11 @@ public class OneSampleZTest {
      * @param  x               the data sample
      */
     private void calcTestStatistic(Hypothesis hAlternative,
-            BigDecimal sampleMean, BigDecimal populationMean,
-            BigDecimal stdDev, ArrayList<BigDecimal> x) {
+            double sampleMean, double populationMean,
+            double stdDev, ArrayList<Double> x) {
 
-        testStatistic = sampleMean.subtract(populationMean).
-                divide(stdDev.divide(new BigDecimal(Math.sqrt(x.size())),
-                        4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP);
+        testStatistic = (sampleMean - populationMean) /
+                (stdDev / Math.sqrt(x.size()));
     }
 
     /**
@@ -214,12 +202,11 @@ public class OneSampleZTest {
      * @param  x               the data sample
      */
     private void calcTestStatistic(Hypothesis hAlternative,
-            BigDecimal sampleMean, BigDecimal populationMean,
-            BigDecimal sampleStdDev, int n) {
+            double sampleMean, double populationMean,
+            double sampleStdDev, int n) {
 
-        testStatistic = sampleMean.subtract(populationMean)
-                .divide(sampleStdDev.divide(new BigDecimal(Math.sqrt(n)),
-                        4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP);
+        testStatistic = (sampleMean - populationMean) /
+                (sampleStdDev / Math.sqrt(n));
     }
 
     /**
@@ -267,7 +254,7 @@ public class OneSampleZTest {
     /**
      * @return  the test statistic
      */
-    public BigDecimal getTestStatistics() {
+    public double getTestStatistics() {
         return testStatistic;
     }
 

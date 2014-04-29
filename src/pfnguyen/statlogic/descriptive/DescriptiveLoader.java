@@ -20,7 +20,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -45,7 +44,7 @@ public class DescriptiveLoader {
     private Dispersion dispersion;
     private Extrema extrema;
     // Data
-    private ArrayList<BigDecimal> values;
+    private ArrayList<Double> values;
     private Scanner input;
     private PrintWriter output;
     private java.io.File inFile;
@@ -86,7 +85,7 @@ public class DescriptiveLoader {
      * @throws  IOException  If an input or output exception occured
      */
     public void loadFileIntoArray() throws IOException {
-        values = new ArrayList<BigDecimal>();
+        values = new ArrayList<Double>();
 
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -121,14 +120,14 @@ public class DescriptiveLoader {
         }
     }
 
-    public void stringToBigDecimalArray(String stringValues) {
-        values = new ArrayList<BigDecimal>();
+    public void stringToDoubleArray(String stringValues) {
+        values = new ArrayList<Double>();
 
         String[] stringArray = stringValues.split("\\s+");
 
         try {
             for (int i = 0; i < stringArray.length; i++) {
-                values.add(new BigDecimal(stringArray[i]));
+                values.add(new Double(stringArray[i]));
             }
 
             mean = new Mean(values);
@@ -159,8 +158,8 @@ public class DescriptiveLoader {
      */
     @SuppressWarnings("unused")
     private void addToArrayList() {
-        if (input.hasNextBigDecimal()) {
-            values.add(input.nextBigDecimal());
+        if (input.hasNextDouble()) {
+            values.add(input.nextDouble());
             addToArrayList();
         } else if (input.hasNext()) {
             input.next();
@@ -177,7 +176,7 @@ public class DescriptiveLoader {
      */
     private void strictAddToArrayList() {
         while (input.hasNext()) {
-            values.add(input.nextBigDecimal());
+            values.add(input.nextDouble());
         }
     }
 
@@ -296,7 +295,7 @@ public class DescriptiveLoader {
     /**
      * @return  the ArrayList of values loaded from a file
      */
-    public ArrayList<BigDecimal> getValues() {
+    public ArrayList<Double> getValues() {
         return values;
     }
 
@@ -310,7 +309,7 @@ public class DescriptiveLoader {
     /**
      * @return  the mean as a BigDecimal
      */
-    public BigDecimal getMean() {
+    public double getMean() {
         return mean.getMean();
     }
 
@@ -324,7 +323,7 @@ public class DescriptiveLoader {
     /**
      * @return  the quartile as a BigDecimal
      */
-    public BigDecimal getMedian() {
+    public double getMedian() {
         return quartile.getMedian();
     }
 

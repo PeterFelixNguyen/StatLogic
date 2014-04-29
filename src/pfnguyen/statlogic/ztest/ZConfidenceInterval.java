@@ -15,51 +15,45 @@
  */
 package pfnguyen.statlogic.ztest;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class ZConfidenceInterval {
-    private BigDecimal lowerBound;
-    private BigDecimal upperBound;
-    private BigDecimal standardError;
+    private double lowerBound;
+    private double upperBound;
+    private double standardError;
     private NormalDistribution normal = new NormalDistribution();
 
-    public ZConfidenceInterval(BigDecimal x[], BigDecimal stdDev,
+    public ZConfidenceInterval(double x[], double stdDev,
             double significance) {
         calcConfidenceInterval(calcSampleMean(x), stdDev, x.length, significance);
     }
 
-    public ZConfidenceInterval(BigDecimal xBar, BigDecimal stdDev, int n,
+    public ZConfidenceInterval(double xBar, double stdDev, int n,
             double significance) {
         calcConfidenceInterval(xBar, stdDev, n, significance);
     }
 
     /** stdDev, n, confidence must not be BigDecimals */
-    public void calcConfidenceInterval(BigDecimal sampleMean,
-            BigDecimal stdDev, int n, double significance) {
-        standardError = new BigDecimal(
-                normal.inverseCumulativeProbability(1 - significance / 2))
-        .multiply(stdDev).divide(new BigDecimal(Math.sqrt(n)), 4,
-                RoundingMode.HALF_UP);
-        upperBound = sampleMean.add(standardError);
-        lowerBound = sampleMean.subtract(standardError);
+    public void calcConfidenceInterval(double sampleMean,
+            double stdDev, int n, double significance) {
+        standardError = normal.inverseCumulativeProbability(
+                1 - significance / 2) * stdDev / Math.sqrt(n);
+        upperBound = sampleMean + standardError;
+        lowerBound = sampleMean - standardError;
     }
 
     public String confidenceInterval() {
         return "[" + lowerBound + "," + upperBound + "]";
     }
 
-    private BigDecimal calcSampleMean(BigDecimal x[]) {
-        BigDecimal sum = BigDecimal.ZERO;
-        BigDecimal sampleMean;
+    private double calcSampleMean(double x[]) {
+        double sum = 0;
+        double sampleMean;
 
         for (int i = 0; i < x.length; i++) {
-            sum = sum.add(x[i]);
+            sum += x[i];
         }
-        sampleMean = sum.divide(new BigDecimal(x.length), 4,
-                RoundingMode.HALF_UP);
+        sampleMean = sum / x.length;
         return sampleMean;
     }
 }
