@@ -86,18 +86,16 @@ class MainFrame extends JFrame {
     private JComboBox<String> jcboCalcChooser;
     private String[] calcName = { "Descriptive Statistics", "1-Sample Z",
             "1-Sample t", "Standard Score"};
-    private JPanel leftInnerPanel = new JPanel();
-    private JPanel rightInnerPanel = new JPanel();
+    private JPanel leftInnerPanel = new JPanel(), rightInnerPanel = new JPanel();
     // Output window
     private JScrollPane scrollerForOutput = new JScrollPane(jtaOutput);
     private Border borderForOutput;
     private JPanel panelForCollapseBtn = new JPanel();
     private int panelIndex = 1; // set default index here
     private boolean hiddenPanel = false;
+    // Currently related to setting font size
     private boolean outputFocused = false;
-    private int minFontSize = 12;
-    private int fontSize = 12;
-    private int maxFontSize = 24;
+    private int minFontSize = 12, fontSize = 12, maxFontSize = 24;
     private boolean ctrlPressed = false;
 
     MainFrame() {
@@ -112,7 +110,7 @@ class MainFrame extends JFrame {
         jtaOutput.setLineWrap(true);
         jtaOutput.setWrapStyleWord(true);
         jtaOutput.setEditable(false);
-        upperPanel.rightPanel.add(containerForChooser);
+        upperPanel.getRightPanel().add(containerForChooser);
         containerForChooser.add(leftInnerPanel);
         containerForChooser.add(rightInnerPanel);
         leftInnerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -191,19 +189,19 @@ class MainFrame extends JFrame {
             public void mousePressed(MouseEvent e) {
                 if (hiddenPanel == false) {
                     collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Show.png")));
-                    upperPanel.leftPanel.removeAll();
-                    upperPanel.leftPanel.revalidate();
+                    upperPanel.getLeftPanel().removeAll();
+                    upperPanel.getLeftPanel().revalidate();
                     hiddenPanel = true;
                 } else if (hiddenPanel == true) {
                     collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
                     showPanel();
-                    upperPanel.leftPanel.revalidate();
+                    upperPanel.getLeftPanel().revalidate();
                     hiddenPanel = false;
                 }
             }
         });
 
-        upperPanel.rightPanel.add(scrollerForOutput);
+        upperPanel.getRightPanel().add(scrollerForOutput);
         panelForCollapseBtn.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelForCollapseBtn.add(new JLabel("Hello World"));
         borderForOutput = BorderFactory.createCompoundBorder(new TitledBorder(
@@ -211,23 +209,23 @@ class MainFrame extends JFrame {
         scrollerForOutput.setBorder(borderForOutput);
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        add(upperPanel, BorderLayout.NORTH);
-        add(lowerPanel, BorderLayout.SOUTH);
+        add(upperPanel, BorderLayout.NORTH); // BorderLayout should be removed
+        add(lowerPanel, BorderLayout.SOUTH); // BorderLayout should be removed
     }
 
     public void showPanel() {
         switch (panelIndex) {
             case 0:
-                upperPanel.leftPanel.add(upperPanel.leftPanel.descriptiveCalc);
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().descriptiveCalc);
                 break;
             case 1:
-                upperPanel.leftPanel.add(upperPanel.leftPanel.zTestCalc);
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zTestCalc);
                 break;
             case 2:
-                upperPanel.leftPanel.add(upperPanel.leftPanel.tTestCalc);
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().tTestCalc);
                 break;
             case 3:
-                upperPanel.leftPanel.add(upperPanel.leftPanel.zScoreCalc);
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zScoreCalc);
                 break;
         }
     }
@@ -235,28 +233,28 @@ class MainFrame extends JFrame {
     public void setPanel(int index) {
         switch (panelIndex = index) {
             case 0:
-                upperPanel.leftPanel.removeAll();
-                upperPanel.leftPanel.add(upperPanel.leftPanel.descriptiveCalc);
-                upperPanel.leftPanel.revalidate();
-                upperPanel.leftPanel.repaint();
+                upperPanel.getLeftPanel().removeAll();
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().descriptiveCalc);
+                upperPanel.getLeftPanel().revalidate();
+                upperPanel.getLeftPanel().repaint();
                 break;
             case 1:
-                upperPanel.leftPanel.removeAll();
-                upperPanel.leftPanel.add(upperPanel.leftPanel.zTestCalc);
-                upperPanel.leftPanel.revalidate();
-                upperPanel.leftPanel.repaint();
+                upperPanel.getLeftPanel().removeAll();
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zTestCalc);
+                upperPanel.getLeftPanel().revalidate();
+                upperPanel.getLeftPanel().repaint();
                 break;
             case 2:
-                upperPanel.leftPanel.removeAll();
-                upperPanel.leftPanel.add(upperPanel.leftPanel.tTestCalc);
-                upperPanel.leftPanel.revalidate();
-                upperPanel.leftPanel.repaint();
+                upperPanel.getLeftPanel().removeAll();
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().tTestCalc);
+                upperPanel.getLeftPanel().revalidate();
+                upperPanel.getLeftPanel().repaint();
                 break;
             case 3:
-                upperPanel.leftPanel.removeAll();
-                upperPanel.leftPanel.add(upperPanel.leftPanel.zScoreCalc);
-                upperPanel.leftPanel.revalidate();
-                upperPanel.leftPanel.repaint();
+                upperPanel.getLeftPanel().removeAll();
+                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zScoreCalc);
+                upperPanel.getLeftPanel().revalidate();
+                upperPanel.getLeftPanel().repaint();
                 break;
         }
     }
@@ -264,8 +262,8 @@ class MainFrame extends JFrame {
 
 @SuppressWarnings("serial")
 class UpperPanel extends JPanel {
-    RightPanel rightPanel = new RightPanel();
-    LeftPanel leftPanel;
+    private RightPanel rightPanel = new RightPanel();
+    private LeftPanel leftPanel;
     //	private int panelIndex = 0;
 
     UpperPanel(JTextArea jtaOutput, JLabel statusBar, StringBuilder outputString) {
@@ -276,41 +274,13 @@ class UpperPanel extends JPanel {
         add(rightPanel);
     }
 
-    // Need to make fields private
-    //	public void setPanel(int index) {
-    //		switch (panelIndex = index) {
-    //		case 0:
-    //			leftPanel.removeAll();
-    //			leftPanel.add(leftPanel.descriptiveCalc);
-    //			leftPanel.revalidate();
-    //			leftPanel.repaint();
-    //			break;
-    //		case 1:
-    //			leftPanel.removeAll();
-    //			leftPanel.add(leftPanel.zTestCalc);
-    //			leftPanel.revalidate();
-    //			leftPanel.repaint();
-    //			break;
-    //		case 2:
-    //			leftPanel.removeAll();
-    //			leftPanel.add(leftPanel.tTestCalc);
-    //			leftPanel.revalidate();
-    //			leftPanel.repaint();
-    //			break;
-    //		case 3:
-    //			leftPanel.removeAll();
-    //			leftPanel.add(leftPanel.zScoreCalc);
-    //			leftPanel.revalidate();
-    //			leftPanel.repaint();
-    //			break;
-    //		case 4:
-    //			leftPanel.removeAll();
-    //			leftPanel.add(leftPanel.unusedCalc);
-    //			leftPanel.revalidate();
-    //			leftPanel.repaint();
-    //			break;
-    //		}
-    //	}
+    public RightPanel getRightPanel() {
+        return rightPanel;
+    }
+
+    public LeftPanel getLeftPanel() {
+        return leftPanel;
+    }
 }
 
 @SuppressWarnings("serial")
