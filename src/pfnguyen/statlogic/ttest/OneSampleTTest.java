@@ -185,7 +185,7 @@ public class OneSampleTTest {
      * @return    the sample variance
      */
     private double calcSampleVariance(ArrayList<Double> x) {
-        double oneOverNAdjusted = 1 / (x.size() - 1);
+        double oneOverNAdjusted = (double) 1 / (x.size() - 1);
         double sumOfDifference;
         double squaredDifference;
         double sumOfSquaredDifference = 1; // This is bad
