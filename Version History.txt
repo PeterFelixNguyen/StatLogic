@@ -2,7 +2,7 @@ Not all changes, additions, or feature removals will be listed.
 Any versions before 1.x are not recommended for commercial or personal use.
 
 Version 0.2.2
-+No information
+*No information
 
 Version 0.2.3
 *Resources can now be packaged correctly into a JAR (using Eclipse).
@@ -11,18 +11,22 @@ Version 0.2.3
 *Icon to show/hide calculator panel did not always update (fixed).
 
 Version 0.2.4
-1-Sample t can now output the results.
-1-Sample t concluded with the wrong hypothesis (fixed, z distribution used instead of t distribution).
-1-Sample t did not perform test until a tail is clicked (fixed).
-1-Sample t can now calculate sample mean and sample standard deviation from file.
-1-Sample t can now calculate sample mean and sample standard deviation from a window of values.
-1-Sample T Confidence Interval did not calculate correctly (fixed, z distribution used instead of t distribution and constructor arguments were wrong)
-1-Sample Z-Test can use all three options: provice x-bar, enter data, and import data.
-Major design improvement in t-distribution calculator.
-Z-Score standardization formula used wrong variable (fixed, X-Bar changed to X (raw score)).
-Clear button on menu bar now works.
-Exit button on menu bar now works.
-Output button added to Standard Score calculator
-"Save as" button now works, and the save button for Descriptive Calculator is removed (in favor of the universal save)
-StatLogic icon added to the program (replaces Java's default coffee cup).
-Improved 1-Sample T-Test and implemented all of the missing/nonfunctional features of the calculator.
+*1-Sample t can now output the results.
+*1-Sample t concluded with the wrong hypothesis (fixed, z distribution used instead of t distribution).
+*1-Sample t did not perform test until a tail is clicked (fixed).
+*1-Sample t can now calculate sample mean and sample standard deviation from file.
+*1-Sample t can now calculate sample mean and sample standard deviation from a window of values.
+*1-Sample T Confidence Interval did not calculate correctly (fixed, z distribution used instead of t distribution and constructor arguments were wrong)
+*1-Sample Z-Test can use all three options: provice x-bar, enter data, and import data.
+*Major design improvement in t-distribution calculator.
+*Z-Score standardization formula used wrong variable (fixed, X-Bar changed to X (raw score)).
+*Clear button on menu bar now works.
+*Exit button on menu bar now works.
+*Output button added to Standard Score calculator
+*"Save as" button now works, and the save button for Descriptive Calculator is removed (in favor of the universal save)
+*StatLogic icon added to the program (replaces Java's default coffee cup).
+*Improved 1-Sample T-Test and implemented all of the missing/nonfunctional features of the calculator.
+
+Version 0.2.5
+*Fixed major bug in which the t-test's computed std. dev. value is incorrectly 0, 'causing the 
+calculator to sometimes produce the wrong conclusion.
