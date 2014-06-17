@@ -264,7 +264,6 @@ class MainFrame extends JFrame {
 class UpperPanel extends JPanel {
     private RightPanel rightPanel = new RightPanel();
     private LeftPanel leftPanel;
-    //	private int panelIndex = 0;
 
     UpperPanel(JTextArea jtaOutput, JLabel statusBar, StringBuilder outputString) {
         leftPanel = new LeftPanel(jtaOutput, statusBar, outputString);
