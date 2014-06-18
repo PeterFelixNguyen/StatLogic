@@ -120,33 +120,33 @@ class ConfigurationPanel extends JPanel {
     private JPanel calcOptions = new JPanel(new GridLayout(2, 1));
     private JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    private JCheckBox meanCheckBox = new JCheckBox("mean");
-    private JCheckBox medianCheckBox = new JCheckBox("median");
-    private JCheckBox modeCheckBox = new JCheckBox("mode");
-    private JCheckBox nCheckBox = new JCheckBox("n");
-    private JCheckBox minimaCheckBox = new JCheckBox("min");
-    private JCheckBox maximaCheckBox = new JCheckBox("max");
-    private JCheckBox percentiles = new JCheckBox("25th/75th percentiles");
+    private JCheckBox meanCheckBox = new JCheckBox("mean", null, true);
+    private JCheckBox medianCheckBox = new JCheckBox("median", null, true);
+    private JCheckBox modeCheckBox = new JCheckBox("mode", null, true);
+    private JCheckBox nCheckBox = new JCheckBox("n", null, true);
+    private JCheckBox minimaCheckBox = new JCheckBox("min", null, true);
+    private JCheckBox maximaCheckBox = new JCheckBox("max", null, true);
+    private JCheckBox percentiles = new JCheckBox("25th/75th percentiles", null, true);
 
     private JPanel varianceOptions = new JPanel(new GridLayout(1, 2));
     private JPanel leftPanel = new JPanel();
     private JPanel rightPanel = new JPanel(new GridLayout(2, 1));
     private JPanel subRightPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JPanel subRightPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    private JRadioButton jrbBothSample = new JRadioButton("s & s^2");
-    private JRadioButton jrbSampleVar = new JRadioButton("s^2");
-    private JRadioButton jrbSampleStdDev = new JRadioButton("s");
-    private JRadioButton jrbBothPop = new JRadioButton("\u03C3 & \u03C3^2");
-    private JRadioButton jrbPopVar = new JRadioButton("\u03C3^2");
-    private JRadioButton jrbPopStdDev = new JRadioButton("\u03C3");
-    private JRadioButton jrbNoneVar = new JRadioButton("none");
+    private JRadioButton jrbBothSample = new JRadioButton("s & s^2", null, false);
+    private JRadioButton jrbSampleVar = new JRadioButton("s^2", null, false);
+    private JRadioButton jrbSampleStdDev = new JRadioButton("s", null, false);
+    private JRadioButton jrbBothPop = new JRadioButton("\u03C3 & \u03C3^2", null, false);
+    private JRadioButton jrbPopVar = new JRadioButton("\u03C3^2", null, false);
+    private JRadioButton jrbPopStdDev = new JRadioButton("\u03C3", null, false);
+    private JRadioButton jrbNoneVar = new JRadioButton("none", null, true);
 
     private JPanel outputOptions = new JPanel();
-    private JRadioButton dataToggle = new JRadioButton("No values");
+    private JRadioButton dataToggle = new JRadioButton("No values", null, true);
     private JRadioButton unsortedDataToggle = new JRadioButton(
-            "Unsorted values");
+            "Unsorted values", null, false);
     private JRadioButton sortedDataToggle = new JRadioButton(
-            "Sorted values");
+            "Sorted values", null, false);
 
     public ConfigurationPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -182,7 +182,6 @@ class ConfigurationPanel extends JPanel {
         subRightPanel2.add(jrbBothPop);
         subRightPanel2.add(jrbPopVar);
         subRightPanel2.add(jrbPopStdDev);
-        jrbNoneVar.setSelected(true);
 
         varianceOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
         varianceOptions.setBorder(new TitledBorder("Variance Options"));
@@ -196,6 +195,5 @@ class ConfigurationPanel extends JPanel {
         valuesGroup.add(dataToggle);
         valuesGroup.add(unsortedDataToggle);
         valuesGroup.add(sortedDataToggle);
-        dataToggle.setSelected(true);
     }
 }

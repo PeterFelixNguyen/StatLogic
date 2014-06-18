@@ -180,7 +180,7 @@ class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
                 hiddenPanel = false;
-                setPanel(jcboCalcChooser.getSelectedIndex());
+                upperPanel.setPanel(jcboCalcChooser.getSelectedIndex());
             }
         });
         collapseBtn.addMouseListener(new MouseAdapter() {
@@ -194,8 +194,7 @@ class MainFrame extends JFrame {
                     hiddenPanel = true;
                 } else if (hiddenPanel == true) {
                     collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
-                    showPanel();
-                    upperPanel.getLeftPanel().revalidate();
+                    upperPanel.showPanel();
                     hiddenPanel = false;
                 }
             }
@@ -213,116 +212,89 @@ class MainFrame extends JFrame {
         add(lowerPanel, BorderLayout.SOUTH); // BorderLayout should be removed
     }
 
-    public void showPanel() {
-        switch (panelIndex) {
-            case 0:
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().descriptiveCalc);
-                break;
-            case 1:
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zTestCalc);
-                break;
-            case 2:
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().tTestCalc);
-                break;
-            case 3:
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zScoreCalc);
-                break;
+    class UpperPanel extends JPanel {
+        private RightPanel rightPanel = new RightPanel();
+        private JPanel leftPanel;
+        private DescriptivePanel descriptiveCalc;
+        private ZTestPanel zTestCalc;
+        private TTestPanel tTestCalc;
+        private ZScorePanel zScoreCalc;
+
+        UpperPanel(JTextArea jtaOutput, JLabel statusBar, StringBuilder outputString) {
+            descriptiveCalc = new DescriptivePanel(jtaOutput, statusBar, outputString);
+            zTestCalc  = new ZTestPanel(jtaOutput, statusBar, outputString);
+            tTestCalc = new TTestPanel(jtaOutput, statusBar, outputString);
+            zScoreCalc = new ZScorePanel(jtaOutput, statusBar, outputString);
+            leftPanel = new JPanel();
+            leftPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+            leftPanel.add(zTestCalc); // Default calculator
+            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            setBorder(new TitledBorder(""));
+            add(leftPanel);
+            add(rightPanel);
+        }
+
+        void showPanel() {
+            switch (panelIndex) {
+                case 0:
+                    leftPanel.add(descriptiveCalc);
+                    break;
+                case 1:
+                    leftPanel.add(zTestCalc);
+                    break;
+                case 2:
+                    leftPanel.add(tTestCalc);
+                    break;
+                case 3:
+                    leftPanel.add(zScoreCalc);
+                    break;
+            }
+            leftPanel.revalidate();
+        }
+
+        void setPanel(int index) {
+            leftPanel.removeAll();
+
+            switch (panelIndex = index) {
+                case 0:
+                    leftPanel.add(descriptiveCalc);
+                    break;
+                case 1:
+                    leftPanel.add(zTestCalc);
+                    break;
+                case 2:
+                    leftPanel.add(tTestCalc);
+                    break;
+                case 3:
+                    leftPanel.add(zScoreCalc);
+                    break;
+            }
+            leftPanel.revalidate();
+            leftPanel.repaint();
+        }
+
+        public JPanel getLeftPanel() {
+            return leftPanel;
+        }
+
+        public RightPanel getRightPanel() {
+            return rightPanel;
         }
     }
 
-    public void setPanel(int index) {
-        switch (panelIndex = index) {
-            case 0:
-                upperPanel.getLeftPanel().removeAll();
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().descriptiveCalc);
-                upperPanel.getLeftPanel().revalidate();
-                upperPanel.getLeftPanel().repaint();
-                break;
-            case 1:
-                upperPanel.getLeftPanel().removeAll();
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zTestCalc);
-                upperPanel.getLeftPanel().revalidate();
-                upperPanel.getLeftPanel().repaint();
-                break;
-            case 2:
-                upperPanel.getLeftPanel().removeAll();
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().tTestCalc);
-                upperPanel.getLeftPanel().revalidate();
-                upperPanel.getLeftPanel().repaint();
-                break;
-            case 3:
-                upperPanel.getLeftPanel().removeAll();
-                upperPanel.getLeftPanel().add(upperPanel.getLeftPanel().zScoreCalc);
-                upperPanel.getLeftPanel().revalidate();
-                upperPanel.getLeftPanel().repaint();
-                break;
+    class RightPanel extends JPanel {
+
+        RightPanel() {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         }
     }
-}
 
-@SuppressWarnings("serial")
-class UpperPanel extends JPanel {
-    private RightPanel rightPanel = new RightPanel();
-    private LeftPanel leftPanel;
-
-    UpperPanel(JTextArea jtaOutput, JLabel statusBar, StringBuilder outputString) {
-        leftPanel = new LeftPanel(jtaOutput, statusBar, outputString);
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(new TitledBorder(""));
-        add(leftPanel);
-        add(rightPanel);
-    }
-
-    public RightPanel getRightPanel() {
-        return rightPanel;
-    }
-
-    public LeftPanel getLeftPanel() {
-        return leftPanel;
-    }
-}
-
-@SuppressWarnings("serial")
-class LeftPanel extends JPanel {
-    DescriptivePanel descriptiveCalc;
-    ZTestPanel zTestCalc;
-    TTestPanel tTestCalc;
-    ZScorePanel zScoreCalc;
-
-    LeftPanel(JTextArea jtaOutput, JLabel statusBar, final StringBuilder outputString) {
-        descriptiveCalc = new DescriptivePanel(jtaOutput, statusBar, outputString);
-        zTestCalc = new ZTestPanel(jtaOutput, statusBar, outputString);
-        tTestCalc = new TTestPanel(jtaOutput, statusBar, outputString);
-        zScoreCalc = new ZScorePanel(jtaOutput, statusBar, outputString);
-        setLayout(new FlowLayout(FlowLayout.LEADING));
-        add(zTestCalc); // Default calculator
-    }
-}
-
-@SuppressWarnings("serial")
-class RightPanel extends JPanel {
-
-    RightPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    }
-}
-
-@SuppressWarnings("serial")
-class LowerPanel extends JPanel {
-    LowerPanel(JLabel statusBar) {
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
-        setBorder(new EtchedBorder(EtchedBorder.RAISED));
-        add(statusBar);
-    }
-}
-
-class CheckBoxListener implements ActionListener {
-    int dummyValue;
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (dummyValue) {
+    class LowerPanel extends JPanel {
+        LowerPanel(JLabel statusBar) {
+            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
+            setBorder(new EtchedBorder(EtchedBorder.RAISED));
+            add(statusBar);
         }
     }
 }

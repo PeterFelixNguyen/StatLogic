@@ -60,8 +60,8 @@ public class MenuBar extends JMenuBar{
     // View Menu Choices
     private JMenu jmCalcView = new JMenu("Calculator View");
     private JMenuItem jmiFontSize = new JMenuItem("Font Size");
-    private JRadioButtonMenuItem jrbmiHideCalc = new JRadioButtonMenuItem("Hide Calculator");
-    private JRadioButtonMenuItem jrbmiShowCalc = new JRadioButtonMenuItem("Show Calculator");
+    private JRadioButtonMenuItem jrbmiHideCalc = new JRadioButtonMenuItem("Hide Calculator", null, false);
+    private JRadioButtonMenuItem jrbmiShowCalc = new JRadioButtonMenuItem("Show Calculator", null, true);
     private FontPanel fontPanel = new FontPanel();
     // Tools Menu Choices
     private JMenuItem jmiArithmetic = new JMenuItem("Arithmetic");
@@ -78,6 +78,7 @@ public class MenuBar extends JMenuBar{
 
     public MenuBar(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
         this.jtaOutput = jtaOutput;
+
         add(fileMenu);
         add(editMenu);
         add(viewMenu);
@@ -182,6 +183,22 @@ public class MenuBar extends JMenuBar{
                 fontPanel.setLocation((int)point.getX() + 50, (int)point.getY() + 50);
                 fontPanel.setVisible(true);
                 System.out.println(getRootPane().getLocationOnScreen());
+            }
+        });
+
+        jrbmiHideCalc.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        jrbmiShowCalc.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
 
