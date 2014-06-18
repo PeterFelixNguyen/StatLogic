@@ -213,8 +213,8 @@ class MainFrame extends JFrame {
     }
 
     class UpperPanel extends JPanel {
-        private RightPanel rightPanel = new RightPanel();
         private JPanel leftPanel;
+        private JPanel rightPanel = new JPanel();
         private DescriptivePanel descriptiveCalc;
         private ZTestPanel zTestCalc;
         private TTestPanel tTestCalc;
@@ -225,9 +225,11 @@ class MainFrame extends JFrame {
             zTestCalc  = new ZTestPanel(jtaOutput, statusBar, outputString);
             tTestCalc = new TTestPanel(jtaOutput, statusBar, outputString);
             zScoreCalc = new ZScorePanel(jtaOutput, statusBar, outputString);
+
             leftPanel = new JPanel();
             leftPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
             leftPanel.add(zTestCalc); // Default calculator
+            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
             setBorder(new TitledBorder(""));
             add(leftPanel);
@@ -277,15 +279,8 @@ class MainFrame extends JFrame {
             return leftPanel;
         }
 
-        public RightPanel getRightPanel() {
+        public JPanel getRightPanel() {
             return rightPanel;
-        }
-    }
-
-    class RightPanel extends JPanel {
-
-        RightPanel() {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         }
     }
 
