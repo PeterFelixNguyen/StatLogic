@@ -78,7 +78,7 @@ class MainFrame extends JFrame {
     private JLabel statusBar = new JLabel(" ", SwingConstants.LEFT);
     private StringBuilder outputString = new StringBuilder();
     // Primary containers
-    private MenuBar menuBar = new MenuBar(jtaOutput, statusBar, outputString);
+    private MenuBar menuBar;
     private UpperPanel upperPanel = new UpperPanel(jtaOutput, statusBar, outputString);
     private LowerPanel lowerPanel = new LowerPanel(statusBar);
     // Subcontainers
@@ -97,15 +97,19 @@ class MainFrame extends JFrame {
     private boolean outputFocused = false;
     private int minFontSize = 12, fontSize = 12, maxFontSize = 24;
     private boolean ctrlPressed = false;
+    // Other visual-related components
+    private final JLabel collapseBtn;
+    private final ClassLoader cLoader;
 
     MainFrame() {
-        final ClassLoader cLoader = getClass().getClassLoader();
+        cLoader = getClass().getClassLoader();
         ImageIcon collapseIcon = new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png"));
-        final JLabel collapseBtn = new JLabel(collapseIcon);
+        collapseBtn = new JLabel(collapseIcon);
 
         ImageIcon windowIcon = new ImageIcon(cLoader.getResource("images/WindowIcon02-50x50.png"));
         setIconImage(windowIcon.getImage());
 
+        menuBar = new MenuBar(jtaOutput, statusBar, outputString, upperPanel);
         setJMenuBar(menuBar);
         jtaOutput.setLineWrap(true);
         jtaOutput.setWrapStyleWord(true);
@@ -181,22 +185,14 @@ class MainFrame extends JFrame {
                 collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
                 hiddenPanel = false;
                 upperPanel.setPanel(jcboCalcChooser.getSelectedIndex());
+                menuBar.setHideButton(false);
             }
         });
         collapseBtn.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (hiddenPanel == false) {
-                    collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Show.png")));
-                    upperPanel.getLeftPanel().removeAll();
-                    upperPanel.getLeftPanel().revalidate();
-                    hiddenPanel = true;
-                } else if (hiddenPanel == true) {
-                    collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
-                    upperPanel.showPanel();
-                    hiddenPanel = false;
-                }
+                upperPanel.collapseBtnHelper();
             }
         });
 
@@ -273,6 +269,20 @@ class MainFrame extends JFrame {
             }
             leftPanel.revalidate();
             leftPanel.repaint();
+        }
+
+        public void collapseBtnHelper() {
+            if (hiddenPanel == false) {
+                collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Show.png")));
+                upperPanel.getLeftPanel().removeAll();
+                upperPanel.getLeftPanel().revalidate();
+                hiddenPanel = true;
+            } else if (hiddenPanel == true) {
+                collapseBtn.setIcon(new ImageIcon(cLoader.getResource("images/Toggle_03_Hide.png")));
+                upperPanel.showPanel();
+                hiddenPanel = false;
+            }
+            menuBar.setHideButton(hiddenPanel);
         }
 
         public JPanel getLeftPanel() {

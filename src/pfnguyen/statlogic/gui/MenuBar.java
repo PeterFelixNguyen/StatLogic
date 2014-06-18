@@ -41,6 +41,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import pfnguyen.statlogic.gui.MainFrame.UpperPanel;
+
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar{
     private JMenu fileMenu = new JMenu("File");
@@ -75,8 +77,9 @@ public class MenuBar extends JMenuBar{
     private AboutPanel aboutPanel = new AboutPanel();
     // Visual Components
     private JTextArea jtaOutput;
+    private boolean isHiddenPanel = false;
 
-    public MenuBar(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString) {
+    public MenuBar(final JTextArea jtaOutput, final JLabel statusBar, final StringBuilder outputString, final UpperPanel upperPanel) {
         this.jtaOutput = jtaOutput;
 
         add(fileMenu);
@@ -190,7 +193,10 @@ public class MenuBar extends JMenuBar{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (!isHiddenPanel) {
+                    upperPanel.collapseBtnHelper();
+                    isHiddenPanel = true;
+                }
             }
         });
 
@@ -198,7 +204,10 @@ public class MenuBar extends JMenuBar{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (isHiddenPanel) {
+                    upperPanel.collapseBtnHelper();
+                    isHiddenPanel = false;
+                }
             }
         });
 
@@ -212,6 +221,14 @@ public class MenuBar extends JMenuBar{
                 JOptionPane.showMessageDialog(null, aboutPanel, "About StatLogic", JOptionPane.PLAIN_MESSAGE, windowIcon);
             }
         });
+    }
+
+    public void setHideButton(boolean isHidden) {
+        if (isHidden) {
+            jrbmiHideCalc.setSelected(true);
+        } else {
+            jrbmiShowCalc.setSelected(true);
+        }
     }
 
     class FontPanel extends JFrame {

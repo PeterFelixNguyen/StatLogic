@@ -30,3 +30,4 @@ Version 0.2.4
 Version 0.2.5
 *Fixed major bug in which the t-test's computed std. dev. value is incorrectly 0, 'causing the 
 calculator to sometimes produce the wrong conclusion.
+*Added functionality to menu bar items "Show Calculator" and "Hide Calculator"
