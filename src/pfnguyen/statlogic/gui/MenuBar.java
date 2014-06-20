@@ -85,8 +85,8 @@ public class MenuBar extends JMenuBar{
         add(fileMenu);
         add(editMenu);
         add(viewMenu);
-        add(toolsMenu);
-        add(settingsMenu);
+        //add(toolsMenu);
+        //add(settingsMenu);
         add(helpMenu);
 
         fileMenu.add(jmiSave);
@@ -95,10 +95,10 @@ public class MenuBar extends JMenuBar{
         fileMenu.add(jmiExit);
 
         editMenu.add(jmiClear);
-        editMenu.addSeparator();
-        editMenu.add(jmiFind);
-        editMenu.addSeparator();
-        editMenu.add(jmiSelectAll);
+        //editMenu.addSeparator();
+        //editMenu.add(jmiFind);
+        //editMenu.addSeparator();
+        //editMenu.add(jmiSelectAll);
 
         viewMenu.add(jmCalcView);
         viewMenu.add(jmiFontSize);
@@ -114,7 +114,7 @@ public class MenuBar extends JMenuBar{
 
         settingsMenu.add(jmiUserConfig);
 
-        helpMenu.add(jmiManual);
+        //helpMenu.add(jmiManual);
         helpMenu.addSeparator();
         helpMenu.add(jmiAbout);
 

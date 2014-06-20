@@ -15,7 +15,6 @@
  */
 package pfnguyen.statlogic.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -113,7 +112,7 @@ class MainFrame extends JFrame {
         setJMenuBar(menuBar);
         jtaOutput.setLineWrap(true);
         jtaOutput.setWrapStyleWord(true);
-        jtaOutput.setEditable(false);
+        jtaOutput.setEditable(true);
         upperPanel.getRightPanel().add(containerForChooser);
         containerForChooser.add(leftInnerPanel);
         containerForChooser.add(rightInnerPanel);
@@ -204,8 +203,8 @@ class MainFrame extends JFrame {
         scrollerForOutput.setBorder(borderForOutput);
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        add(upperPanel, BorderLayout.NORTH); // BorderLayout should be removed
-        add(lowerPanel, BorderLayout.SOUTH); // BorderLayout should be removed
+        add(upperPanel);
+        add(lowerPanel);
     }
 
     class UpperPanel extends JPanel {
@@ -297,8 +296,8 @@ class MainFrame extends JFrame {
     class LowerPanel extends JPanel {
         LowerPanel(JLabel statusBar) {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-            setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
             setBorder(new EtchedBorder(EtchedBorder.RAISED));
+            setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
             add(statusBar);
         }
     }
