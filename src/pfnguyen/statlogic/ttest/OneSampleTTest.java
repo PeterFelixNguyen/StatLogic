@@ -30,10 +30,10 @@ public class OneSampleTTest {
     private Double upperRegion;
     private String nullHypothesis;
     private String altHypothesis;
-    private String xBar;
-    private String n;
-    private String sigma;
-    private String alpha;
+    private double xBar;
+    private int n;
+    private double sigma;
+    private double alpha;
     private String conclusion = "Test statistic is within the critical region \n"
             + "Reject the null hypothesis";
     private boolean rejectNull;
@@ -105,10 +105,10 @@ public class OneSampleTTest {
             inequality = "!= ";
         nullHypothesis = "H0: mu " + "= " + testValue;
         altHypothesis = "H1: mu " + inequality + testValue;
-        this.xBar = "" + xBar;
-        this.n = "" + n;
-        this.sigma = "" + sampleStdDev;
-        this.alpha = "" + significance;
+        this.xBar = xBar;
+        this.n = n;
+        this.sigma = sampleStdDev;
+        this.alpha = significance;
     }
 
     /**
@@ -250,28 +250,28 @@ public class OneSampleTTest {
     /**
      * @return  the sample mean
      */
-    public String getXBar() {
+    public double getXBar() {
         return xBar;
     }
 
     /**
      * @return  the sample size
      */
-    public String getN() {
+    public int getN() {
         return n;
     }
 
     /**
      * @return  the standard deviation
      */
-    public String getSigma() {
+    public double getSigma() {
         return sigma;
     }
 
     /**
      * @return  the significance level
      */
-    public String getAlpha() {
+    public double getAlpha() {
         return alpha;
     }
 
