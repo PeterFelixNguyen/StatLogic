@@ -16,8 +16,7 @@
 package pfnguyen.statlogic.descriptive;
 
 import java.util.ArrayList;
-
-import pfnguyen.statlogic.algorithms.SortAlgorithms;
+import java.util.Collections;
 
 /**
  * Class that calculates the extrema of a data set.
@@ -44,7 +43,7 @@ public class Extrema {
      * @param  values  the values used for calculation of extrema
      */
     private void calcExtrema(ArrayList<Double> values) {
-        SortAlgorithms.BubbleSort(values);
+        Collections.sort(values);
         minima = values.get(0);
         maxima = values.get(values.size() - 1);
     }

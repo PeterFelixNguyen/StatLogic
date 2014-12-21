@@ -74,9 +74,6 @@ public class DescriptiveLoader {
         this.statusBar = statusBar;
         this.outputString = outputString;
     }
-    // I plan to turn JTextArea and JLabel into special classes
-    // So that only these two classes could be passed into the
-    // constructor.
 
     /**
      * Invokes JFileChooser and stores each filestream input into
@@ -180,16 +177,6 @@ public class DescriptiveLoader {
         }
     }
 
-    /*
-     * Must decide whether to keep this for "individual save"
-     * or to discard this in favor of "save all"
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
     /**
      * Saves results into a .txt file.
      *

@@ -16,8 +16,7 @@
 package pfnguyen.statlogic.descriptive;
 
 import java.util.ArrayList;
-
-import pfnguyen.statlogic.algorithms.SortAlgorithms;
+import java.util.Collections;
 
 public class Quartiles {
     private double lowerQuartile;
@@ -30,7 +29,7 @@ public class Quartiles {
 
     private void calcMedian(ArrayList<Double> values) {
 
-        SortAlgorithms.BubbleSort(values);
+        Collections.sort(values);
 
         /* Finds median for even sized ArrayList */
         if (values.size() % 2 == 0) {

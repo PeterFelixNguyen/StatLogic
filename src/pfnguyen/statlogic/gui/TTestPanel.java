@@ -16,6 +16,7 @@
 package pfnguyen.statlogic.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -279,8 +280,13 @@ public class TTestPanel extends JPanel {
                             jtaValues.setWrapStyleWord(true);
 
                             BoxPanel calcXBarPanel = new BoxPanel();
-                            calcXBarPanel.add(new JLabel(
-                                    "Enter values to calculate Sample Mean"));
+
+                            JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                            panel.add(new JLabel("Enter values to calculate Sample Mean"));
+                            panel.setPreferredSize(new Dimension(400, 25));
+                            panel.setMaximumSize(new Dimension(400, 25));
+
+                            calcXBarPanel.add(panel);
                             calcXBarPanel.add(new JScrollPane(jtaValues));
 
                             int selected = JOptionPane.showConfirmDialog(

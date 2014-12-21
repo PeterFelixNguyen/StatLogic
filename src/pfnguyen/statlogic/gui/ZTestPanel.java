@@ -285,7 +285,7 @@ public class ZTestPanel extends JPanel {
                             calcXBarPanel.add(new JScrollPane(jtaValues));
 
                             int selected = JOptionPane.showConfirmDialog(
-                                    null, calcXBarPanel, "1-Sample t",
+                                    null, calcXBarPanel, "1-Sample Z",
                                     JOptionPane.OK_CANCEL_OPTION,
                                     JOptionPane.PLAIN_MESSAGE);
 
