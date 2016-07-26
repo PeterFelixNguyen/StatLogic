@@ -115,7 +115,7 @@ public class MenuBar extends JMenuBar{
         settingsMenu.add(jmiUserConfig);
 
         //helpMenu.add(jmiManual);
-        helpMenu.addSeparator();
+        //helpMenu.addSeparator();
         helpMenu.add(jmiAbout);
 
         jmiSaveAs.addActionListener(new ActionListener() {

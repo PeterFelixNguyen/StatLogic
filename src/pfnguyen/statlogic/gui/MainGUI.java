@@ -36,7 +36,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
@@ -74,6 +76,7 @@ class ContainerForChooser extends JPanel {
 class MainFrame extends JFrame {
     // Visual components
     private JTextArea jtaOutput = new JTextArea();
+    private TextMenu textMenu = new TextMenu();
     private JLabel statusBar = new JLabel(" ", SwingConstants.LEFT);
     private StringBuilder outputString = new StringBuilder();
     // Primary containers
@@ -123,6 +126,13 @@ class MainFrame extends JFrame {
         leftInnerPanel.add(jcboCalcChooser);
         rightInnerPanel.add(collapseBtn);
 
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //textMenu.setVisible(false);
+            }
+        });
+
         jtaOutput.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -163,6 +173,36 @@ class MainFrame extends JFrame {
                     }
                 }
             }
+        });
+
+        jtaOutput.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                checkPopup(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                checkPopup(e);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                checkPopup(e);
+            }
+
+            private void checkPopup(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    if (jtaOutput.getSelectedText() != null && jtaOutput.getSelectedText().length() > 0) {
+                        textMenu.notifyTextSelected(true);
+                    } else {
+                        textMenu.notifyTextSelected(false);
+                    }
+
+                    textMenu.show(jtaOutput, e.getX(), e.getY());
+                }
+            }
+
         });
 
         jtaOutput.addFocusListener(new FocusListener() {
@@ -299,6 +339,40 @@ class MainFrame extends JFrame {
             setBorder(new EtchedBorder(EtchedBorder.RAISED));
             setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
             add(statusBar);
+        }
+    }
+
+    class TextMenu extends JPopupMenu {
+        JMenuItem jmiClear = new JMenuItem("Clear");
+        JMenuItem jmiCopy = new JMenuItem("Copy");
+        JMenuItem jmiCut = new JMenuItem("Cut");
+        JMenuItem jmiPaste = new JMenuItem("Paste");
+
+        public TextMenu() {
+            add(jmiClear);
+            add(jmiCut);
+            add(jmiCopy);
+            add(jmiPaste);
+
+            jmiClear.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    jtaOutput.setText("");
+                }
+            });
+        }
+
+        public void notifyTextSelected(boolean state) {
+            jmiCut.setEnabled(state);
+            jmiCopy.setEnabled(state);
+        }
+    }
+
+    class MouseTextAdapter extends MouseAdapter {
+
+        public MouseTextAdapter() {
+
         }
     }
 }
